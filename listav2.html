@@ -201,7 +201,7 @@
       background: #fefaf2;
       border: 1px solid #e2cfb0;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
-      max-height: 60vh;
+      max-height: 70vh;
       overflow-y: auto;
     }
     .card-back {
@@ -315,10 +315,6 @@
       font-size: 1.1rem;
       padding: 2rem;
     }
-    hr {
-      border: 0.5px solid #ddceb5;
-      margin: 0.8rem 0;
-    }
     /* associação */
     .associacao-container {
       display: flex;
@@ -328,7 +324,7 @@
     }
     .termos-col,
     .respostas-col {
-      flex: 1 1 200px;
+      flex: 1 1 220px;
     }
     .termo-btn {
       display: block;
@@ -366,11 +362,11 @@
     .resp-btn.associado {
       background: #e8f0fe;
     }
-    .resp-btn.correto {
+    .resp-btn.correta {
       background: #c8e6c9;
       border-color: #2e7d32;
     }
-    .resp-btn.errado {
+    .resp-btn.errada {
       background: #ffcdd2;
       border-color: #b71c1c;
     }
@@ -379,6 +375,12 @@
       gap: 0.8rem;
       margin-top: 1rem;
       flex-wrap: wrap;
+    }
+    .footer-creditos {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #b9a58b;
+      margin-top: 1rem;
     }
     @media (max-width: 650px) {
       .container {
@@ -408,9 +410,7 @@
         <button class="btn-inicio" id="btnConcursos"><span>🏛️</span> Questões de Concursos <small>60 objetivas</small></button>
         <button class="btn-inicio" id="btnVariadas"><span>📋</span> Questões Variadas <small>V/F, lacunas, etc.</small></button>
       </div>
-       <div style="text-align:center; font-size:0.75rem; color:#b9a58b; margin-top:1.5rem;">
-    Sisteminha desenvolvido por Werisson para ajudar sua namorada Beatriz a estudar
-  </div>
+      <div class="footer-creditos">Sisteminha desenvolvido por Werisson para ajudar sua namorada Beatriz a estudar</div>
     </div>
 
     <div id="areaEstudo" style="display:none; flex-direction:column; gap:1.5rem;">
@@ -429,7 +429,7 @@
       </div>
 
       <div class="flashcard-area" id="flashcardContainer"></div>
-      <div style="text-align:center; font-size:0.75rem; color:#b9a58b; margin-top:0.5rem;">Sisteminha desenvolvido por Werisson para ajudar sua namorada Beatriz a estudar</div>
+      <div class="footer-creditos">Sisteminha desenvolvido por Werisson para ajudar sua namorada Beatriz a estudar</div>
     </div>
   </div>
 
@@ -659,52 +659,17 @@
       ];
       variadasLacuna.forEach(v => addQ('variada', 'lacuna', 'Complete a Lacuna', v[0], v[1], null, ''));
 
-      // Associação de colunas (4 questões) - formato estruturado
       const variadasAssociacao = [
-        {
-          topico: 'Associação de Colunas',
-          enunciado: 'Associe os institutos às suas descrições:',
-          termos: ['Mora', 'Novação', 'Remissão', 'Dação em pagamento', 'Transação'],
-          respostas: ['Extinção mediante nova obrigação', 'Perdão da dívida', 'Atraso culposo', 'Concessões recíprocas', 'Prestação diversa aceita'],
-          gabarito: [1, 2, 0, 4, 3] // índices: resposta 0 -> termo 1 (Novação), 1->2 (Remissão), 2->0 (Mora), 3->4 (Transação), 4->3 (Dação)
-        },
-        {
-          topico: 'Associação de Colunas',
-          enunciado: 'Associe os institutos às suas descrições:',
-          termos: ['Juros remuneratórios', 'Juros moratórios', 'Arras penitenciais', 'Arras confirmatórias'],
-          respostas: ['Preço do arrependimento', 'Remuneram capital', 'Decorrentes do atraso', 'Confirmam contrato'],
-          gabarito: [2, 0, 1, 3] // resp 0->termo 2 (Arras penit.), 1->0 (Juros remun.), 2->1 (Juros morat.), 3->3 (Arras conf.)
-        },
-        {
-          topico: 'Associação de Colunas',
-          enunciado: 'Associe os institutos às suas descrições:',
-          termos: ['Dação', 'Compensação', 'Confusão', 'Consignação', 'Sub-rogação'],
-          respostas: ['Credor e devedor mesma pessoa', 'Depósito por obstáculo', 'Extinção recíproca', 'Substituição do credor', 'Prestação diversa aceita'],
-          gabarito: [2, 3, 1, 4, 0] // resp0->termo2 (Confusão), 1->3 (Consignação), 2->1 (Compensação), 3->4 (Sub-rogação), 4->0 (Dação)
-        },
-        {
-          topico: 'Associação de Colunas',
-          enunciado: 'Associe os institutos às suas descrições:',
-          termos: ['Danos emergentes', 'Lucros cessantes', 'Mora accipiendi', 'Mora solvendi'],
-          respostas: ['Prejuízo efetivo', 'Atraso pelo credor', 'Ganho frustrado', 'Atraso pelo devedor'],
-          gabarito: [0, 2, 1, 3] // resp0->termo0 (Danos emergentes), 1->2 (Mora accipiendi), 2->1 (Lucros cessantes), 3->3 (Mora solvendi)
-        }
+        { topico: 'Associação de Colunas', enunciado: 'Associe os institutos às suas descrições:', termos: ['Mora', 'Novação', 'Remissão', 'Dação em pagamento', 'Transação'], respostas: ['Extinção mediante nova obrigação', 'Perdão da dívida', 'Atraso culposo', 'Concessões recíprocas', 'Prestação diversa aceita'], gabarito: [1, 2, 0, 4, 3] },
+        { topico: 'Associação de Colunas', enunciado: 'Associe os institutos às suas descrições:', termos: ['Juros remuneratórios', 'Juros moratórios', 'Arras penitenciais', 'Arras confirmatórias'], respostas: ['Preço do arrependimento', 'Remuneram capital', 'Decorrentes do atraso', 'Confirmam contrato'], gabarito: [2, 0, 1, 3] },
+        { topico: 'Associação de Colunas', enunciado: 'Associe os institutos às suas descrições:', termos: ['Dação', 'Compensação', 'Confusão', 'Consignação', 'Sub-rogação'], respostas: ['Credor e devedor mesma pessoa', 'Depósito por obstáculo', 'Extinção recíproca', 'Substituição do credor', 'Prestação diversa aceita'], gabarito: [2, 3, 1, 4, 0] },
+        { topico: 'Associação de Colunas', enunciado: 'Associe os institutos às suas descrições:', termos: ['Danos emergentes', 'Lucros cessantes', 'Mora accipiendi', 'Mora solvendi'], respostas: ['Prejuízo efetivo', 'Atraso pelo credor', 'Ganho frustrado', 'Atraso pelo devedor'], gabarito: [0, 2, 1, 3] }
       ];
       variadasAssociacao.forEach(item => {
-        const q = {
-          id: QUESTOES_BASE.length + 1,
-          tipo: 'variada',
-          subtipo: 'associacao',
-          topico: item.topico,
-          enunciado: item.enunciado,
-          resposta: '', // não usado
-          alternativas: null,
-          comentario: '',
-          termos: item.termos,
-          respostasList: item.respostas,
-          gabaritoAssoc: item.gabarito
-        };
-        QUESTOES_BASE.push(q);
+        QUESTOES_BASE.push({
+          id: QUESTOES_BASE.length + 1, tipo: 'variada', subtipo: 'associacao', topico: item.topico, enunciado: item.enunciado,
+          resposta: '', alternativas: null, comentario: '', termos: item.termos, respostasList: item.respostas, gabaritoAssoc: item.gabarito
+        });
       });
 
       const variadasMultipla = [
@@ -733,6 +698,7 @@
 
       // ==================== ESTADO ====================
       let questoesFiltradas = [], indiceAtual = 0, respondidasSet = new Set(), listaAtiva = null, cronometroInterval = null, cronometroSegundos = 0;
+      let navegacaoTravada = false;
 
       const telaInicial = document.getElementById('telaInicial'), areaEstudo = document.getElementById('areaEstudo');
       const cronometroBox = document.getElementById('cronometroBox'), cronometroDisplay = document.getElementById('cronometroDisplay');
@@ -743,10 +709,10 @@
       const inputIrQuestao = document.getElementById('inputIrQuestao'), btnIrQuestao = document.getElementById('btnIrQuestao');
 
       function carregarRespondidas() {
-        const s = localStorage.getItem('civil_respondidas_v3');
+        const s = localStorage.getItem('civil_respondidas_v4');
         if (s) try { respondidasSet = new Set(JSON.parse(s)); } catch (e) { respondidasSet = new Set(); }
       }
-      function salvarRespondidas() { localStorage.setItem('civil_respondidas_v3', JSON.stringify([...respondidasSet])); }
+      function salvarRespondidas() { localStorage.setItem('civil_respondidas_v4', JSON.stringify([...respondidasSet])); }
       carregarRespondidas();
 
       function formatarTempo(s) { const h = Math.floor(s / 3600).toString().padStart(2, '0'); const m = Math.floor((s % 3600) / 60).toString().padStart(2, '0'); const seg = (s % 60).toString().padStart(2, '0'); return `${h}:${m}:${seg}`; }
@@ -769,29 +735,19 @@
         flashcardContainer.innerHTML = '<div class="mensagem-inicial">Nenhuma questão encontrada.</div>';
       }
 
-      function gerarBotaoAlternativas(q) {
-        const alts = q.alternativas;
-        if (!alts) return '';
-        return alts.map((a, idx) => {
-          const letra = a.charAt(0);
-          return `<button class="alt-btn" data-resposta="${letra}" data-gabarito="${q.resposta}">${a}</button>`;
-        }).join('');
-      }
-
       function gerarPainelInterativo(q) {
         const tipo = q.tipo === 'concursos' ? 'concursos' : q.subtipo;
         if (tipo === 'vf' || tipo === 'correto_incorreto') {
           const opcoes = tipo === 'vf' ? ['Verdadeiro', 'Falso'] : ['Correto', 'Incorreto'];
-          const gabarito = q.resposta;
           return `
             <div class="botoes-resposta">
-              ${opcoes.map(op => `<button class="btn-vf alt-btn" data-resposta="${op}" data-gabarito="${gabarito}">${op}</button>`).join('')}
+              ${opcoes.map(op => `<button class="btn-vf alt-btn" data-resposta="${op}" data-gabarito="${q.resposta}">${op}</button>`).join('')}
             </div>
             <div class="resposta-exibicao" style="display:none;"></div>
           `;
         } else if (tipo === 'multipla' || tipo === 'concursos') {
           return `
-            <div class="alternativas-lista">${gerarBotaoAlternativas(q)}</div>
+            <div class="alternativas-lista">${q.alternativas.map((a, idx) => `<button class="alt-btn" data-resposta="${a.charAt(0)}" data-gabarito="${q.resposta}">${a}</button>`).join('')}</div>
             <div class="resposta-exibicao" style="display:none;"></div>
           `;
         }
@@ -812,13 +768,7 @@
                 ${q.comentario ? `<div style="margin-top:0.5rem; font-style:italic;">${q.comentario}</div>` : ''}
               </div>
             </div>
-          </div>
-          <div class="botoes-flash">
-            <button id="btnAnterior">⏪ Anterior</button>
-            <button id="btnFlip">🔄 Virar</button>
-            <button id="btnProximo">⏩ Próxima</button>
-          </div>
-        `;
+          </div>`;
       }
 
       function montarCardInterativo(q) {
@@ -829,208 +779,167 @@
               <div class="enunciado">${q.enunciado}</div>
               ${gerarPainelInterativo(q)}
             </div>
-          </div>
-          <div class="botoes-flash">
-            <button id="btnAnterior">⏪ Anterior</button>
-            <button id="btnProximo">⏩ Próxima</button>
-          </div>
-        `;
+          </div>`;
       }
 
       function montarCardAssociacao(q) {
-        const termos = q.termos;
-        const respostas = q.respostasList;
-        const gabarito = q.gabaritoAssoc;
-        let html = `
+        return `
           <div class="card" style="cursor:default;">
             <div class="card-front" style="position:static; transform:none; backface-visibility:visible;">
               <div class="questao-titulo"><span>📋 Associação de Colunas</span><span class="tipo-tag">${q.topico || ''}</span></div>
               <div class="enunciado">${q.enunciado}</div>
               <div class="associacao-container">
-                <div class="termos-col">
-                  <h4>Termos</h4>
-                  <div id="termosList"></div>
-                </div>
-                <div class="respostas-col">
-                  <h4>Respostas</h4>
-                  <div id="respostasList"></div>
-                </div>
+                <div class="termos-col"><h4>Termos</h4><div id="termosList"></div></div>
+                <div class="respostas-col"><h4>Respostas</h4><div id="respostasList"></div></div>
               </div>
               <div class="botoes-assoc">
                 <button id="btnLimparAssoc">🧹 Limpar questão</button>
                 <button id="btnConferirAssoc">✅ Conferir respostas</button>
               </div>
             </div>
-          </div>
-          <div class="botoes-flash">
-            <button id="btnAnterior">⏪ Anterior</button>
-            <button id="btnProximo">⏩ Próxima</button>
-          </div>
-        `;
-        flashcardContainer.innerHTML = html;
-
-        // Estado local da associação
-        let termoSelecionado = null;
-        const termoUsado = new Array(termos.length).fill(false);
-        const associacao = new Array(respostas.length).fill(null);
-
-        const termosListDiv = document.getElementById('termosList');
-        const respostasListDiv = document.getElementById('respostasList');
-        const btnLimpar = document.getElementById('btnLimparAssoc');
-        const btnConferir = document.getElementById('btnConferirAssoc');
-
-        function renderizarBotoes() {
-          termosListDiv.innerHTML = termos.map((termo, idx) => {
-            let classe = 'termo-btn';
-            if (termoUsado[idx]) classe += ' usado';
-            else if (termoSelecionado === idx) classe += ' selecionado';
-            return `<button class="${classe}" data-idx="${idx}">${idx+1}. ${termo}</button>`;
-          }).join('');
-          respostasListDiv.innerHTML = respostas.map((resp, idx) => {
-            let label = resp;
-            if (associacao[idx] !== null) {
-              label = `${resp} (Termo ${associacao[idx]+1})`;
-            }
-            return `<button class="resp-btn ${associacao[idx] !== null ? 'associado' : ''}" data-idx="${idx}">${label}</button>`;
-          }).join('');
-
-          // Eventos termos
-          termosListDiv.querySelectorAll('.termo-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const idx = parseInt(btn.dataset.idx);
-              if (termoUsado[idx]) return;
-              if (termoSelecionado === idx) {
-                termoSelecionado = null;
-              } else {
-                termoSelecionado = idx;
-              }
-              renderizarBotoes();
-            });
-          });
-
-          // Eventos respostas
-          respostasListDiv.querySelectorAll('.resp-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const respIdx = parseInt(btn.dataset.idx);
-              if (termoSelecionado !== null) {
-                // liberar termo antigo se existir associação nessa resposta
-                if (associacao[respIdx] !== null) {
-                  termoUsado[associacao[respIdx]] = false;
-                }
-                associacao[respIdx] = termoSelecionado;
-                termoUsado[termoSelecionado] = true;
-                termoSelecionado = null;
-                renderizarBotoes();
-              } else if (associacao[respIdx] !== null) {
-                // remover associação ao clicar sem termo selecionado
-                termoUsado[associacao[respIdx]] = false;
-                associacao[respIdx] = null;
-                renderizarBotoes();
-              }
-            });
-          });
-        }
-
-        btnLimpar.addEventListener('click', () => {
-          termoSelecionado = null;
-          termoUsado.fill(false);
-          associacao.fill(null);
-          renderizarBotoes();
-        });
-
-        btnConferir.addEventListener('click', () => {
-          respostasListDiv.querySelectorAll('.resp-btn').forEach((btn, idx) => {
-            if (associacao[idx] === gabarito[idx]) {
-              btn.classList.add('correto');
-              btn.classList.remove('errado');
-            } else {
-              btn.classList.add('errado');
-              btn.classList.remove('correto');
-            }
-          });
-        });
-
-        renderizarBotoes();
-        return html;
+          </div>`;
       }
 
       function renderizarQuestao() {
+        if (navegacaoTravada) return;
         if (!questoesFiltradas.length || indiceAtual >= questoesFiltradas.length) { renderizarVazio(); return; }
+        navegacaoTravada = true;
         const q = questoesFiltradas[indiceAtual];
         const precisaFlip = (q.tipo === 'discursiva') || (q.tipo === 'variada' && q.subtipo === 'lacuna');
-        let html = '';
-        if (precisaFlip) {
-          html = montarCardFlipavel(q);
-        } else if (q.tipo === 'variada' && q.subtipo === 'associacao') {
-          montarCardAssociacao(q); // essa função já insere no container e gerencia eventos
-        } else {
-          html = montarCardInterativo(q);
-        }
+        let cardHtml = '';
+        if (precisaFlip) cardHtml = montarCardFlipavel(q);
+        else if (q.tipo === 'variada' && q.subtipo === 'associacao') cardHtml = montarCardAssociacao(q);
+        else cardHtml = montarCardInterativo(q);
 
-        if (!(q.tipo === 'variada' && q.subtipo === 'associacao')) {
-          flashcardContainer.innerHTML = html;
-          if (precisaFlip) {
-            document.getElementById('btnFlip')?.addEventListener('click', () => {
-              document.getElementById('cardFlip')?.classList.toggle('flipped');
-            });
-            document.getElementById('cardFlip')?.addEventListener('click', (e) => {
-              if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
-              document.getElementById('cardFlip').classList.toggle('flipped');
-            });
-          } else {
-            document.querySelectorAll('.alt-btn').forEach(btn => {
-              btn.addEventListener('click', function() {
-                const resposta = this.dataset.resposta;
-                const gabarito = this.dataset.gabarito;
-                const botoes = this.parentElement.querySelectorAll('.alt-btn');
-                botoes.forEach(b => b.disabled = true);
-                if (resposta === gabarito) {
-                  this.classList.add('certa');
-                } else {
-                  this.classList.add('errada');
-                  botoes.forEach(b => { if (b.dataset.resposta === gabarito) b.classList.add('certa'); });
-                }
-                const divResp = this.closest('.card-front').querySelector('.resposta-exibicao');
-                if (divResp) {
-                  divResp.style.display = 'block';
-                  divResp.innerHTML = `<strong>Gabarito: ${gabarito}</strong><br>${q.comentario || ''}`;
-                }
-                if (!respondidasSet.has(q.id)) {
-                  respondidasSet.add(q.id);
-                  salvarRespondidas();
-                }
-              });
-            });
-          }
-        }
-
-        // Adiciona footer comum
-        const footerHtml = `
+        const htmlCompleto = `
+          ${cardHtml}
+          <div class="botoes-flash">
+            <button id="btnAnterior">⏪ Anterior</button>
+            ${precisaFlip ? '<button id="btnFlip">🔄 Virar</button>' : ''}
+            <button id="btnProximo">⏩ Próxima</button>
+          </div>
           <div class="footer-navegacao">
             <span class="questao-contador">${indiceAtual+1} / ${questoesFiltradas.length}</span>
             <button id="btnMarcarRespondida">✔️ Marcar como respondida</button>
           </div>
         `;
-        flashcardContainer.insertAdjacentHTML('beforeend', footerHtml);
+        flashcardContainer.innerHTML = htmlCompleto;
 
-        document.getElementById('btnProximo')?.addEventListener('click', () => {
-          if (indiceAtual < questoesFiltradas.length - 1) { indiceAtual++; renderizarQuestao(); } else alert('Última questão.');
+        if (precisaFlip) {
+          document.getElementById('btnFlip').addEventListener('click', () => document.getElementById('cardFlip')?.classList.toggle('flipped'));
+          document.getElementById('cardFlip')?.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+            document.getElementById('cardFlip').classList.toggle('flipped');
+          });
+        }
+
+        if (q.tipo === 'variada' && q.subtipo === 'associacao') {
+          const termos = q.termos, respostas = q.respostasList, gabarito = q.gabaritoAssoc;
+          let termoSelecionado = null;
+          const termoUsado = new Array(termos.length).fill(false);
+          const associacao = new Array(respostas.length).fill(null);
+          const termosDiv = document.getElementById('termosList');
+          const respostasDiv = document.getElementById('respostasList');
+          const btnLimpar = document.getElementById('btnLimparAssoc');
+          const btnConferir = document.getElementById('btnConferirAssoc');
+
+          function renderBotoes() {
+            termosDiv.innerHTML = termos.map((t, i) => {
+              let cls = 'termo-btn';
+              if (termoUsado[i]) cls += ' usado';
+              else if (termoSelecionado === i) cls += ' selecionado';
+              return `<button class="${cls}" data-idx="${i}">${i+1}. ${t}</button>`;
+            }).join('');
+            respostasDiv.innerHTML = respostas.map((r, i) => {
+              let label = r;
+              if (associacao[i] !== null) {
+                const termoIdx = associacao[i];
+                label = `${r} <span style="font-weight:600;color:#4a3724;">(${termoIdx+1}- ${termos[termoIdx]})</span>`;
+              }
+              return `<button class="resp-btn ${associacao[i] !== null ? 'associado' : ''}" data-idx="${i}">${label}</button>`;
+            }).join('');
+            termosDiv.querySelectorAll('.termo-btn').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                if (termoUsado[idx]) return;
+                termoSelecionado = termoSelecionado === idx ? null : idx;
+                renderBotoes();
+              });
+            });
+            respostasDiv.querySelectorAll('.resp-btn').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const respIdx = parseInt(btn.dataset.idx);
+                if (termoSelecionado !== null) {
+                  if (associacao[respIdx] !== null) termoUsado[associacao[respIdx]] = false;
+                  associacao[respIdx] = termoSelecionado;
+                  termoUsado[termoSelecionado] = true;
+                  termoSelecionado = null;
+                  renderBotoes();
+                } else if (associacao[respIdx] !== null) {
+                  termoUsado[associacao[respIdx]] = false;
+                  associacao[respIdx] = null;
+                  renderBotoes();
+                }
+              });
+            });
+          }
+          btnLimpar.addEventListener('click', () => { termoSelecionado = null; termoUsado.fill(false); associacao.fill(null); renderBotoes(); });
+          btnConferir.addEventListener('click', () => {
+            respostasDiv.querySelectorAll('.resp-btn').forEach((btn, idx) => {
+              btn.classList.remove('correta', 'errada');
+              if (associacao[idx] === gabarito[idx]) {
+                btn.classList.add('correta');
+              } else {
+                btn.classList.add('errada');
+                const corretoIdx = gabarito[idx];
+                btn.innerHTML = `${respostas[idx]} <span style="font-weight:700;color:#b71c1c;">(Correto: ${corretoIdx+1}- ${termos[corretoIdx]})</span>`;
+              }
+            });
+          });
+          renderBotoes();
+        } else {
+          document.querySelectorAll('.alt-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const resposta = this.dataset.resposta;
+              const gabarito = this.dataset.gabarito;
+              const botoes = this.parentElement.querySelectorAll('.alt-btn');
+              botoes.forEach(b => b.disabled = true);
+              if (resposta === gabarito) this.classList.add('certa');
+              else {
+                this.classList.add('errada');
+                botoes.forEach(b => { if (b.dataset.resposta === gabarito) b.classList.add('certa'); });
+              }
+              const divResp = this.closest('.card-front')?.querySelector('.resposta-exibicao');
+              if (divResp) {
+                divResp.style.display = 'block';
+                divResp.innerHTML = `<strong>Gabarito: ${gabarito}</strong><br>${q.comentario || ''}`;
+              }
+              if (!respondidasSet.has(q.id)) { respondidasSet.add(q.id); salvarRespondidas(); }
+            });
+          });
+        }
+
+        document.getElementById('btnProximo').addEventListener('click', () => {
+          if (indiceAtual < questoesFiltradas.length - 1) { indiceAtual++; renderizarQuestao(); }
+          else alert('Última questão.');
         });
-        document.getElementById('btnAnterior')?.addEventListener('click', () => {
-          if (indiceAtual > 0) { indiceAtual--; renderizarQuestao(); } else alert('Primeira questão.');
+        document.getElementById('btnAnterior').addEventListener('click', () => {
+          if (indiceAtual > 0) { indiceAtual--; renderizarQuestao(); }
+          else alert('Primeira questão.');
         });
-        document.getElementById('btnMarcarRespondida')?.addEventListener('click', () => {
+        document.getElementById('btnMarcarRespondida').addEventListener('click', () => {
           if (respondidasSet.has(q.id)) { alert('Já marcada.'); return; }
-          respondidasSet.add(q.id); salvarRespondidas(); alert('Marcada como respondida!');
+          respondidasSet.add(q.id); salvarRespondidas(); alert('Marcada!');
           if (!exibirRespondidasCheck.checked) aplicarFiltros();
         });
+        setTimeout(() => { navegacaoTravada = false; }, 100);
       }
 
       btnDiscursivas.addEventListener('click', () => iniciarLista('discursiva'));
       btnConcursos.addEventListener('click', () => iniciarLista('concursos'));
       btnVariadas.addEventListener('click', () => iniciarLista('variada'));
       btnEncerrar.addEventListener('click', encerrarLista);
-      exibirRespondidasCheck.addEventListener('change', () => { aplicarFiltros(); });
+      exibirRespondidasCheck.addEventListener('change', () => { indiceAtual = 0; aplicarFiltros(); });
       btnReset.addEventListener('click', () => { if (confirm('Apagar histórico?')) { respondidasSet.clear(); salvarRespondidas(); aplicarFiltros(); } });
       btnIrQuestao.addEventListener('click', () => {
         const n = parseInt(inputIrQuestao.value, 10);
@@ -1038,9 +947,7 @@
         indiceAtual = n - 1; renderizarQuestao();
       });
 
-      areaEstudo.style.display = 'none';
-      cronometroBox.style.display = 'none';
-      telaInicial.style.display = 'block';
+      areaEstudo.style.display = 'none'; cronometroBox.style.display = 'none'; telaInicial.style.display = 'block';
     })();
   </script>
 </body>
