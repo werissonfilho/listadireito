@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0">
+  <title>Estudos · Obrigações e Pagamento · Direito Civil</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif;
+      background: #f5f2eb;
+      color: #2e241f;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem 1rem;
+    }
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      background: #fffcf5;
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.15);
+      padding: 2rem 2rem 2.5rem;
+      border: 1px solid #e7d7c4;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #4a3724;
+      letter-spacing: -0.5px;
+      border-bottom: 2px solid #d9c5a7;
+      padding-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    h1 span {
+      background: #e6d7bd;
+      padding: 0.2rem 1rem;
+      border-radius: 3rem;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .cronometro-box {
+      background: #2e241f;
+      color: #f5e8d3;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      justify-content: center;
+      letter-spacing: 1px;
+      font-variant-numeric: tabular-nums;
+      font-family: 'Courier New', monospace;
+    }
+    .botoes-inicio {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+    .btn-inicio {
+      background: #fffbf5;
+      border: 2px solid #b99e7c;
+      padding: 1.5rem 2rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.25s;
+      text-align: center;
+      flex: 1 1 220px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+      background: #faf3e6;
+      color: #3e2e20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-inicio:hover {
+      background: #e7d5bb;
+      border-color: #8b6f50;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(120, 80, 40, 0.15);
+    }
+    .btn-inicio .emoji {
+      font-size: 2.5rem;
+    }
+    .painel-controle {
+      background: #faf3e6;
+      border-radius: 2rem;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.5rem;
+      border: 1px solid #ddd0bb;
+    }
+    .filtro-respostas {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    button {
+      background: #ffffff;
+      border: 1px solid #b99e7c;
+      padding: 0.6rem 1.3rem;
+      border-radius: 2.5rem;
+      font-weight: 600;
+      color: #3e2e20;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.9rem;
+    }
+    button:hover {
+      background: #e7d5bb;
+      border-color: #8b6f50;
+    }
+    .btn-encerrar {
+      background: #c0392b;
+      color: white;
+      border-color: #a93226;
+      font-weight: 700;
+    }
+    .btn-encerrar:hover {
+      background: #e74c3c;
+      border-color: #c0392b;
+    }
+    .navegacao-rapida {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f4ede1;
+      border-radius: 3rem;
+      padding: 0.3rem 1rem;
+    }
+    select,
+    input[type="number"] {
+      padding: 0.5rem 0.9rem;
+      border-radius: 2rem;
+      border: 1px solid #ccb699;
+      background: white;
+      font-weight: 500;
+    }
+    .flashcard-area {
+      background: #fffbf5;
+      border-radius: 2rem;
+      border: 1px solid #dac9ae;
+      padding: 1.8rem;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.04);
+    }
+    .card {
+      width: 100%;
+      perspective: 1500px;
+      cursor: pointer;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      min-height: 250px;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-style: preserve-3d;
+    }
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      backface-visibility: hidden;
+      border-radius: 1.8rem;
+      padding: 1.8rem;
+      background: #fefaf2;
+      border: 1px solid #e2cfb0;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+      top: 0;
+      left: 0;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      background: #f7efe2;
+      border: 1px solid #c8af87;
+      overflow-y: auto;
+      max-height: 480px;
+    }
+    .questao-titulo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #5b3f28;
+      margin-bottom: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tipo-tag {
+      background: #dcc7aa;
+      border-radius: 2rem;
+      padding: 0.2rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .enunciado {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #2f241a;
+      white-space: pre-wrap;
+    }
+    .alternativas-lista {
+      margin-top: 0.8rem;
+      padding-left: 1.2rem;
+      line-height: 1.7;
+    }
+    .resposta-detalhada {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .botoes-flash {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .footer-navegacao {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    .questao-contador {
+      font-weight: 600;
+      background: #ede3d3;
+      padding: 0.3rem 1.5rem;
+      border-radius: 2rem;
+    }
+    .mensagem-inicial {
+      text-align: center;
+      color: #7b6e5e;
+      font-size: 1.1rem;
+      padding: 2rem;
+    }
+    hr {
+      border: 0.5px solid #ddceb5;
+      margin: 0.8rem 0;
+    }
+    @media (max-width: 650px) {
+      .container {
+        padding: 1.2rem;
+      }
+      .btn-inicio {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="appContainer">
+    <h1>📚 Obrigações & Pagamento <span>Civil</span></h1>
+
+    <!-- CRONÔMETRO -->
+    <div class="cronometro-box" id="cronometroBox" style="display:none;">
+      ⏱️ <span id="cronometroDisplay">00:00:00</span>
+      <button class="btn-encerrar" id="btnEncerrar" style="margin-left:1rem; font-size:0.8rem; padding:0.4rem 1rem;">ENCERRAR LISTA</button>
+    </div>
+
+    <!-- TELA INICIAL -->
+    <div id="telaInicial">
+      <div class="mensagem-inicial">
+        <p style="font-size:1.3rem; font-weight:600;">Selecione o tipo de lista para começar:</p>
+      </div>
+      <div class="botoes-inicio">
+        <button class="btn-inicio" id="btnDiscursivas">
+          <span class="emoji">📝</span> Questões Discursivas
+          <small style="font-weight:400;">100 questões teóricas</small>
+        </button>
+        <button class="btn-inicio" id="btnConcursos">
+          <span class="emoji">🏛️</span> Questões de Concursos
+          <small style="font-weight:400;">60 questões objetivas</small>
+        </button>
+        <button class="btn-inicio" id="btnVariadas">
+          <span class="emoji">📋</span> Questões Variadas
+          <small style="font-weight:400;">V/F, lacunas, associação</small>
+        </button>
+      </div>
+    </div>
+
+    <!-- ÁREA DE ESTUDO (inicialmente oculta) -->
+    <div id="areaEstudo" style="display:none; display:flex; flex-direction:column; gap:1.5rem;">
+      <!-- PAINEL DE CONTROLE -->
+      <div class="painel-controle">
+        <div class="filtro-respostas">
+          <label style="display:flex;align-items:center;gap:0.3rem;cursor:pointer;">
+            <input type="checkbox" id="exibirRespondidasCheck"> Exibir já respondidas
+          </label>
+          <button id="btnResetProgress">🧹 Reset progresso</button>
+        </div>
+        <div class="navegacao-rapida">
+          <span>🔢 Ir para:</span>
+          <input type="number" id="inputIrQuestao" placeholder="Nº" min="1" style="width:75px;">
+          <button id="btnIrQuestao">Ir</button>
+        </div>
+      </div>
+
+      <!-- FLASHCARD -->
+      <div class="flashcard-area" id="flashcardContainer">
+        <div style="width:100%;">
+          <div class="card" id="flashcard">
+            <div class="card-inner">
+              <div class="card-front" id="cardFront">
+                <div class="questao-titulo">
+                  <span id="tipoQuestaoLabel">📖</span>
+                  <span class="tipo-tag" id="subtipoTag"></span>
+                </div>
+                <div class="enunciado" id="enunciadoTexto">Carregando...</div>
+                <div id="alternativasContainer" style="margin-top:0.5rem;"></div>
+                <div style="margin-top:0.6rem;font-size:0.8rem;color:#7b6e5e;" id="topicoPequeno"></div>
+              </div>
+              <div class="card-back" id="cardBack">
+                <div style="font-weight:700;margin-bottom:0.5rem;">✅ Resposta / Gabarito:</div>
+                <div class="resposta-detalhada" id="respostaTexto"></div>
+                <div id="comentarioExtra" style="margin-top:0.8rem;font-style:italic;color:#5b3f28;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="botoes-flash">
+          <button id="btnFlip">🔄 Virar (Flip)</button>
+          <button id="btnProximo">⏩ Próxima</button>
+          <button id="btnAnterior">⏪ Anterior</button>
+        </div>
+        <div class="footer-navegacao">
+          <span class="questao-contador" id="contadorQuestoes">0 / 0</span>
+          <button id="btnMarcarRespondida">✔️ Marcar como respondida</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ==================== BANCO DE QUESTÕES ====================
+      const QUESTOES_BASE = [];
+
+      function addQ(tipo, subtipo, topico, enunciado, resposta, alternativas, comentario) {
+        QUESTOES_BASE.push({
+          id: QUESTOES_BASE.length + 1,
+          tipo, // 'discursiva', 'concursos', 'variada'
+          subtipo: subtipo || '', // 'vf','lacuna','associacao','multipla','correto_incorreto','' para concursos/discursivas
+          topico,
+          enunciado,
+          resposta,
+          alternativas: alternativas || null,
+          comentario: comentario || ''
+        });
+      }
+
+      // ========== DISCURSIVAS (100) ==========
+      const discursivas = [
+        { t: "Conceito e natureza jurídica", e: "Explique a natureza jurídica da obrigação e diferencie obrigação de dever jurídico em sentido amplo.", r: "Obrigação é vínculo jurídico patrimonial que constrange o devedor a cumprir determinada prestação em favor do credor, sob pena de responsabilidade patrimonial. Possui sujeitos, objeto e vínculo jurídico. Já o dever jurídico é gênero mais amplo, abrangendo toda conduta imposta pelo ordenamento, inclusive deveres sem conteúdo patrimonial ou sem relação obrigacional específica. Toda obrigação é dever jurídico, mas nem todo dever jurídico é obrigação." },
+        { t: "Elementos da obrigação", e: "Aponte e explique os elementos estruturais da obrigação, indicando a função de cada um deles dentro da relação obrigacional.", r: "Os elementos são: sujeito ativo (credor), titular do direito de exigir; sujeito passivo (devedor), responsável pelo cumprimento; objeto/prestação, que consiste em dar, fazer ou não fazer; e vínculo jurídico, que autoriza a coerção estatal em caso de inadimplemento. A ausência de qualquer desses elementos descaracteriza a obrigação." },
+        { t: "Dar coisa certa e incerta", e: "Diferencie obrigação de dar coisa certa e obrigação de dar coisa incerta, explicando a relevância jurídica da concentração.", r: "Na obrigação de dar coisa certa, o objeto já é individualizado desde a origem. Na obrigação de dar coisa incerta, o objeto é indicado apenas pelo gênero e quantidade. A concentração é o ato de individualização da coisa devida, transformando a obrigação genérica em específica. Após a concentração, passam a incidir as regras da obrigação de dar coisa certa." },
+        { t: "Obrigações de fazer", e: "Explique a diferença entre obrigações fungíveis e infungíveis dentro das obrigações de fazer e indique suas consequências no inadimplemento.", r: "Obrigação fungível é aquela que pode ser executada por terceiro sem prejuízo ao credor. A infungível depende das qualidades pessoais do devedor. No inadimplemento da fungível, admite-se execução por terceiro às custas do devedor. Na infungível, a tutela tende à conversão em perdas e danos, pois não é possível substituição pessoal." },
+        { t: "Divisíveis e indivisíveis", e: "Diferencie obrigação divisível de indivisível e explique por que indivisibilidade não se confunde com solidariedade.", r: "Obrigação divisível admite fracionamento do objeto sem alteração de valor ou utilidade. A indivisível não admite divisão útil da prestação. Solidariedade refere-se ao vínculo subjetivo entre credores ou devedores, permitindo cobrança integral. Já a indivisibilidade decorre da natureza do objeto. A obrigação pode ser indivisível sem ser solidária e vice-versa." },
+        { t: "Solidariedade passiva", e: "Explique os efeitos da solidariedade passiva em relação aos devedores e ao credor.", r: "Na solidariedade passiva, qualquer devedor pode ser compelido ao pagamento integral da dívida. O pagamento feito por um extingue a obrigação perante o credor, mas gera direito regressivo contra os demais coobrigados proporcionalmente às suas quotas. O credor pode escolher contra quem demandar." },
+        { t: "Alternativa e facultativa", e: "Diferencie obrigação alternativa e obrigação facultativa, destacando o impacto da perda do objeto em cada uma delas.", r: "Na obrigação alternativa existem duas ou mais prestações devidas, mas o cumprimento de uma extingue a obrigação. Na facultativa existe apenas uma prestação principal, com faculdade de substituição pelo devedor. Na alternativa, a perda de uma prestação pode concentrar a obrigação na remanescente. Na facultativa, a perda da prestação principal extingue a obrigação, ainda que a prestação substitutiva permaneça possível." },
+        { t: "Obrigação natural", e: "Conceitue obrigação natural e explique por que ela é considerada inexigível, mas irrepetível.", r: "Obrigação natural é aquela destituída de coercibilidade jurídica, não podendo o credor exigir judicialmente o cumprimento. Contudo, se houver pagamento espontâneo, ele é válido e não pode ser repetido pelo devedor, razão pela qual é irrepetível." },
+        { t: "Cessão de crédito", e: "Explique os requisitos e efeitos da cessão de crédito, indicando a importância da notificação ao devedor.", r: "A cessão de crédito consiste na transferência do crédito do credor originário a terceiro. Exige existência de crédito transmissível e acordo entre cedente e cessionário. A notificação ao devedor é importante para tornar a cessão eficaz perante ele, evitando pagamento válido ao credor antigo." },
+        { t: "Assunção de dívida", e: "Diferencie expromissão e delegação na assunção de dívida.", r: "Na expromissão, terceiro assume espontaneamente a dívida independentemente da participação do devedor originário. Na delegação, o próprio devedor indica terceiro para assumir a obrigação. Em ambos os casos, depende da concordância do credor." },
+        { t: "Novação", e: "Explique a novação e diferencie novação objetiva de subjetiva.", r: "Novação é forma de extinção da obrigação mediante criação de nova obrigação destinada a substituir a anterior. Na novação objetiva, altera-se o objeto ou causa da obrigação. Na subjetiva, altera-se um dos sujeitos da relação obrigacional, podendo envolver substituição do credor ou do devedor." },
+        { t: "Compensação", e: "Quais são os pressupostos da compensação legal e qual sua finalidade prática?", r: "A compensação legal exige reciprocidade de créditos, liquidez, exigibilidade e fungibilidade das prestações. Sua finalidade é extinguir obrigações recíprocas até o limite equivalente, evitando dupla circulação patrimonial." },
+        { t: "Confusão", e: "Explique o instituto da confusão e indique por que ela extingue a obrigação.", r: "Confusão ocorre quando as qualidades de credor e devedor se reúnem na mesma pessoa. Como ninguém pode exigir obrigação de si mesmo, desaparece a dualidade subjetiva necessária à relação obrigacional, extinguindo-se a obrigação." },
+        { t: "Remissão e dação", e: "Diferencie remissão da dívida e dação em pagamento.", r: "Na remissão, o credor perdoa a dívida, extinguindo-a gratuitamente. Na dação em pagamento, o credor aceita prestação diversa da originalmente pactuada para extinguir a obrigação. A remissão é liberalidade; a dação é forma especial de adimplemento." },
+        { t: "Transação", e: "Explique o conceito de transação e sua função na solução de conflitos obrigacionais.", r: "Transação é negócio jurídico bilateral em que as partes realizam concessões recíprocas para prevenir ou extinguir litígios. Sua função é solucionar controvérsias de forma consensual, produzindo efeito extintivo em relação às obrigações discutidas." },
+        { t: "Mora e inadimplemento", e: "Diferencie mora e inadimplemento absoluto, apontando os critérios utilizados para essa distinção.", r: "Mora é atraso culposo no cumprimento da obrigação, quando ainda subsiste interesse útil do credor na prestação. Inadimplemento absoluto ocorre quando a prestação se torna impossível ou inútil ao credor. O critério principal é a utilidade do cumprimento tardio." },
+        { t: "Mora do devedor e credor", e: "Explique a mora do devedor e a mora do credor, destacando seus efeitos jurídicos.", r: "Mora do devedor ocorre quando ele atrasa injustificadamente o cumprimento. Gera responsabilidade por perdas e danos, juros e riscos da coisa. Mora do credor ocorre quando ele injustificadamente recusa receber o pagamento ou dificulta o adimplemento. Nesse caso, cessam certos encargos do devedor e os riscos podem ser transferidos ao credor." },
+        { t: "Perdas e danos", e: "Diferencie danos emergentes e lucros cessantes no contexto das perdas e danos.", r: "Danos emergentes representam prejuízo efetivamente sofrido pelo patrimônio da vítima. Lucros cessantes correspondem ao ganho que razoavelmente deixou de ser obtido em razão do inadimplemento." },
+        { t: "Cláusula penal", e: "Explique a diferença entre cláusula penal compensatória e cláusula penal moratória.", r: "A cláusula penal compensatória substitui as perdas e danos em caso de inadimplemento total. Já a moratória incide em caso de atraso no cumprimento, funcionando como penalidade pelo retardamento sem extinguir a obrigação principal." },
+        { t: "Juros", e: "Diferencie juros remuneratórios e juros moratórios quanto à finalidade e origem.", r: "Juros remuneratórios remuneram o uso consentido do capital, normalmente decorrendo de convenção contratual. Juros moratórios decorrem do atraso no cumprimento da obrigação e possuem função indenizatória pelo inadimplemento." },
+        { t: "Arras", e: "Explique a distinção entre arras confirmatórias e arras penitenciais.", r: "Arras confirmatórias servem como sinal de confirmação do contrato e garantia de execução. Em caso de inadimplemento, podem ser retidas ou devolvidas em dobro. Arras penitenciais asseguram direito de arrependimento, funcionando como preço da desistência contratual." },
+        { t: "Identidade do pagamento", e: "Explique o princípio da identidade do pagamento e indique suas consequências práticas.", r: "O princípio da identidade determina que o credor não é obrigado a aceitar prestação diversa da convencionada, ainda que mais valiosa. Garante a exata correspondência entre obrigação assumida e prestação exigível." },
+        { t: "Quesível e portável", e: "Diferencie dívida quesível e dívida portável, indicando a regra geral no direito civil brasileiro.", r: "Na dívida quesível, o pagamento deve ser buscado pelo credor no domicílio do devedor. Na dívida portável, o devedor deve levar a prestação ao credor. A regra geral é a dívida quesível, salvo convenção, lei ou natureza da obrigação em sentido diverso." },
+        { t: "Consignação em pagamento", e: "Explique a consignação em pagamento e indique as hipóteses em que ela é admitida.", r: "Consignação em pagamento é forma especial de extinção da obrigação mediante depósito judicial ou extrajudicial da prestação devida quando o pagamento direto se torna impossível ou excessivamente dificultado. É admitida, por exemplo, em caso de recusa injusta do credor, dúvida sobre quem deve receber ou incapacidade do credor." },
+        { t: "Sub-rogação", e: "Explique a sub-rogação e diferencie sub-rogação legal de convencional.", r: "Sub-rogação é a substituição de uma pessoa por outra na posição de credor, com transferência dos direitos e garantias do crédito. A sub-rogação legal decorre diretamente da lei; a convencional resulta de acordo entre as partes." },
+        { t: "Patrimonialidade", e: "A obrigação possui caráter patrimonial, mas nem toda relação patrimonial constitui obrigação. Explique essa afirmação e demonstre quais características tornam a obrigação uma relação jurídica específica dentro do Direito Civil.", r: "A obrigação é uma relação jurídica patrimonial específica porque envolve vínculo jurídico entre sujeitos determinados, permitindo ao credor exigir do devedor uma prestação economicamente apreciável. Nem toda relação patrimonial é obrigação, pois pode haver relações patrimoniais sem pretensão exigível entre partes determinadas, como direitos reais ou meras situações econômicas. A obrigação distingue-se pela presença simultânea de sujeitos, prestação e coercibilidade jurídica." },
+        { t: "Perecimento e deterioração", e: "Nas obrigações de dar coisa certa, explique a diferença entre perecimento e deterioração da coisa antes da tradição, indicando os efeitos quando houver ou não culpa do devedor.", r: "Perecimento é a perda total da coisa; deterioração é sua perda parcial ou desvalorização. Sem culpa do devedor, a obrigação resolve-se para as partes no perecimento, e o credor recebe a coisa no estado em que estiver na deterioração, podendo eventualmente rescindir. Havendo culpa do devedor, responde ele por perdas e danos, além do equivalente econômico da coisa." },
+        { t: "Gênero não perece", e: "Explique por que o gênero não perece nas obrigações de dar coisa incerta e indique em que momento essa lógica deixa de ser aplicada.", r: "O gênero não perece porque, enquanto não houver individualização da prestação, o devedor pode cumprir a obrigação com outro bem pertencente ao mesmo gênero e quantidade. Essa lógica deixa de existir após a concentração, quando a obrigação se individualiza e passa a seguir o regime da coisa certa." },
+        { t: "Obrigação de não fazer", e: "Analise a possibilidade de execução específica nas obrigações de não fazer e explique quais providências podem ser adotadas diante do descumprimento da obrigação.", r: "Na obrigação de não fazer, o descumprimento ocorre quando o devedor pratica o ato do qual deveria se abster. O credor pode exigir desfazimento do ato, quando possível, às custas do devedor, além de perdas e danos. Também podem existir medidas coercitivas para impedir continuidade da conduta ilícita." },
+        { t: "Solidariedade não se presume", e: "A solidariedade não se presume. Explique o significado dessa afirmação e indique suas consequências práticas na interpretação das obrigações.", r: "A solidariedade depende de previsão legal ou convencional expressa. Na dúvida, presume-se obrigação fracionada. Como consequência, cada devedor responde apenas por sua quota e cada credor só pode exigir sua parte, salvo estipulação diversa." },
+        { t: "Conjunta x solidária", e: "Diferencie obrigação conjunta simples de obrigação solidária passiva quanto aos efeitos do inadimplemento de um dos devedores.", r: "Na obrigação conjunta simples, cada devedor responde apenas pela própria quota; o inadimplemento de um não amplia a responsabilidade dos demais. Na solidariedade passiva, qualquer devedor pode ser cobrado integralmente pelo credor, independentemente da divisão interna das quotas." },
+        { t: "Concentração nas alternativas", e: "Explique a concentração nas obrigações alternativas e indique sua relevância para determinação dos riscos da obrigação.", r: "Concentração é a definição definitiva da prestação que será cumprida dentre as alternativas possíveis. Após a concentração, desaparece a pluralidade de objetos e a obrigação passa a incidir sobre prestação única, determinando também qual prestação suportará os riscos de perecimento ou inadimplemento." },
+        { t: "Líquida e ilíquida", e: "Explique a diferença prática entre obrigação líquida e obrigação ilíquida no contexto da exigibilidade judicial.", r: "Obrigação líquida possui valor determinado ou determinável imediatamente; obrigação ilíquida depende de apuração prévia do montante devido. A liquidez influencia a exigibilidade, cálculo de mora, execução e extensão da responsabilidade patrimonial." },
+        { t: "Efeitos da obrigação natural", e: "A obrigação natural produz efeitos jurídicos mesmo sendo inexigível. Demonstre essa afirmação utilizando a lógica da irrepetibilidade.", r: "Embora não possa ser cobrada judicialmente, a obrigação natural gera efeitos jurídicos porque o pagamento voluntário é válido e não pode ser restituído. A irrepetibilidade demonstra que o ordenamento reconhece certa juridicidade ao vínculo, ainda que sem coercibilidade." },
+        { t: "Cessão e garantias", e: "Explique os efeitos da cessão de crédito em relação às garantias e acessórios da obrigação principal.", r: "A cessão transfere ao cessionário não apenas o crédito principal, mas também seus acessórios e garantias, como juros, cláusula penal, privilégios e garantias reais, salvo disposição em contrário. O crédito é transmitido com suas características originárias." },
+        { t: "Assunção e concordância", e: "Explique por que a concordância do credor é elemento essencial na assunção de dívida.", r: "A substituição do devedor altera diretamente a segurança patrimonial do credor. Por isso, sua concordância é indispensável, pois o credor possui interesse legítimo na solvabilidade e confiabilidade do novo devedor." },
+        { t: "Cessão de contrato", e: "A cessão de contrato é considerada instituto mais complexo do que a cessão de crédito. Explique o motivo.", r: "Na cessão de contrato ocorre transferência da posição contratual completa, abrangendo direitos e deveres. Diferentemente da cessão de crédito, que transfere apenas o polo ativo da obrigação, a cessão contratual envolve substituição ampla na relação jurídica, normalmente exigindo anuência da outra parte." },
+        { t: "Novação x modificação", e: "Explique a diferença estrutural entre novação e mera modificação contratual.", r: "Na novação há intenção inequívoca de extinguir a obrigação anterior e substituí-la por nova obrigação. Na simples modificação contratual, a obrigação originária permanece, sofrendo apenas alterações acessórias ou secundárias sem efeito extintivo." },
+        { t: "Compensação como pagamento indireto", e: "A compensação pode ser vista como forma simplificada de pagamento indireto. Explique essa ideia.", r: "Na compensação, duas pessoas simultaneamente credoras e devedoras extinguem reciprocamente suas obrigações até o limite correspondente. Evita-se dupla circulação de patrimônio, produzindo resultado econômico equivalente ao pagamento recíproco." },
+        { t: "Remissão e aceitação", e: "Explique por que a remissão da dívida depende de aceitação do devedor em determinadas hipóteses.", r: "Apesar de normalmente favorecer o devedor, a remissão pode afetar interesses jurídicos relevantes, como honra, garantias ou relações patrimoniais paralelas. Por isso, em certas situações exige-se aceitação para aperfeiçoamento do negócio extintivo." },
+        { t: "Dação x novação", e: "Diferencie dação em pagamento e novação quanto aos efeitos sobre a obrigação originária.", r: "Na dação em pagamento extingue-se a obrigação mediante entrega de prestação diversa aceita pelo credor. Já na novação há substituição da obrigação antiga por nova obrigação juridicamente distinta. A dação extingue diretamente; a novação substitui." },
+        { t: "Transação e concessões", e: "Explique por que a transação exige concessões recíprocas das partes.", r: "A essência da transação é a composição consensual do conflito. As concessões recíprocas demonstram renúncias parciais de pretensões, permitindo equilíbrio negocial e solução definitiva da controvérsia." },
+        { t: "Purga da mora", e: "Explique a purga da mora e indique em que situações ela possui relevância prática.", r: "Purga da mora consiste na eliminação dos efeitos do atraso mediante cumprimento da obrigação acrescida dos encargos decorrentes da mora. Possui relevância especialmente em relações contratuais continuadas ou quando a lei admite preservação do vínculo contratual apesar do atraso." },
+        { t: "Responsabilidade mora x inadimplemento", e: "Diferencie responsabilidade civil decorrente da mora e responsabilidade decorrente do inadimplemento absoluto.", r: "Na mora, a obrigação principal ainda subsiste, sendo cumulada com encargos como juros e perdas adicionais. No inadimplemento absoluto, desaparece o interesse útil na prestação, convertendo-se a obrigação em perdas e danos substitutivas." },
+        { t: "Função preventiva cláusula penal", e: "Explique a função preventiva da cláusula penal dentro das relações obrigacionais.", r: "A cláusula penal funciona como mecanismo coercitivo indireto, pressionando o devedor ao adimplemento pela previsão antecipada de penalidade econômica em caso de descumprimento. Possui função intimidativa e também prefixadora de indenização." },
+        { t: "Juros e mora", e: "Explique a relação entre juros moratórios e constituição em mora do devedor.", r: "Os juros moratórios surgem como consequência do atraso culposo no cumprimento da obrigação. A constituição em mora marca o momento a partir do qual passam a incidir os encargos decorrentes do retardamento." },
+        { t: "Arras confirmatória e indenizatória", e: "As arras podem possuir função confirmatória e indenizatória simultaneamente. Explique essa afirmação.", r: "As arras confirmatórias demonstram conclusão do contrato e antecipam consequências do inadimplemento. Funcionam como prova do negócio e também como prefixação mínima de perdas decorrentes do descumprimento." },
+        { t: "Terceiro interessado e não interessado", e: "Explique por que o pagamento realizado por terceiro interessado produz efeitos distintos do pagamento feito por terceiro não interessado.", r: "O terceiro interessado possui vínculo jurídico com a obrigação e interesse na extinção do débito, razão pela qual pode sub-rogar-se nos direitos do credor. Já o terceiro não interessado normalmente atua por liberalidade, sem automaticamente adquirir posição jurídica equivalente à do credor originário." },
+        { t: "Quitação", e: "Explique os requisitos essenciais da quitação como prova do pagamento.", r: "A quitação deve identificar credor, devedor, objeto da prestação, valor ou extensão do pagamento e manifestação inequívoca de recebimento. Serve como prova documental do adimplemento e proteção contra cobranças indevidas." },
+        { t: "Imputação do pagamento", e: "Na imputação do pagamento, explique por que a ordem de abatimento da dívida possui relevância prática nas relações obrigacionais complexas.", r: "Quando existem várias dívidas entre as mesmas partes, a imputação define qual obrigação será considerada extinta pelo pagamento realizado. Isso influencia incidência de juros, garantias, prescrição, encargos e permanência de obrigações mais onerosas." },
+        { t: "Patrimonialidade e interesse", e: "A patrimonialidade é frequentemente apontada como característica essencial da obrigação. Explique em que consiste esse caráter patrimonial e demonstre por que ele não significa necessariamente que o interesse protegido seja exclusivamente econômico.", r: "A patrimonialidade significa que a prestação obrigacional deve possuir expressão econômica, permitindo avaliação pecuniária e responsabilização patrimonial em caso de inadimplemento. Contudo, o interesse protegido pode ser moral, afetivo, artístico ou pessoal, desde que a prestação seja economicamente apreciável." },
+        { t: "Vínculo e coerção", e: "Explique como o vínculo jurídico obrigacional limita a liberdade patrimonial do devedor e justifique por que não se admite coerção física para cumprimento da obrigação.", r: "O vínculo obrigacional submete o patrimônio do devedor à satisfação do crédito, permitindo responsabilização patrimonial em caso de inadimplemento. O ordenamento não admite coerção física porque a execução civil recai sobre bens e patrimônio, preservando a dignidade e liberdade pessoal do devedor." },
+        { t: "Melhoramentos na coisa certa", e: "Nas obrigações de dar coisa certa, explique o tratamento jurídico dos melhoramentos e acréscimos ocorridos antes da tradição.", r: "Os melhoramentos e acréscimos da coisa pertencem ao credor, pois acompanham o bem principal. Contudo, o devedor também faz jus ao reembolso das despesas necessárias ou úteis realizadas antes da entrega, conforme a boa-fé e vedação ao enriquecimento sem causa." },
+        { t: "Escolha na coisa incerta", e: "Explique por que a escolha da coisa nas obrigações de dar coisa incerta não pode recair sobre bem de pior qualidade, nem obrigar o credor a aceitar o melhor exemplar do gênero.", r: "A escolha deve observar equilíbrio e boa-fé objetiva. O devedor não pode escolher coisa de qualidade inferior porque isso representaria inadimplemento qualitativo da obrigação. Também não pode ser compelido a entregar o melhor exemplar, pois a obrigação recai sobre bem médio dentro do gênero pactuado." },
+        { t: "Impossibilidade jurídica e material", e: "Diferencie impossibilidade jurídica e impossibilidade material nas obrigações de fazer, indicando seus efeitos.", r: "Impossibilidade material ocorre quando a execução física da prestação se torna inviável. Impossibilidade jurídica ocorre quando a prestação se torna proibida pelo ordenamento. Ambas podem extinguir a obrigação sem culpa do devedor, desde que supervenientes e inevitáveis; havendo culpa, surge dever de indenizar." },
+        { t: "Indivisível em divisível", e: "Explique por que a obrigação indivisível pode tornar-se divisível em determinadas hipóteses.", r: "A indivisibilidade decorre da natureza da prestação, da vontade das partes ou da lei. Contudo, convertida a obrigação em perdas e danos, desaparece a indivisibilidade material da prestação original, passando a existir dívida pecuniária divisível entre os coobrigados." },
+        { t: "Solidariedade ativa", e: "Na solidariedade ativa, explique os efeitos do pagamento realizado pelo devedor a apenas um dos credores solidários.", r: "O pagamento feito a um credor solidário extingue integralmente a obrigação perante o devedor. O credor que recebeu torna-se responsável perante os demais credores solidários pela repartição interna das quotas correspondentes." },
+        { t: "Risco na facultativa", e: "Explique por que a obrigação facultativa possui maior risco para o credor do que a obrigação alternativa.", r: "Na obrigação facultativa existe apenas uma prestação efetivamente devida. Se ela perecer sem culpa do devedor, extingue-se a obrigação, mesmo permanecendo possível a prestação substitutiva. Já na alternativa, subsistindo uma das prestações, o vínculo obrigacional permanece." },
+        { t: "Iliquidez e existência", e: "A iliquidez da obrigação impede sua existência? Justifique.", r: "Não. A obrigação ilíquida existe validamente, embora o valor exato da prestação ainda dependa de apuração posterior. A liquidez relaciona-se à determinação quantitativa do objeto, não à existência do vínculo obrigacional." },
+        { t: "Prescrição e obrigação natural", e: "Explique a razão pela qual dívidas prescritas costumam ser apontadas como exemplo clássico de obrigação natural.", r: "Após a prescrição, desaparece a pretensão judicial de cobrança, tornando a obrigação inexigível coercitivamente. Contudo, o pagamento espontâneo permanece válido e irrepetível, preservando efeitos jurídicos típicos da obrigação natural." },
+        { t: "Cessão e circulação", e: "Explique como a cessão de crédito se relaciona com o princípio da circulação de riquezas no Direito Privado.", r: "A cessão permite transferência de posições creditórias entre particulares, promovendo mobilidade patrimonial e circulação econômica dos créditos. Facilita operações negociais, liquidez patrimonial e dinamização das relações econômicas." },
+        { t: "Assunção liberatória", e: "Na assunção de dívida, explique a diferença entre liberação e manutenção da responsabilidade do devedor originário.", r: "Na assunção liberatória, o devedor originário é integralmente substituído pelo novo devedor. Na modalidade cumulativa ou não liberatória, o devedor inicial continua responsável juntamente com o assuntor, fortalecendo a garantia do crédito." },
+        { t: "Cessão de contrato e anuência", e: "Explique por que a cessão de contrato normalmente exige concordância da outra parte contratante.", r: "A substituição de uma das partes altera a confiança, capacidade econômica e expectativas legítimas existentes no vínculo contratual. Como o contrato envolve direitos e deveres recíprocos, a anuência da outra parte preserva equilíbrio e segurança jurídica." },
+        { t: "Novação e garantias", e: "A novação extingue automaticamente as garantias da obrigação anterior? Explique.", r: "Em regra, a novação extingue os acessórios e garantias vinculados à obrigação originária, pois surge nova relação obrigacional autônoma. Entretanto, as partes podem convencionar expressamente a manutenção das garantias." },
+        { t: "Compensação infungível", e: "Explique por que a compensação não pode ocorrer quando uma das dívidas possui natureza infungível.", r: "A compensação exige equivalência qualitativa das prestações. Dívidas infungíveis não podem ser compensadas porque não admitem substituição por equivalente genérico, inviabilizando extinção recíproca automática." },
+        { t: "Remissão total e parcial", e: "A remissão da dívida pode ser total ou parcial. Explique os reflexos dessa distinção na obrigação.", r: "Na remissão total extingue-se integralmente a obrigação. Na parcial, apenas parte do débito é perdoada, subsistindo o restante da obrigação com redução proporcional do montante devido." },
+        { t: "Dação e autonomia", e: "Explique a relação entre dação em pagamento e autonomia privada.", r: "A dação decorre da liberdade contratual das partes, permitindo que credor e devedor convencionem extinção da obrigação mediante prestação diversa da originalmente pactuada. Representa manifestação da autonomia privada na adaptação consensual do adimplemento." },
+        { t: "Transação e coisa julgada", e: "Explique por que a transação possui eficácia semelhante à coisa julgada entre as partes.", r: "A transação estabiliza consensualmente a controvérsia, impedindo rediscussão posterior do objeto transacionado. Embora não seja sentença judicial, produz efeito vinculante semelhante ao da coisa julgada material em relação às partes." },
+        { t: "Mora ex re e ex persona", e: "Diferencie mora ex re e mora ex persona.", r: "Mora ex re decorre automaticamente do vencimento da obrigação quando há termo certo para cumprimento. Mora ex persona depende de interpelação ou constituição formal do devedor, geralmente nas obrigações sem prazo determinado." },
+        { t: "Mora e riscos", e: "Explique os efeitos da mora sobre a responsabilidade pelos riscos da coisa.", r: "O devedor em mora pode responder inclusive pela perda ou deterioração da coisa decorrente de caso fortuito ou força maior, salvo prova de que o dano ocorreria igualmente mesmo sem o atraso. A mora amplia a responsabilidade patrimonial do devedor." },
+        { t: "Lucros cessantes", e: "Explique por que os lucros cessantes dependem de demonstração de probabilidade razoável de ganho.", r: "Os lucros cessantes indenizam vantagem econômica frustrada pelo inadimplemento. Por isso, não basta mera expectativa abstrata; exige-se demonstração objetiva de que o ganho provavelmente ocorreria em situação normal." },
+        { t: "Cláusula penal e perdas", e: "A cláusula penal pode coexistir com indenização por perdas e danos? Explique.", r: "Em regra, a cláusula penal substitui as perdas e danos relativas ao inadimplemento abrangido pela penalidade. Contudo, admite-se cumulação quando houver previsão contratual, excesso de prejuízo não abrangido ou hipóteses legalmente autorizadas." },
+        { t: "Juros x cláusula penal", e: "Explique a diferença funcional entre juros compensatórios/remuneratórios e cláusula penal.", r: "Os juros remuneratórios constituem remuneração pelo uso legítimo do capital durante determinado período. Já a cláusula penal possui função coercitiva e indenizatória vinculada ao inadimplemento ou mora." },
+        { t: "Arras e irrevogabilidade", e: "Explique por que as arras penitenciais são incompatíveis com contratos irrevogáveis.", r: "As arras penitenciais pressupõem direito de arrependimento mediante perda ou devolução em dobro do sinal. Em contratos irrevogáveis não existe faculdade de desistência unilateral, tornando incompatível a função penitencial das arras." },
+        { t: "Sub-rogação e garantias", e: "Explique como a sub-rogação preserva garantias e privilégios do crédito originário.", r: "O sub-rogado assume a posição jurídica do credor originário, recebendo juntamente com o crédito seus acessórios, garantias reais, privilégios e ações relacionadas. Isso preserva a integridade econômica e jurídica do crédito transferido." },
+        { t: "Boa-fé objetiva", e: "Explique como a boa-fé objetiva influencia o cumprimento das obrigações mesmo quando determinada conduta não está expressamente prevista no contrato.", r: "A boa-fé objetiva impõe deveres anexos de lealdade, cooperação, transparência e proteção recíproca, influenciando toda a relação obrigacional. Assim, mesmo sem previsão contratual expressa, as partes devem agir de modo compatível com confiança legítima e função econômica do vínculo obrigacional." },
+        { t: "Tradição e domínio", e: "Nas obrigações de dar coisa certa, explique a diferença entre tradição e transferência do domínio, indicando por que esses conceitos não se confundem.", r: "Tradição é a entrega da coisa ao credor ou adquirente. Transferência do domínio é a mudança da titularidade jurídica da propriedade. Embora frequentemente relacionadas, não se confundem, pois pode haver tradição sem aquisição da propriedade imediata ou propriedade sem entrega física do bem." },
+        { t: "Meio e resultado", e: "Explique a importância da distinção entre obrigação de meio e obrigação de resultado dentro das obrigações de fazer.", r: "Na obrigação de meio, o devedor compromete-se a empregar diligência e técnica adequadas, sem garantir resultado específico. Na obrigação de resultado, o devedor assume compromisso de atingir determinado fim concreto. A distinção influencia ônus probatório e configuração do inadimplemento." },
+        { t: "Indivisibilidade convencional", e: "Explique como a indivisibilidade pode decorrer da vontade das partes, ainda que o objeto seja materialmente divisível.", r: "As partes podem convencionar que determinada prestação seja cumprida integralmente, atribuindo indivisibilidade convencional à obrigação. Assim, mesmo sendo fisicamente divisível, a prestação torna-se juridicamente indivisível em razão da autonomia privada." },
+        { t: "Remissão na solidariedade", e: "Na solidariedade passiva, explique os efeitos da remissão concedida pelo credor a apenas um dos devedores solidários.", r: "A remissão concedida a um devedor extingue sua quota interna perante os demais, mas não necessariamente elimina a solidariedade quanto ao restante da dívida. Os demais continuam responsáveis pelo saldo remanescente, descontada a parte correspondente ao remitido." },
+        { t: "Escolha e concentração", e: "Explique a diferença entre concentração da obrigação alternativa e escolha da prestação pelo devedor.", r: "A escolha é o exercício do direito de definir qual prestação será cumprida. A concentração é o efeito jurídico decorrente dessa escolha, momento em que a obrigação deixa de possuir pluralidade de objetos e passa a recair sobre prestação única." },
+        { t: "Facultativa sem pluralidade", e: "Explique por que a obrigação facultativa não gera pluralidade obrigacional.", r: "Na obrigação facultativa existe apenas uma prestação principal efetivamente devida. A prestação substitutiva representa mera faculdade concedida ao devedor para extinguir a obrigação de forma alternativa, sem criação de múltiplos objetos obrigacionais." },
+        { t: "Iliquidez e execução", e: "Explique os efeitos processuais da iliquidez da obrigação na fase de execução.", r: "A obrigação ilíquida exige prévia liquidação para determinação do valor devido antes da execução forçada. Enquanto não houver definição quantitativa da prestação, não é possível exigir coercitivamente montante certo." },
+        { t: "Obrigação natural e fiança", e: "A obrigação natural pode ser garantida por fiador? Explique.", r: "Em regra, não se admite garantia acessória plenamente exigível para obrigação natural, pois a ausência de coercibilidade do débito principal compromete a eficácia da obrigação acessória. O acessório acompanha a natureza jurídica da obrigação principal." },
+        { t: "Cessão onerosa e gratuita", e: "Explique a diferença entre cessão onerosa e cessão gratuita de crédito quanto à responsabilidade do cedente.", r: "Na cessão onerosa, o cedente normalmente responde pela existência do crédito no momento da cessão. Na gratuita, sua responsabilidade tende a ser mais restrita. Em regra, o cedente não garante solvência do devedor, salvo estipulação expressa." },
+        { t: "Insolvência e assunção", e: "Explique por que a insolvência do novo devedor pode afetar a eficácia da assunção de dívida.", r: "A substituição do devedor não pode prejudicar injustamente o credor. Se o novo devedor for insolvente e essa condição for desconhecida do credor, a assunção pode perder eficácia liberatória em relação ao devedor originário." },
+        { t: "Cessão x subcontratação", e: "Diferencie cessão de contrato e subcontratação.", r: "Na cessão de contrato ocorre transferência da posição contratual completa a terceiro. Na subcontratação, o contratante original permanece vinculado ao contrato principal e apenas transfere a execução material de certas obrigações a terceiro." },
+        { t: "Intenção de novar", e: "Explique por que a intenção de novar não pode ser presumida.", r: "A novação extingue obrigação anterior e cria vínculo novo, produzindo efeitos relevantes sobre garantias e acessórios. Por isso, exige manifestação inequívoca de vontade, não podendo resultar de mera alteração acessória ou interpretação duvidosa." },
+        { t: "Compensação datas diferentes", e: "A compensação pode ocorrer entre dívidas vencidas em datas diferentes? Explique.", r: "Sim, desde que ambas sejam exigíveis no momento em que se pretende operar a compensação. Não é necessário vencimento simultâneo originário, mas coexistência de créditos líquidos, exigíveis e recíprocos." },
+        { t: "Remissão e renúncia", e: "Explique a relação entre remissão da dívida e renúncia patrimonial.", r: "Na remissão, o credor abre mão voluntariamente de direito de crédito integrante de seu patrimônio. Trata-se de ato de disposição patrimonial que extingue total ou parcialmente a pretensão creditória." },
+        { t: "Dação e consentimento", e: "Explique por que a dação em pagamento exige consentimento do credor mesmo quando a prestação substitutiva possui valor superior.", r: "O princípio da identidade do pagamento garante ao credor direito de receber exatamente a prestação convencionada. Assim, mesmo prestação aparentemente mais valiosa não pode ser imposta unilateralmente ao credor." },
+        { t: "Transação judicial e extrajudicial", e: "Diferencie transação judicial e transação extrajudicial.", r: "A transação judicial ocorre no curso do processo e normalmente é homologada judicialmente. A extrajudicial é celebrada fora do processo, diretamente entre as partes. Ambas possuem finalidade de prevenir ou extinguir litígios mediante concessões recíprocas." },
+        { t: "Mora e utilidade", e: "Explique por que a mora pressupõe possibilidade útil de cumprimento da obrigação.", r: "A mora representa apenas atraso no cumprimento, mantendo-se interesse útil do credor na prestação. Se o cumprimento perde utilidade ou se torna impossível, deixa de haver mora e configura-se inadimplemento absoluto." },
+        { t: "Mora solvendi e accipiendi", e: "Diferencie mora solvendi e mora accipiendi quanto à origem do inadimplemento temporário.", r: "Na mora solvendi, o atraso decorre da conduta do devedor que não realiza a prestação no tempo devido. Na mora accipiendi, o atraso decorre do credor que injustificadamente recusa ou impede o recebimento da prestação." },
+        { t: "Função reparatória", e: "Explique a função reparatória das perdas e danos dentro do inadimplemento contratual.", r: "As perdas e danos buscam recompor o patrimônio do credor lesado, colocando-o, tanto quanto possível, na situação em que estaria caso a obrigação tivesse sido regularmente cumprida." },
+        { t: "Cláusula penal acessória", e: "Explique por que a cláusula penal possui natureza acessória.", r: "A cláusula penal depende da existência da obrigação principal, servindo como garantia do cumprimento ou prefixação indenizatória decorrente de seu inadimplemento. Extinta a obrigação principal, desaparece a cláusula penal." },
+        { t: "Juros legais e convencionais", e: "Explique a diferença entre juros legais e juros convencionais.", r: "Juros legais decorrem diretamente da lei, incidindo independentemente de estipulação das partes. Juros convencionais resultam de acordo contratual entre credor e devedor, dentro dos limites permitidos pelo ordenamento." },
+        { t: "Arras e segurança", e: "Explique por que as arras confirmatórias reforçam a segurança do vínculo contratual.", r: "As arras confirmatórias funcionam como demonstração concreta da celebração do contrato e garantia mínima contra inadimplemento, fortalecendo confiança e estabilidade da relação contratual." },
+        { t: "Pagamento direto e indireto", e: "Explique a diferença entre pagamento direto e pagamento indireto nas obrigações.", r: "Pagamento direto ocorre pelo cumprimento normal da prestação originalmente devida. Pagamento indireto ocorre por mecanismos especiais de extinção da obrigação, como compensação, novação, consignação ou dação em pagamento." },
+        { t: "Consignação e proteção", e: "Explique por que a consignação em pagamento protege o devedor contra os efeitos da mora.", r: "Ao depositar corretamente a prestação quando o pagamento direto é inviabilizado pelo credor ou por circunstância jurídica relevante, o devedor demonstra intenção de adimplir, afastando os efeitos da mora e impedindo agravamento da responsabilidade obrigacional." }
+      ];
+      discursivas.forEach(d => addQ('discursiva', '', d.t, d.e, d.r, null, ''));
+
+      // ========== CONCURSOS (60) ==========
+      const concursosData = [
+        { t: "Solidariedade", e: "A solidariedade obrigacional:", alts: ["A) presume-se nas obrigações civis.", "B) decorre exclusivamente da lei.", "C) decorre da lei ou da vontade das partes.", "D) existe apenas em obrigações indivisíveis.", "E) depende sempre de decisão judicial."], r: "C", com: "A solidariedade não se presume; decorre da lei ou da vontade das partes (art. 265 CC)." },
+        { t: "Solidariedade passiva", e: "Na obrigação solidária passiva, o credor:", alts: ["A) deve cobrar todos os devedores simultaneamente.", "B) só pode exigir quota proporcional de cada devedor.", "C) pode exigir de um só devedor a dívida integral.", "D) perde a solidariedade ao cobrar apenas um devedor.", "E) precisa respeitar benefício de ordem."], r: "C", com: "Na solidariedade passiva, o credor pode exigir de qualquer devedor a dívida integral." },
+        { t: "Solidariedade em perdas e danos", e: "Convertendo-se a obrigação solidária em perdas e danos:", alts: ["A) extingue-se automaticamente a solidariedade.", "B) permanece a solidariedade quanto ao valor principal.", "C) desaparece toda responsabilidade dos devedores.", "D) transforma-se em obrigação indivisível.", "E) somente o culpado permanece responsável."], r: "B", com: "A solidariedade persiste em relação ao valor principal convertido em perdas e danos." },
+        { t: "Dar coisa incerta", e: "Nas obrigações de dar coisa incerta:", alts: ["A) o devedor pode entregar qualquer objeto, ainda que inferior.", "B) o credor é obrigado a aceitar objeto de qualidade inferior.", "C) a escolha não pode recair sobre a pior nem sobre a melhor coisa do gênero.", "D) o gênero perece com a perda do objeto inicialmente separado.", "E) a concentração é irrelevante juridicamente."], r: "C", com: "A escolha deve observar o meio-termo do gênero, não podendo ser a pior nem a melhor." },
+        { t: "Indivisível x solidária", e: "A obrigação indivisível distingue-se da obrigação solidária porque:", alts: ["A) a solidariedade decorre do objeto da prestação.", "B) a indivisibilidade decorre do vínculo subjetivo.", "C) a solidariedade nunca admite pluralidade de sujeitos.", "D) a indivisibilidade relaciona-se ao objeto da prestação.", "E) ambas possuem exatamente a mesma natureza jurídica."], r: "D", com: "A indivisibilidade diz respeito ao objeto; a solidariedade, ao vínculo subjetivo." },
+        { t: "Obrigação natural", e: "A obrigação natural caracteriza-se por:", alts: ["A) inexistência de prestação econômica.", "B) exigibilidade judicial limitada.", "C) inexistência de vínculo jurídico.", "D) inexigibilidade e irrepetibilidade do pagamento espontâneo.", "E) nulidade do pagamento realizado."], r: "D", com: "A obrigação natural é inexigível, mas o pagamento espontâneo é válido e irrepetível." },
+        { t: "Cessão de crédito", e: "Na cessão de crédito:", alts: ["A) exige-se anuência do devedor para validade.", "B) o crédito perde seus acessórios.", "C) a notificação do devedor torna a cessão eficaz perante ele.", "D) extingue-se a obrigação originária.", "E) o devedor pode impedir livremente a cessão."], r: "C", com: "A notificação ao devedor é essencial para eficácia da cessão perante ele." },
+        { t: "Assunção de dívida", e: "Na assunção de dívida:", alts: ["A) dispensa-se concordância do credor.", "B) o devedor originário jamais será liberado.", "C) há substituição do sujeito ativo.", "D) terceiro assume posição de devedor.", "E) ocorre transferência automática do contrato inteiro."], r: "D", com: "Na assunção, um terceiro assume a posição de devedor." },
+        { t: "Novação", e: "A novação caracteriza-se por:", alts: ["A) simples alteração acessória da obrigação.", "B) extinção da obrigação anterior e criação de nova obrigação.", "C) mera modificação do prazo contratual.", "D) compensação de créditos recíprocos.", "E) remissão parcial do débito."], r: "B", com: "Novação é a substituição de uma obrigação por outra nova, extinguindo a anterior." },
+        { t: "Compensação", e: "A compensação legal exige:", alts: ["A) dívidas ilíquidas.", "B) prestações infungíveis.", "C) reciprocidade entre créditos e débitos.", "D) intervenção judicial obrigatória.", "E) identidade absoluta de origem contratual."], r: "C", com: "A compensação legal exige reciprocidade, liquidez, exigibilidade e fungibilidade." },
+        { t: "Confusão", e: "A confusão extingue a obrigação porque:", alts: ["A) ocorre perda do objeto.", "B) desaparece o vínculo contratual escrito.", "C) credor e devedor reúnem-se na mesma pessoa.", "D) o crédito torna-se inexigível.", "E) há novação subjetiva."], r: "C", com: "A confusão ocorre pela reunião de credor e devedor na mesma pessoa." },
+        { t: "Dação em pagamento", e: "A dação em pagamento ocorre quando:", alts: ["A) o credor perdoa a dívida.", "B) o devedor substitui unilateralmente a prestação.", "C) o credor aceita prestação diversa da originalmente devida.", "D) há compensação automática entre créditos.", "E) surge obrigação alternativa."], r: "C", com: "Dação em pagamento é a aceitação de prestação diversa da pactuada." },
+        { t: "Transação", e: "A transação exige:", alts: ["A) homologação judicial obrigatória.", "B) concessões recíprocas entre as partes.", "C) inexistência de controvérsia.", "D) apenas obrigações extracontratuais.", "E) renúncia integral de uma das partes."], r: "B", com: "A transação pressupõe concessões recíprocas para solução do litígio." },
+        { t: "Mora", e: "A mora caracteriza-se quando:", alts: ["A) há impossibilidade definitiva da prestação.", "B) existe atraso culposo no cumprimento da obrigação.", "C) o credor desiste da prestação.", "D) ocorre nulidade contratual.", "E) a obrigação se extingue automaticamente."], r: "B", com: "Mora é o atraso culposo no cumprimento, mantendo-se a utilidade da prestação." },
+        { t: "Inadimplemento absoluto", e: "O inadimplemento absoluto ocorre quando:", alts: ["A) o atraso ainda interessa ao credor.", "B) há simples mora do devedor.", "C) o cumprimento torna-se inútil ou impossível.", "D) o devedor oferece consignação.", "E) existe apenas cláusula penal moratória."], r: "C", com: "Inadimplemento absoluto ocorre quando a prestação se torna inútil ou impossível." },
+        { t: "Lucros cessantes", e: "Os lucros cessantes correspondem:", alts: ["A) aos prejuízos efetivamente sofridos.", "B) à multa contratual prefixada.", "C) às despesas processuais.", "D) ao ganho que razoavelmente deixou de ser obtido.", "E) aos juros legais."], r: "D", com: "Lucros cessantes são os ganhos que razoavelmente deixaram de ser auferidos." },
+        { t: "Cláusula penal compensatória", e: "A cláusula penal compensatória:", alts: ["A) pune apenas atraso da obrigação.", "B) substitui as perdas e danos pelo inadimplemento total.", "C) não possui natureza acessória.", "D) depende sempre de decisão judicial.", "E) extingue automaticamente o contrato antes do inadimplemento."], r: "B", com: "A cláusula penal compensatória substitui as perdas e danos pelo inadimplemento total." },
+        { t: "Juros moratórios", e: "Os juros moratórios:", alts: ["A) remuneram uso regular do capital.", "B) independem de mora.", "C) possuem função indenizatória pelo atraso.", "D) são incompatíveis com obrigações civis.", "E) substituem integralmente a obrigação principal."], r: "C", com: "Juros moratórios indenizam o atraso no cumprimento da obrigação." },
+        { t: "Arras penitenciais", e: "As arras penitenciais:", alts: ["A) impedem arrependimento.", "B) funcionam como preço do direito de desistência.", "C) anulam o contrato automaticamente.", "D) somente existem em contratos gratuitos.", "E) equivalem à cláusula penal compensatória."], r: "B", com: "Arras penitenciais são o preço pago pelo direito de arrependimento." },
+        { t: "Identidade do pagamento", e: "Pelo princípio da identidade do pagamento:", alts: ["A) o credor deve aceitar prestação mais valiosa.", "B) o devedor escolhe livremente a forma de pagamento.", "C) o credor não é obrigado a aceitar prestação diversa da convencionada.", "D) admite-se substituição unilateral da prestação.", "E) toda obrigação pode ser convertida em dinheiro."], r: "C", com: "O credor não é obrigado a aceitar prestação diversa da pactuada." },
+        { t: "Dívida quesível", e: "A dívida quesível é aquela em que:", alts: ["A) o pagamento deve ser levado ao credor.", "B) o credor deve buscar o pagamento no domicílio do devedor.", "C) há obrigação solidária.", "D) existe cláusula penal.", "E) o pagamento depende de consignação."], r: "B", com: "Na dívida quesível, o credor busca o pagamento no domicílio do devedor." },
+        { t: "Terceiro interessado", e: "O pagamento realizado por terceiro interessado:", alts: ["A) é juridicamente inexistente.", "B) não produz efeitos obrigacionais.", "C) pode gerar sub-rogação.", "D) depende sempre de autorização do devedor.", "E) extingue também as garantias do crédito."], r: "C", com: "Terceiro interessado pode sub-rogar-se nos direitos do credor." },
+        { t: "Quitação", e: "A quitação serve como:", alts: ["A) novação automática da obrigação.", "B) prova do pagamento realizado.", "C) garantia fidejussória.", "D) forma de cláusula penal.", "E) cessão de crédito indireta."], r: "B", com: "A quitação é prova documental do adimplemento." },
+        { t: "Consignação", e: "A consignação em pagamento é cabível quando:", alts: ["A) o devedor simplesmente não deseja pagar.", "B) o credor recusa injustamente receber a prestação.", "C) há mera dificuldade financeira do devedor.", "D) existe obrigação natural.", "E) ocorre novação subjetiva."], r: "B", com: "Cabível quando o credor recusa injustamente o pagamento." },
+        { t: "Sub-rogação convencional", e: "A sub-rogação convencional decorre:", alts: ["A) exclusivamente da lei.", "B) de decisão judicial automática.", "C) de acordo de vontades.", "D) apenas da mora do devedor.", "E) da remissão da dívida."], r: "C", com: "A sub-rogação convencional resulta de acordo entre as partes." },
+        { t: "Fazer infungível", e: "A obrigação de fazer infungível:", alts: ["A) admite livre substituição do devedor.", "B) depende das qualidades pessoais do devedor.", "C) sempre se converte em obrigação de dar.", "D) não admite perdas e danos.", "E) extingue-se automaticamente pela mora."], r: "B", com: "A infungibilidade decorre das qualidades pessoais do devedor." },
+        { t: "Alternativa", e: "Na obrigação alternativa:", alts: ["A) existem várias prestações cumulativamente exigíveis.", "B) o cumprimento de uma prestação extingue a obrigação.", "C) não existe direito de escolha.", "D) há apenas uma prestação principal.", "E) inexiste concentração da obrigação."], r: "B", com: "Na alternativa, o cumprimento de uma das prestações extingue a obrigação." },
+        { t: "Remissão", e: "A remissão da dívida consiste:", alts: ["A) na substituição do devedor.", "B) em compensação judicial.", "C) no perdão da dívida pelo credor.", "D) em modalidade de mora.", "E) em cessão contratual."], r: "C", com: "Remissão é o perdão da dívida pelo credor." },
+        { t: "Purga da mora", e: "A purga da mora ocorre quando:", alts: ["A) a obrigação torna-se impossível.", "B) o credor renuncia ao crédito.", "C) o devedor elimina os efeitos do atraso mediante adimplemento acrescido dos encargos.", "D) há novação automática da dívida.", "E) o contrato é anulado."], r: "C", com: "Purga da mora é a eliminação dos efeitos do atraso pelo cumprimento com encargos." },
+        { t: "Portável", e: "Em regra, a obrigação portável determina que:", alts: ["A) o credor busque o pagamento no domicílio do devedor.", "B) o pagamento seja realizado no domicílio do credor.", "C) a obrigação seja indivisível.", "D) exista solidariedade entre as partes.", "E) o pagamento dependa de autorização judicial."], r: "B", com: "Na dívida portável, o devedor leva o pagamento ao credor." },
+        { t: "Dar coisa certa (FCC)", e: "(FCC) Nas obrigações de dar coisa certa:", alts: ["A) pertencem ao devedor os melhoramentos acrescidos à coisa até a tradição.", "B) os acessórios não acompanham a coisa principal.", "C) os frutos percebidos antes da tradição pertencem ao credor.", "D) o credor adquire os melhoramentos sem obrigação de indenizar.", "E) os acessórios acompanham a coisa principal, salvo estipulação em contrário."], r: "E", com: "Os acessórios acompanham o principal, salvo disposição contrária." },
+        { t: "Solidariedade (CEBRASPE)", e: "(CEBRASPE) Julgue: \"A solidariedade obrigacional presume-se quando houver pluralidade de devedores.\"", alts: ["Certo", "Errado"], r: "Errado", com: "A solidariedade não se presume; decorre da lei ou da vontade." },
+        { t: "Alternativa (FGV)", e: "(FGV) Na obrigação alternativa:", alts: ["A) todas as prestações são cumulativamente exigíveis.", "B) a escolha cabe sempre ao credor.", "C) a impossibilidade de uma prestação extingue automaticamente a obrigação.", "D) realizada a escolha, ocorre concentração da obrigação.", "E) inexiste pluralidade de objetos."], r: "D", com: "A escolha gera concentração da obrigação na prestação escolhida." },
+        { t: "Fazer (FCC)", e: "(FCC) Quanto às obrigações de fazer, é correto afirmar:", alts: ["A) toda obrigação de fazer admite execução por terceiro.", "B) obrigação infungível é aquela vinculada às qualidades pessoais do devedor.", "C) a obrigação fungível depende exclusivamente da pessoa do devedor.", "D) o inadimplemento nunca gera perdas e danos.", "E) obrigação de fazer não possui conteúdo patrimonial."], r: "B", com: "Obrigação infungível está vinculada às qualidades pessoais do devedor." },
+        { t: "Indivisível (CEBRASPE)", e: "(CEBRASPE) Julgue: \"Na obrigação indivisível, convertida a prestação em perdas e danos, desaparece a indivisibilidade.\"", alts: ["Certo", "Errado"], r: "Certo", com: "Convertida em perdas e danos, a indivisibilidade material desaparece." },
+        { t: "Natural (FGV)", e: "(FGV) A obrigação natural:", alts: ["A) pode ser judicialmente exigida.", "B) não produz efeitos jurídicos.", "C) admite repetição do pagamento espontâneo.", "D) caracteriza-se pela inexigibilidade do débito.", "E) equivale à obrigação inexistente."], r: "D", com: "A obrigação natural é inexigível judicialmente." },
+        { t: "Cessão (FCC)", e: "(FCC) Sobre cessão de crédito, assinale a correta:", alts: ["A) depende sempre da anuência do devedor.", "B) extingue os acessórios do crédito cedido.", "C) produz efeitos perante o devedor independentemente de ciência.", "D) transfere ao cessionário os acessórios do crédito.", "E) impede oposição de exceções pessoais pelo devedor."], r: "D", com: "A cessão transfere ao cessionário os acessórios do crédito." },
+        { t: "Assunção (CEBRASPE)", e: "(CEBRASPE) Julgue: \"A assunção de dívida implica substituição do sujeito passivo da obrigação.\"", alts: ["Certo", "Errado"], r: "Certo", com: "Assunção de dívida substitui o devedor (sujeito passivo)." },
+        { t: "Novação subjetiva (FCC)", e: "(FCC) A novação subjetiva ocorre quando:", alts: ["A) há modificação do objeto da obrigação.", "B) altera-se apenas o prazo contratual.", "C) substitui-se um dos sujeitos da obrigação.", "D) ocorre compensação de dívidas.", "E) há simples remissão parcial."], r: "C", com: "Novação subjetiva envolve substituição de sujeito." },
+        { t: "Compensação (FGV)", e: "(FGV) São requisitos da compensação legal:", alts: ["A) reciprocidade, liquidez e exigibilidade.", "B) pluralidade de credores solidários.", "C) mora do credor.", "D) tradição da coisa certa.", "E) cláusula penal expressa."], r: "A", com: "Requisitos: reciprocidade, liquidez e exigibilidade." },
+        { t: "Confusão (FCC)", e: "(FCC) A confusão extingue a obrigação porque:", alts: ["A) elimina a exigibilidade judicial.", "B) transforma obrigação civil em natural.", "C) reúne credor e devedor na mesma pessoa.", "D) extingue automaticamente o contrato principal.", "E) implica remissão tácita da dívida."], r: "C", com: "Confusão: reunião de credor e devedor na mesma pessoa." },
+        { t: "Dação (CEBRASPE)", e: "(CEBRASPE) Julgue: \"Na dação em pagamento, o credor é obrigado a aceitar prestação diversa se ela possuir valor superior.\"", alts: ["Certo", "Errado"], r: "Errado", com: "O credor não é obrigado a aceitar prestação diversa, mesmo que mais valiosa." },
+        { t: "Transação (FGV)", e: "(FGV) A transação caracteriza-se:", alts: ["A) pela inexistência de litígio.", "B) pela unilateralidade do negócio.", "C) por concessões recíprocas entre as partes.", "D) pela substituição automática da obrigação.", "E) pela natureza exclusivamente judicial."], r: "C", com: "Transação pressupõe concessões recíprocas." },
+        { t: "Mora do credor (FCC)", e: "(FCC) A mora do credor ocorre quando:", alts: ["A) o devedor atrasa culposamente a prestação.", "B) o credor recusa injustificadamente receber o pagamento.", "C) a obrigação torna-se impossível.", "D) existe inadimplemento absoluto.", "E) o devedor age com dolo."], r: "B", com: "Mora do credor: recusa injustificada de receber." },
+        { t: "Inadimplemento (CEBRASPE)", e: "(CEBRASPE) Julgue: \"O inadimplemento absoluto ocorre quando o cumprimento da obrigação perde utilidade para o credor.\"", alts: ["Certo", "Errado"], r: "Certo", com: "Inadimplemento absoluto: perda de utilidade da prestação." },
+        { t: "Danos emergentes (FCC)", e: "(FCC) Constituem danos emergentes:", alts: ["A) os ganhos futuros frustrados.", "B) os juros legais incidentes.", "C) os prejuízos efetivamente sofridos.", "D) apenas danos morais.", "E) as cláusulas penais compensatórias."], r: "C", com: "Danos emergentes: prejuízo efetivamente sofrido." },
+        { t: "Cláusula penal moratória (FGV)", e: "(FGV) A cláusula penal moratória:", alts: ["A) substitui definitivamente a obrigação principal.", "B) pune o atraso no cumprimento da obrigação.", "C) extingue automaticamente o vínculo contratual.", "D) não possui natureza acessória.", "E) impede cobrança da obrigação principal."], r: "B", com: "Cláusula penal moratória pune o atraso." },
+        { t: "Juros remuneratórios (FCC)", e: "(FCC) Os juros remuneratórios possuem finalidade de:", alts: ["A) indenizar mora do devedor.", "B) sancionar inadimplemento absoluto.", "C) remunerar utilização consentida do capital.", "D) substituir cláusula penal.", "E) extinguir obrigação líquida."], r: "C", com: "Juros remuneratórios remuneram o uso do capital." },
+        { t: "Arras (CEBRASPE)", e: "(CEBRASPE) Julgue: \"As arras confirmatórias possuem função de confirmação do contrato.\"", alts: ["Certo", "Errado"], r: "Certo", com: "Arras confirmatórias confirmam a celebração do contrato." },
+        { t: "Indivisibilidade pagamento (FGV)", e: "(FGV) Pelo princípio da indivisibilidade do pagamento:", alts: ["A) o devedor pode fracionar livremente a prestação.", "B) o credor é obrigado a aceitar pagamento parcial.", "C) o pagamento deve ocorrer integralmente, salvo disposição diversa.", "D) toda obrigação é solidária.", "E) toda prestação é indivisível por natureza."], r: "C", com: "Pagamento deve ser integral, salvo disposição em contrário." },
+        { t: "Portável (FCC)", e: "(FCC) Na dívida portável:", alts: ["A) o credor deve buscar a prestação no domicílio do devedor.", "B) o pagamento deve ser levado ao credor.", "C) inexiste local de pagamento.", "D) há obrigação necessariamente solidária.", "E) o pagamento ocorre por consignação obrigatória."], r: "B", com: "Dívida portável: pagamento levado ao credor." },
+        { t: "Terceiro não interessado (CEBRASPE)", e: "(CEBRASPE) Julgue: \"O pagamento realizado por terceiro não interessado pode extinguir validamente a obrigação.\"", alts: ["Certo", "Errado"], r: "Certo", com: "Terceiro não interessado pode pagar e extinguir a obrigação." },
+        { t: "Quitação (FGV)", e: "(FGV) A quitação:", alts: ["A) depende exclusivamente de instrumento público.", "B) possui função de prova do pagamento.", "C) extingue automaticamente garantias reais.", "D) equivale à novação.", "E) dispensa identificação das partes."], r: "B", com: "Quitação é prova do pagamento." },
+        { t: "Consignação (FCC)", e: "(FCC) É hipótese típica de consignação em pagamento:", alts: ["A) mera dificuldade financeira do devedor.", "B) recusa injustificada do credor em receber.", "C) arrependimento contratual do devedor.", "D) novação subjetiva.", "E) obrigação natural prescrita."], r: "B", com: "Recusa injustificada do credor autoriza consignação." },
+        { t: "Sub-rogação legal (FGV)", e: "(FGV) Na sub-rogação legal:", alts: ["A) exige-se acordo entre credor e terceiro.", "B) decorre diretamente da lei.", "C) extinguem-se os acessórios do crédito.", "D) não há transferência de garantias.", "E) depende de homologação judicial."], r: "B", com: "Sub-rogação legal decorre diretamente da lei." },
+        { t: "Líquida (FCC)", e: "(FCC) A obrigação líquida caracteriza-se por:", alts: ["A) ausência de valor econômico.", "B) impossibilidade de quantificação da prestação.", "C) prestação determinada quanto à existência, mas não quanto ao valor.", "D) valor certo ou determinável imediatamente.", "E) inexigibilidade judicial."], r: "D", com: "Obrigação líquida tem valor certo ou determinável." },
+        { t: "Solidariedade (CEBRASPE)", e: "(CEBRASPE) Julgue: \"O pagamento parcial realizado a um credor solidário extingue a obrigação apenas até o montante pago.\"", alts: ["Certo", "Errado"], r: "Certo", com: "Pagamento parcial extingue a obrigação até o montante pago." },
+        { t: "Facultativa (FGV)", e: "(FGV) Na obrigação facultativa:", alts: ["A) existem duas prestações principais cumulativas.", "B) há pluralidade obrigacional completa.", "C) existe prestação principal e faculdade substitutiva.", "D) a escolha cabe necessariamente ao credor.", "E) o perecimento da prestação principal nunca extingue a obrigação."], r: "C", com: "Facultativa: uma prestação principal e faculdade substitutiva." },
+        { t: "Purga (FCC)", e: "(FCC) A purga da mora consiste:", alts: ["A) na remissão da dívida pelo credor.", "B) na conversão da obrigação em perdas e danos.", "C) na eliminação dos efeitos do atraso mediante adimplemento.", "D) em hipótese de novação legal.", "E) em compensação obrigatória."], r: "C", com: "Purga da mora: eliminação dos efeitos do atraso." },
+        { t: "Prescrição (CEBRASPE)", e: "(CEBRASPE) Julgue: \"O pagamento espontâneo de dívida prescrita pode ser repetido pelo devedor.\"", alts: ["Certo", "Errado"], r: "Errado", com: "Dívida prescrita paga espontaneamente é irrepetível (obrigação natural)." }
+      ];
+      concursosData.forEach(c => addQ('concursos', '', c.t, c.e, c.r, c.alts, c.com));
+
+      // ========== VARIADAS (60) ==========
+      const variadasVF = [
+        { e: "A solidariedade obrigacional nunca pode resultar da vontade das partes.", r: "Falso", com: "A solidariedade pode resultar da vontade das partes ou da lei." },
+        { e: "A obrigação natural é inexigível judicialmente, mas o pagamento espontâneo é válido.", r: "Verdadeiro", com: "Obrigação natural: inexigível, mas pagamento válido e irrepetível." },
+        { e: "Na obrigação de dar coisa incerta, o gênero perece com a perda do primeiro bem separado pelo devedor.", r: "Falso", com: "O gênero não perece; a perda antes da concentração não extingue a obrigação." },
+        { e: "A mora do credor ocorre quando ele injustificadamente se recusa a receber o pagamento.", r: "Verdadeiro", com: "Mora do credor (mora accipiendi) é a recusa injustificada de receber." },
+        { e: "A cláusula penal possui natureza acessória em relação à obrigação principal.", r: "Verdadeiro", com: "A cláusula penal é acessória e depende da obrigação principal." },
+        { e: "A novação presume-se sempre que houver modificação contratual.", r: "Falso", com: "A novação exige intenção inequívoca de extinguir a obrigação anterior." },
+        { e: "A compensação exige reciprocidade entre credor e devedor.", r: "Verdadeiro", com: "Compensação exige reciprocidade de créditos e débitos." },
+        { e: "O pagamento feito por terceiro interessado pode gerar sub-rogação.", r: "Verdadeiro", com: "Terceiro interessado sub-roga-se nos direitos do credor." },
+        { e: "A remissão da dívida corresponde ao perdão concedido pelo credor.", r: "Verdadeiro", com: "Remissão é o perdão da dívida." },
+        { e: "Na obrigação indivisível, convertida em perdas e danos, a indivisibilidade necessariamente permanece.", r: "Falso", com: "Convertida em perdas e danos, desaparece a indivisibilidade." },
+        { e: "A obrigação de fazer infungível pode depender das qualidades pessoais do devedor.", r: "Verdadeiro", com: "Infungibilidade decorre das qualidades pessoais do devedor." },
+        { e: "O credor é obrigado a aceitar prestação diversa da convencionada se ela for economicamente superior.", r: "Falso", com: "Princípio da identidade: credor não é obrigado a aceitar prestação diversa." },
+        { e: "A cessão de crédito, em regra, independe da anuência do devedor.", r: "Verdadeiro", com: "A cessão não depende de anuência do devedor, mas a notificação é importante." },
+        { e: "A mora sempre extingue automaticamente a obrigação.", r: "Falso", com: "Mora é atraso; a obrigação subsiste, acrescida de encargos." },
+        { e: "A obrigação alternativa possui pluralidade de prestações.", r: "Verdadeiro", com: "Alternativa: duas ou mais prestações, cumprindo-se uma." },
+        { e: "A obrigação facultativa possui duas prestações principais simultaneamente exigíveis.", r: "Falso", com: "Facultativa tem uma prestação principal e faculdade substitutiva." },
+        { e: "A cláusula penal pode ter função compensatória ou moratória.", r: "Verdadeiro", com: "Cláusula penal pode ser compensatória ou moratória." },
+        { e: "Os lucros cessantes correspondem ao que a vítima razoavelmente deixou de ganhar.", r: "Verdadeiro", com: "Lucros cessantes: ganhos frustrados pelo inadimplemento." },
+        { e: "O pagamento realizado por terceiro nunca extingue a obrigação.", r: "Falso", com: "Terceiro pode pagar e extinguir validamente a obrigação." },
+        { e: "A quitação pode servir como prova documental do adimplemento.", r: "Verdadeiro", com: "Quitação é prova do pagamento." }
+      ];
+      variadasVF.forEach(v => addQ('variada', 'vf', 'Verdadeiro ou Falso', v.e, v.r, null, v.com));
+
+      const variadasLacuna = [
+        { e: "A obrigação em que o objeto é determinado apenas pelo gênero e quantidade denomina-se obrigação de dar coisa __________.", r: "incerta" },
+        { e: "A reunião das qualidades de credor e devedor na mesma pessoa chama-se __________.", r: "confusão" },
+        { e: "A substituição do credor na titularidade do crédito denomina-se __________ de crédito.", r: "cessão" },
+        { e: "A substituição do devedor com consentimento do credor denomina-se __________ de dívida.", r: "assunção" },
+        { e: "A aceitação, pelo credor, de prestação diversa da originalmente pactuada chama-se __________ em pagamento.", r: "dação" },
+        { e: "A obrigação em que qualquer devedor pode ser cobrado pela dívida integral é denominada obrigação __________.", r: "solidária" },
+        { e: "A prestação economicamente apreciável constitui o __________ da obrigação.", r: "objeto" },
+        { e: "A multa prevista contratualmente para hipótese de inadimplemento chama-se cláusula __________.", r: "penal" },
+        { e: "A extinção recíproca de dívidas equivalentes denomina-se __________.", r: "compensação" },
+        { e: "A forma especial de pagamento utilizada quando o credor injustamente recusa receber chama-se consignação em __________.", r: "pagamento" },
+        { e: "A obrigação que admite divisão útil da prestação denomina-se obrigação __________.", r: "divisível" },
+        { e: "A obrigação cujo cumprimento depende de prestação positiva do devedor é obrigação de __________.", r: "fazer" },
+        { e: "O atraso culposo no cumprimento da obrigação caracteriza a __________.", r: "mora" },
+        { e: "O ganho frustrado em razão do inadimplemento corresponde aos __________ cessantes.", r: "lucros" },
+        { e: "A obrigação em que qualquer credor pode exigir o débito integral é chamada solidariedade __________.", r: "ativa" },
+        { e: "O instituto que extingue a obrigação mediante perdão do credor denomina-se __________ da dívida.", r: "remissão" },
+        { e: "A substituição de uma obrigação antiga por nova obrigação chama-se __________.", r: "novação" },
+        { e: "A obrigação inexigível judicialmente, mas cujo pagamento espontâneo é válido, chama-se obrigação __________.", r: "natural" },
+        { e: "O princípio segundo o qual o credor não é obrigado a aceitar prestação diversa chama-se princípio da __________ do pagamento.", r: "identidade" },
+        { e: "A obrigação de se abster de determinada conduta é obrigação de __________ fazer.", r: "não" }
+      ];
+      variadasLacuna.forEach(v => addQ('variada', 'lacuna', 'Complete a Lacuna', v.e, v.r, null, ''));
+
+      const variadasAssociacao = [
+        { e: "Associe:\n1. Mora  2. Novação  3. Remissão  4. Dação em pagamento  5. Transação\n( ) Extinção mediante nova obrigação\n( ) Perdão da dívida\n( ) Atraso culposo\n( ) Concessões recíprocas\n( ) Prestação diversa aceita", r: "2 — 3 — 1 — 5 — 4", com: "Novação(2), Remissão(3), Mora(1), Transação(5), Dação(4)." },
+        { e: "Associe:\n1. Juros remuneratórios  2. Juros moratórios  3. Arras penitenciais  4. Arras confirmatórias\n( ) Preço do arrependimento\n( ) Remuneram capital\n( ) Decorrentes do atraso\n( ) Confirmam contrato", r: "3 — 1 — 2 — 4", com: "Penitenciais(3), Remuneratórios(1), Moratórios(2), Confirmatórias(4)." },
+        { e: "Associe:\n1. Dação  2. Compensação  3. Confusão  4. Consignação  5. Sub-rogação\n( ) Credor e devedor mesma pessoa\n( ) Depósito por obstáculo\n( ) Extinção recíproca\n( ) Substituição do credor\n( ) Prestação diversa aceita", r: "3 — 4 — 2 — 5 — 1", com: "Confusão(3), Consignação(4), Compensação(2), Sub-rogação(5), Dação(1)." },
+        { e: "Associe:\n1. Danos emergentes  2. Lucros cessantes  3. Mora accipiendi  4. Mora solvendi\n( ) Prejuízo efetivo\n( ) Atraso pelo credor\n( ) Ganho frustrado\n( ) Atraso pelo devedor", r: "1 — 3 — 2 — 4", com: "Danos emergentes(1), Mora accipiendi(3), Lucros cessantes(2), Mora solvendi(4)." }
+      ];
+      variadasAssociacao.forEach(v => addQ('variada', 'associacao', 'Associação de Colunas', v.e, v.r, null, v.com));
+
+      const variadasMultipla = [
+        { e: "Assinale a correta:", alts: ["A) Toda obrigação indivisível é solidária.", "B) Toda obrigação solidária é indivisível.", "C) Solidariedade relaciona-se aos sujeitos; indivisibilidade, ao objeto.", "D) Solidariedade e indivisibilidade são sinônimos.", "E) A indivisibilidade decorre exclusivamente da lei."], r: "C", com: "Solidariedade: sujeitos; indivisibilidade: objeto." },
+        { e: "Na obrigação facultativa:", alts: ["A) existem várias prestações principais.", "B) o credor escolhe livremente.", "C) há uma prestação principal e outra facultativa.", "D) todas são cumulativas.", "E) inexiste objeto principal."], r: "C", com: "Facultativa: prestação principal + facultativa." },
+        { e: "A obrigação líquida é aquela:", alts: ["A) inexigível judicialmente.", "B) sem valor econômico.", "C) cujo valor depende de arbitramento impossível.", "D) determinada quanto ao valor ou facilmente determinável.", "E) que possui objeto indivisível."], r: "D", com: "Líquida: valor certo ou determinável." },
+        { e: "Em regra, a dívida no direito civil brasileiro é:", alts: ["A) portável.", "B) solidária.", "C) quesível.", "D) indivisível.", "E) alternativa."], r: "C", com: "Regra geral: dívida quesível (credor busca no domicílio do devedor)." },
+        { e: "Nas obrigações solidárias:", alts: ["A) a solidariedade presume-se.", "B) cada devedor responde apenas pela quota.", "C) qualquer devedor pode ser compelido ao pagamento integral.", "D) inexiste direito regressivo.", "E) pagamento de um não extingue."], r: "C", com: "Solidariedade: qualquer devedor responde pelo todo." },
+        { e: "A obrigação de dar coisa certa:", alts: ["A) nunca possui acessórios.", "B) exige objeto individualizado.", "C) admite entrega de qualquer bem do gênero.", "D) dispensa tradição.", "E) sempre será indivisível."], r: "B", com: "Coisa certa: objeto individualizado." },
+        { e: "Mora do credor:", alts: ["A) atraso culposo do devedor.", "B) inadimplemento absoluto.", "C) recusa injustificada em receber.", "D) novação contratual.", "E) cessão de crédito."], r: "C", com: "Mora do credor: recusa injustificada de receber." },
+        { e: "Compensação legal depende de:", alts: ["A) prestações infungíveis.", "B) reciprocidade.", "C) cláusula penal.", "D) autorização judicial.", "E) obrigação natural."], r: "B", com: "Compensação exige reciprocidade." }
+      ];
+      variadasMultipla.forEach(v => addQ('variada', 'multipla', 'Múltipla Escolha', v.e, v.r, v.alts, v.com || ''));
+
+      const variadasCorreto = [
+        { e: "\"A obrigação de não fazer consiste em prestação positiva realizada pelo devedor.\"", r: "Incorreto. A obrigação de não fazer consiste em abstenção de conduta." },
+        { e: "\"A sub-rogação transfere ao novo credor os acessórios e garantias do crédito.\"", r: "Correto. O sub-rogado assume a posição jurídica do credor originário." },
+        { e: "\"O inadimplemento absoluto ocorre quando o cumprimento ainda é útil ao credor.\"", r: "Incorreto. Se ainda há utilidade, há mora, não inadimplemento absoluto." },
+        { e: "\"A quitação funciona como prova do pagamento realizado.\"", r: "Correto. A quitação comprova o adimplemento." },
+        { e: "\"A obrigação líquida é aquela cujo valor ainda depende de apuração futura.\"", r: "Incorreto. Obrigação líquida possui valor determinado ou determinável." },
+        { e: "\"A transação exige concessões recíprocas entre as partes.\"", r: "Correto. A composição consensual depende de concessões mútuas." },
+        { e: "\"A solidariedade decorre exclusivamente da natureza do objeto.\"", r: "Incorreto. Solidariedade decorre da lei ou da vontade das partes." },
+        { e: "\"A mora pressupõe que o cumprimento ainda seja útil ao credor.\"", r: "Correto. Se não houver utilidade, configura-se inadimplemento absoluto." }
+      ];
+      variadasCorreto.forEach(v => addQ('variada', 'correto_incorreto', 'Certo ou Errado', v.e, v.r, null, ''));
+
+      // ==================== ESTADO DA APLICAÇÃO ====================
+      let questoesFiltradas = [];
+      let indiceAtual = 0;
+      let respondidasSet = new Set();
+      let listaAtiva = null; // 'discursiva', 'concursos', 'variada'
+      let cronometroInterval = null;
+      let cronometroSegundos = 0;
+
+      // Elementos DOM
+      const telaInicial = document.getElementById('telaInicial');
+      const areaEstudo = document.getElementById('areaEstudo');
+      const cronometroBox = document.getElementById('cronometroBox');
+      const cronometroDisplay = document.getElementById('cronometroDisplay');
+      const btnEncerrar = document.getElementById('btnEncerrar');
+      const btnDiscursivas = document.getElementById('btnDiscursivas');
+      const btnConcursos = document.getElementById('btnConcursos');
+      const btnVariadas = document.getElementById('btnVariadas');
+      const exibirRespondidasCheck = document.getElementById('exibirRespondidasCheck');
+      const btnReset = document.getElementById('btnResetProgress');
+      const flashcard = document.getElementById('flashcard');
+      const btnFlip = document.getElementById('btnFlip');
+      const btnProximo = document.getElementById('btnProximo');
+      const btnAnterior = document.getElementById('btnAnterior');
+      const btnMarcarRespondida = document.getElementById('btnMarcarRespondida');
+      const contadorEl = document.getElementById('contadorQuestoes');
+      const enunciadoTexto = document.getElementById('enunciadoTexto');
+      const respostaTexto = document.getElementById('respostaTexto');
+      const tipoQuestaoLabel = document.getElementById('tipoQuestaoLabel');
+      const subtipoTag = document.getElementById('subtipoTag');
+      const topicoPequeno = document.getElementById('topicoPequeno');
+      const alternativasContainer = document.getElementById('alternativasContainer');
+      const comentarioExtra = document.getElementById('comentarioExtra');
+      const inputIrQuestao = document.getElementById('inputIrQuestao');
+      const btnIrQuestao = document.getElementById('btnIrQuestao');
+
+      function carregarRespondidas() {
+        const saved = localStorage.getItem('civil_respondidas_v2');
+        if (saved) { try { respondidasSet = new Set(JSON.parse(saved)); } catch (e) { respondidasSet = new Set(); } }
+      }
+
+      function salvarRespondidas() { localStorage.setItem('civil_respondidas_v2', JSON.stringify([...respondidasSet])); }
+      carregarRespondidas();
+
+      function formatarTempo(s) {
+        const h = Math.floor(s / 3600).toString().padStart(2, '0');
+        const m = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
+        const seg = (s % 60).toString().padStart(2, '0');
+        return `${h}:${m}:${seg}`;
+      }
+
+      function iniciarCronometro() {
+        if (cronometroInterval) clearInterval(cronometroInterval);
+        cronometroSegundos = 0;
+        cronometroDisplay.textContent = formatarTempo(0);
+        cronometroInterval = setInterval(() => {
+          cronometroSegundos++;
+          cronometroDisplay.textContent = formatarTempo(cronometroSegundos);
+        }, 1000);
+      }
+
+      function pararCronometro() {
+        if (cronometroInterval) { clearInterval(cronometroInterval);
+          cronometroInterval = null; }
+      }
+
+      function encerrarLista() {
+        pararCronometro();
+        listaAtiva = null;
+        questoesFiltradas = [];
+        indiceAtual = 0;
+        telaInicial.style.display = 'block';
+        areaEstudo.style.display = 'none';
+        cronometroBox.style.display = 'none';
+      }
+
+      function iniciarLista(tipo) {
+        listaAtiva = tipo;
+        telaInicial.style.display = 'none';
+        areaEstudo.style.display = 'flex';
+        cronometroBox.style.display = 'flex';
+        iniciarCronometro();
+        indiceAtual = 0;
+        aplicarFiltros();
+      }
+
+      function aplicarFiltros() {
+        if (!listaAtiva) return;
+        let base = QUESTOES_BASE.filter(q => q.tipo === listaAtiva);
+        if (!exibirRespondidasCheck.checked) {
+          base = base.filter(q => !respondidasSet.has(q.id));
+        }
+        questoesFiltradas = base;
+        if (questoesFiltradas.length === 0) {
+          indiceAtual = 0;
+          renderizarVazio();
+        } else {
+          if (indiceAtual >= questoesFiltradas.length) indiceAtual = 0;
+          renderizarQuestao();
+        }
+      }
+
+      function renderizarVazio() {
+        enunciadoTexto.innerText = 'Nenhuma questão encontrada com esses filtros.';
+        respostaTexto.innerText = '';
+        subtipoTag.innerText = '';
+        topicoPequeno.innerText = '';
+        tipoQuestaoLabel.innerText = '⛔';
+        alternativasContainer.innerHTML = '';
+        comentarioExtra.innerText = '';
+        contadorEl.innerText = '0 / 0';
+        flashcard.classList.remove('flipped');
+      }
+
+      function renderizarQuestao() {
+        if (!questoesFiltradas.length || indiceAtual >= questoesFiltradas.length) { renderizarVazio(); return; }
+        const q = questoesFiltradas[indiceAtual];
+        flashcard.classList.remove('flipped');
+        topicoPequeno.innerText = '📌 ' + (q.topico || '');
+        contadorEl.innerText = `${indiceAtual+1} / ${questoesFiltradas.length}`;
+        comentarioExtra.innerText = q.comentario || '';
+        alternativasContainer.innerHTML = '';
+
+        if (q.tipo === 'discursiva') {
+          tipoQuestaoLabel.innerText = '📝 Discursiva';
+          subtipoTag.innerText = '';
+          enunciadoTexto.innerText = q.enunciado;
+          respostaTexto.innerText = q.resposta;
+        } else if (q.tipo === 'concursos') {
+          tipoQuestaoLabel.innerText = '🏛️ Concurso';
+          subtipoTag.innerText = 'Múltipla Escolha';
+          enunciadoTexto.innerText = q.enunciado;
+          if (q.alternativas && q.alternativas.length > 0) {
+            alternativasContainer.innerHTML = '<div class="alternativas-lista">' + q.alternativas.map(a => '<div>' + a + '</div>').join('') + '</div>';
+          }
+          respostaTexto.innerText = 'Gabarito: ' + q.resposta + (q.comentario ? '\n\n' + q.comentario : '');
+        } else if (q.tipo === 'variada') {
+          tipoQuestaoLabel.innerText = '📋 Variada';
+          const subtiposNomes = {
+            'vf': 'Verdadeiro ou Falso',
+            'lacuna': 'Complete a Lacuna',
+            'associacao': 'Associação de Colunas',
+            'multipla': 'Múltipla Escolha',
+            'correto_incorreto': 'Certo ou Errado'
+          };
+          subtipoTag.innerText = subtiposNomes[q.subtipo] || '';
+          enunciadoTexto.innerText = q.enunciado;
+          if (q.subtipo === 'multipla' && q.alternativas && q.alternativas.length > 0) {
+            alternativasContainer.innerHTML = '<div class="alternativas-lista">' + q.alternativas.map(a => '<div>' + a + '</div>').join('') + '</div>';
+          }
+          respostaTexto.innerText = q.resposta;
+        }
+      }
+
+      function flipCard() { if (questoesFiltradas.length) flashcard.classList.toggle('flipped'); }
+
+      function proximaQuestao() {
+        if (!questoesFiltradas.length) return;
+        if (indiceAtual < questoesFiltradas.length - 1) { indiceAtual++;
+          renderizarQuestao(); } else alert('Última questão da lista.');
+      }
+
+      function anteriorQuestao() {
+        if (!questoesFiltradas.length) return;
+        if (indiceAtual > 0) { indiceAtual--;
+          renderizarQuestao(); } else alert('Primeira questão.');
+      }
+
+      function marcarRespondida() {
+        if (!questoesFiltradas.length) return;
+        const q = questoesFiltradas[indiceAtual];
+        if (respondidasSet.has(q.id)) { alert('Já marcada.'); return; }
+        respondidasSet.add(q.id);
+        salvarRespondidas();
+        if (!exibirRespondidasCheck.checked) { aplicarFiltros(); } else alert('Marcada!');
+      }
+
+      function irParaQuestao() {
+        const num = parseInt(inputIrQuestao.value, 10);
+        if (isNaN(num) || num < 1 || num > questoesFiltradas.length) { alert(`Digite entre 1 e ${questoesFiltradas.length}`); return; }
+        indiceAtual = num - 1;
+        renderizarQuestao();
+      }
+
+      // Event Listeners
+      btnDiscursivas.addEventListener('click', () => iniciarLista('discursiva'));
+      btnConcursos.addEventListener('click', () => iniciarLista('concursos'));
+      btnVariadas.addEventListener('click', () => iniciarLista('variada'));
+      btnEncerrar.addEventListener('click', encerrarLista);
+      exibirRespondidasCheck.addEventListener('change', () => { indiceAtual = 0;
+        aplicarFiltros(); });
+      btnReset.addEventListener('click', () => {
+        if (confirm('Apagar histórico de respondidas?')) { respondidasSet.clear();
+          salvarRespondidas();
+          aplicarFiltros(); }
+      });
+      btnFlip.addEventListener('click', flipCard);
+      btnProximo.addEventListener('click', proximaQuestao);
+      btnAnterior.addEventListener('click', anteriorQuestao);
+      btnMarcarRespondida.addEventListener('click', marcarRespondida);
+      btnIrQuestao.addEventListener('click', irParaQuestao);
+      flashcard.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+        flipCard();
+      });
+
+      // Inicial: esconder área de estudo
+      areaEstudo.style.display = 'none';
+      cronometroBox.style.display = 'none';
+      telaInicial.style.display = 'block';
+    })();
+  </script>
+</body>
+</html>
