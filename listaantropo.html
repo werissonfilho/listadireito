@@ -1,1 +1,1257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Listas de Exercícios</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rawline:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
 
+  :root {
+    --gov-blue: #1351B4;
+    --gov-blue-dark: #0C326F;
+    --gov-blue-light: #2670E8;
+    --gov-yellow: #FFCD07;
+    --gov-green: #168821;
+    --gov-red: #E52207;
+    --gov-gray-10: #F8F8F8;
+    --gov-gray-20: #EDEDED;
+    --gov-gray-30: #CCCCCC;
+    --gov-gray-50: #9E9E9E;
+    --gov-gray-70: #555555;
+    --gov-gray-90: #1B1B1B;
+    --white: #FFFFFF;
+    --font-main: 'Rawline', 'Segoe UI', Arial, sans-serif;
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius: 4px;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-main);
+    background: var(--gov-gray-10);
+    color: var(--gov-gray-90);
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ===== MAIN HEADER ===== */
+  .main-header {
+    background: var(--gov-blue);
+    color: var(--white);
+    padding: 0 24px;
+    display: flex;
+    align-items: stretch;
+    border-bottom: 4px solid var(--gov-yellow);
+    min-height: 64px;
+  }
+  .main-header .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    text-decoration: none;
+    color: var(--white);
+  }
+  .brand-icon {
+    width: 40px; height: 40px;
+    background: var(--gov-yellow);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .brand-text { line-height: 1.2; }
+  .brand-text strong { display: block; font-size: 15px; letter-spacing: 0.01em; }
+  .brand-text small { font-size: 11px; opacity: 0.75; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* ===== HOME PAGE ===== */
+  #home-page { display: block; }
+  #list-page { display: none; }
+
+  .page-title-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gov-gray-20);
+    padding: 28px 24px 20px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .page-title-bar h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gov-blue-dark);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .page-title-bar p {
+    font-size: 14px;
+    color: var(--gov-gray-70);
+  }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--gov-gray-50);
+    margin-bottom: 10px;
+  }
+  .breadcrumb a { color: var(--gov-blue); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb .sep { font-size: 10px; }
+
+  /* ===== LISTS GRID ===== */
+  .lists-section { padding: 32px 24px 48px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gov-blue);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: var(--gov-gray-20);
+  }
+
+  .lists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .list-card {
+    background: var(--white);
+    border: 1px solid var(--gov-gray-20);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition), transform var(--transition);
+    cursor: pointer;
+    display: flex; flex-direction: column;
+  }
+  .list-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .card-cover {
+    background: var(--gov-blue);
+    padding: 28px 20px 24px;
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 8px;
+    min-height: 130px;
+    position: relative;
+  }
+  .card-cover::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gov-yellow);
+  }
+  .card-cover .card-emoji {
+    font-size: 32px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .card-cover .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .card-body { padding: 16px 20px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+  .card-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 8px 4px;
+    background: var(--gov-gray-10);
+    border-radius: var(--radius);
+    border: 1px solid var(--gov-gray-20);
+  }
+  .stat-item .stat-num {
+    font-size: 18px; font-weight: 700;
+    color: var(--gov-blue-dark);
+    line-height: 1;
+    display: block;
+  }
+  .stat-item .stat-num.green { color: var(--gov-green); }
+  .stat-item .stat-num.red { color: var(--gov-red); }
+  .stat-item .stat-label {
+    font-size: 10px; color: var(--gov-gray-50);
+    letter-spacing: 0.04em; text-transform: uppercase;
+    display: block; margin-top: 3px;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--gov-gray-20);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--gov-blue);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .btn-start {
+    display: block; width: 100%;
+    background: var(--gov-blue);
+    color: var(--white);
+    border: none; border-radius: var(--radius);
+    padding: 11px 16px;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background var(--transition);
+    margin-top: auto;
+    font-family: var(--font-main);
+  }
+  .btn-start:hover { background: var(--gov-blue-dark); }
+
+  /* ===== FOOTER ===== */
+  .site-footer {
+    background: var(--gov-blue-dark);
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    padding: 18px 24px;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+    border-top: 3px solid var(--gov-yellow);
+  }
+  .site-footer strong { color: rgba(255,255,255,0.7); font-weight: 600; }
+
+  /* ===== LIST PAGE ===== */
+  #list-page {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Top bar - fixed */
+  .list-topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--gov-blue-dark);
+    border-bottom: 3px solid var(--gov-yellow);
+    min-height: 56px;
+    display: flex; align-items: center;
+  }
+  .list-topbar-inner {
+    display: flex; align-items: center;
+    width: 100%; padding: 0 16px; gap: 16px;
+  }
+  .btn-back {
+    background: none; border: 1.5px solid rgba(255,255,255,0.3);
+    color: var(--white); border-radius: var(--radius);
+    padding: 7px 14px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.05em; cursor: pointer;
+    font-family: var(--font-main);
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+    transition: background var(--transition), border-color var(--transition);
+    flex-shrink: 0;
+  }
+  .btn-back:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); }
+
+  .list-name-center {
+    flex: 1; text-align: center;
+    color: var(--white); font-weight: 700; font-size: 14px;
+    letter-spacing: 0.01em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding: 0 8px;
+  }
+
+  /* Question dots row - hidden on mobile */
+  .q-dots-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gov-gray-20);
+    padding: 10px 16px;
+    position: fixed; top: 59px; left: 0; right: 0; z-index: 99;
+  }
+  .q-dots-scroll {
+    display: flex; gap: 6px;
+    overflow-x: auto; padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .q-dots-scroll::-webkit-scrollbar { display: none; }
+
+  .q-dot {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--gov-gray-30);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--gov-gray-70);
+    font-size: 12px; font-weight: 700;
+    cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition);
+    font-family: var(--font-main);
+  }
+  .q-dot:hover { border-color: var(--gov-blue); color: var(--gov-blue); }
+  .q-dot.active { background: var(--gov-blue); border-color: var(--gov-blue); color: var(--white); }
+  .q-dot.done { background: var(--gov-gray-20); border-color: var(--gov-gray-30); color: var(--gov-gray-70); }
+  .q-dot.correct { background: #D4EDDA; border-color: var(--gov-green); color: var(--gov-green); }
+  .q-dot.wrong { background: #FDDEDE; border-color: var(--gov-red); color: var(--gov-red); }
+
+  /* Question content area */
+  .list-content {
+    flex: 1;
+    padding: 16px;
+  }
+
+  .q-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .q-number-badge {
+    background: var(--gov-blue);
+    color: var(--white);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: var(--radius);
+    white-space: nowrap;
+  }
+  .q-type-badge {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 10px;
+    border-radius: var(--radius);
+    border: 1.5px solid;
+  }
+  .q-type-badge.disc { color: #7B4F00; background: #FFF3CD; border-color: #FFCD07; }
+  .q-type-badge.obj { color: #0C326F; background: #D9E8FF; border-color: #2670E8; }
+
+  .q-statement {
+    background: var(--white);
+    border: 1px solid var(--gov-gray-20);
+    border-left: 4px solid var(--gov-blue);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--gov-gray-90);
+    margin-bottom: 20px;
+    font-family: var(--font-serif);
+  }
+
+  /* ===== DISCURSIVE ===== */
+  .disc-flip-container {
+    perspective: 1200px;
+    min-height: 100px;
+  }
+  .disc-flip-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+  }
+  .disc-flip-inner.flipped { transform: rotateY(180deg); }
+
+  .disc-face {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .disc-face.back {
+    position: absolute; top: 0; left: 0; right: 0;
+    transform: rotateY(180deg);
+  }
+
+  .answer-box {
+    background: var(--white);
+    border: 1px solid var(--gov-gray-20);
+    border-left: 4px solid var(--gov-green);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--gov-gray-90);
+    font-family: var(--font-serif);
+    min-height: 80px;
+  }
+  .answer-box .answer-label {
+    font-family: var(--font-main);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gov-green);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .btn-verify {
+    background: var(--gov-blue);
+    color: var(--white);
+    border: none; border-radius: var(--radius);
+    padding: 11px 24px;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    cursor: pointer; font-family: var(--font-main);
+    transition: background var(--transition);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-verify:hover { background: var(--gov-blue-dark); }
+  .btn-verify.back-mode { background: var(--gov-gray-70); }
+  .btn-verify.back-mode:hover { background: var(--gov-gray-90); }
+
+  /* ===== OBJECTIVE ===== */
+  .alternatives { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+
+  .alternative {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--white);
+    border: 1.5px solid var(--gov-gray-30);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition);
+    font-size: 14px; line-height: 1.6;
+    font-family: var(--font-serif);
+  }
+  .alternative:hover:not(.locked) { border-color: var(--gov-blue); background: #F0F5FF; }
+  .alternative.selected:not(.locked) { border-color: var(--gov-blue); background: #E8F0FF; }
+  .alternative.locked { cursor: default; }
+  .alternative.correct-alt { border-color: var(--gov-green) !important; background: #D4EDDA !important; }
+  .alternative.wrong-alt { border-color: var(--gov-red) !important; background: #FDDEDE !important; }
+
+  .alt-letter {
+    width: 26px; height: 26px;
+    border: 1.5px solid var(--gov-gray-30);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; font-family: var(--font-main);
+    flex-shrink: 0; margin-top: 1px;
+    background: var(--gov-gray-10);
+    color: var(--gov-gray-70);
+    transition: all var(--transition);
+  }
+  .alternative.selected:not(.locked) .alt-letter { background: var(--gov-blue); border-color: var(--gov-blue); color: var(--white); }
+  .alternative.correct-alt .alt-letter { background: var(--gov-green); border-color: var(--gov-green); color: var(--white); }
+  .alternative.wrong-alt .alt-letter { background: var(--gov-red); border-color: var(--gov-red); color: var(--white); }
+
+  .btn-confirm {
+    background: var(--gov-green);
+    color: var(--white);
+    border: none; border-radius: var(--radius);
+    padding: 11px 24px;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    cursor: pointer; font-family: var(--font-main);
+    transition: background var(--transition);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-confirm:hover { background: #116B1A; }
+  .btn-confirm:disabled { background: var(--gov-gray-30); cursor: not-allowed; }
+  .btn-confirm.explain-mode { background: var(--gov-blue); }
+  .btn-confirm.explain-mode:hover { background: var(--gov-blue-dark); }
+
+  /* ===== EXPLANATION MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity var(--transition);
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal-box {
+    background: var(--white);
+    border-radius: var(--radius) var(--radius) 0 0;
+    width: 100%; max-width: 700px;
+    max-height: 80vh;
+    display: flex; flex-direction: column;
+    transform: translateY(40px);
+    transition: transform var(--transition);
+    box-shadow: var(--shadow-lg);
+  }
+  .modal-overlay.open .modal-box { transform: translateY(0); }
+
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gov-gray-20);
+    flex-shrink: 0;
+  }
+  .modal-header h3 { font-size: 14px; font-weight: 700; color: var(--gov-blue-dark); letter-spacing: 0.04em; text-transform: uppercase; }
+  .btn-close-modal {
+    background: none; border: none; cursor: pointer;
+    color: var(--gov-gray-50); font-size: 20px; line-height: 1;
+    padding: 4px; border-radius: var(--radius);
+    transition: color var(--transition);
+    display: flex;
+  }
+  .btn-close-modal:hover { color: var(--gov-gray-90); }
+
+  .modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    font-family: var(--font-serif);
+    font-size: 15px; line-height: 1.8;
+    color: var(--gov-gray-90);
+    flex: 1;
+  }
+
+  /* ===== BOTTOM NAV ===== */
+  .list-bottombar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: var(--white);
+    border-top: 1px solid var(--gov-gray-20);
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+  }
+
+  .btn-nav {
+    background: var(--white);
+    border: 1.5px solid var(--gov-gray-30);
+    color: var(--gov-gray-70);
+    border-radius: var(--radius);
+    padding: 9px 14px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    cursor: pointer; font-family: var(--font-main);
+    transition: all var(--transition);
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+  }
+  .btn-nav:hover { border-color: var(--gov-blue); color: var(--gov-blue); background: #F0F5FF; }
+  .btn-nav:disabled { opacity: 0.35; cursor: not-allowed; background: var(--white); border-color: var(--gov-gray-20); color: var(--gov-gray-50); }
+
+  .btn-mark-done {
+    background: var(--gov-yellow);
+    border: 1.5px solid #D4A800;
+    color: #5A3A00;
+    border-radius: var(--radius);
+    padding: 9px 14px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    cursor: pointer; font-family: var(--font-main);
+    transition: all var(--transition);
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+  }
+  .btn-mark-done:hover { background: #E6B800; }
+  .btn-mark-done.marked { background: var(--gov-green); border-color: #116B1A; color: var(--white); }
+  .btn-mark-done.marked:hover { background: #116B1A; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .q-dots-bar { display: none; }
+
+    .list-content {
+      padding-top: calc(56px + 16px) !important;
+    }
+
+    .main-header { min-height: 52px; }
+    .brand-text strong { font-size: 13px; }
+    .brand-text small { display: none; }
+
+    .btn-nav span.label { display: none; }
+    .btn-mark-done span.label { display: none; }
+    .btn-nav { padding: 9px 12px; }
+    .btn-mark-done { padding: 9px 12px; }
+
+    .modal-box { max-height: 85vh; }
+
+    .lists-section { padding: 20px 16px 40px; }
+    .lists-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .page-title-bar { padding: 20px 16px 16px; }
+    .page-title-bar h1 { font-size: 19px; }
+
+    .card-cover { min-height: 100px; padding: 20px 14px 18px; }
+    .card-body { padding: 12px 14px; }
+  }
+
+  @media (max-width: 400px) {
+    .lists-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Top padding for list page content (desktop) */
+  .list-page-wrapper {
+    padding-top: calc(56px + 3px + 54px);
+    padding-bottom: 72px;
+    min-height: 100vh;
+  }
+
+  @media (max-width: 640px) {
+    .list-page-wrapper {
+      padding-top: calc(56px + 3px + 16px);
+    }
+  }
+
+  /* Mobile counter in header (shown on mobile only) */
+  .mobile-q-counter {
+    display: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px; font-weight: 600;
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .mobile-q-counter { display: block; }
+    .list-name-center { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="home-page">
+
+  <header class="main-header">
+    <div class="brand">
+      <div class="brand-icon">📚</div>
+      <div class="brand-text">
+        <strong>Portal de Exercícios</strong>
+        <small>Sistema de Estudos e Avaliação</small>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-title-bar">
+    <div class="container">
+      <div class="breadcrumb">
+        <span>Início</span>
+        <span class="sep">›</span>
+        <span>Listas de Exercícios</span>
+      </div>
+      <h1>Listas de Exercícios</h1>
+      <p>Selecione uma lista para iniciar sua prática de estudos.</p>
+    </div>
+  </div>
+
+  <div class="lists-section">
+    <div class="container">
+      <div class="section-label">Listas Disponíveis</div>
+      <div class="lists-grid" id="lists-grid">
+        <!-- Cards rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    Sistema desenvolvido por <strong>Werisson (namorado de Beatriz)</strong> para <strong>Beatriz (namorada de Werisson)</strong> estudar.<br>
+    <span style="font-size:10px">© Portal de Exercícios — Uso educacional</span>
+  </footer>
+</div>
+
+<!-- ===== LIST PAGE ===== -->
+<div id="list-page" style="display:none">
+
+  <!-- Top bar -->
+  <div class="list-topbar">
+    <div class="list-topbar-inner">
+      <button class="btn-back" onclick="goHome()">← Voltar</button>
+      <div class="list-name-center" id="list-title-center">Nome da Lista</div>
+      <div class="mobile-q-counter" id="mobile-counter">1/5</div>
+    </div>
+  </div>
+
+  <!-- Question dots (desktop) -->
+  <div class="q-dots-bar" id="q-dots-bar">
+    <div class="q-dots-scroll" id="q-dots"></div>
+  </div>
+
+  <!-- Content area -->
+  <div class="list-page-wrapper">
+    <div class="list-content container" id="question-area">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="list-bottombar">
+    <button class="btn-nav" id="btn-prev" onclick="navigate(-1)">
+      <span>←</span> <span class="label">Anterior</span>
+    </button>
+    <button class="btn-mark-done" id="btn-mark" onclick="markDone()">
+      <span>✓</span> <span class="label">Marcar como Feita</span>
+    </button>
+    <button class="btn-nav" id="btn-next" onclick="navigate(1)">
+      <span class="label">Próxima</span> <span>→</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== EXPLANATION MODAL ===== -->
+<div class="modal-overlay" id="explanation-modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>💡 Explicação da Questão</h3>
+      <button class="btn-close-modal" onclick="closeExplanationModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA — 5 LISTAS COMPLETAS
+// ============================================================
+const LISTS_DATA = [
+  {
+    id: "intro-antropologia",
+    emoji: "👨",
+    title: "INTRODUÇÃO À ANTROPOLOGIA",
+    questions: [
+      // 1 discursiva
+      { type: "discursiva", statement: "Explique por que o conceito de \"estranhamento\" (dépaysement) é considerado uma ruptura epistemológica fundamental para a Antropologia. Relacione sua resposta com a crítica ao evolucionismo e ao etnocentrismo.", answer: "O estranhamento, ou dépaysement, constitui uma das principais bases epistemológicas da Antropologia porque propõe uma mudança radical na forma de compreender a realidade social. Em vez de considerar a própria cultura como parâmetro universal para interpretar todas as demais, o antropólogo busca tornar estranho aquilo que lhe é familiar e familiar aquilo que lhe parece estranho. Esse movimento permite questionar hábitos, valores e instituições que normalmente são percebidos como naturais.\n\nEssa perspectiva representa uma ruptura com o evolucionismo do século XIX, que organizava as sociedades em uma escala hierárquica de desenvolvimento, colocando a cultura ocidental como modelo mais avançado de civilização. Ao reconhecer que cada sociedade possui sua própria lógica histórica e cultural, a Antropologia rejeita a ideia de superioridade cultural.\n\nConsequentemente, o estranhamento também combate o etnocentrismo, entendido como a tendência de julgar outras culturas a partir dos valores da própria. Ao compreender que aquilo que consideramos natural é, na verdade, uma construção cultural, torna-se possível analisar outras sociedades de maneira mais crítica e menos preconceituosa. Assim, o estranhamento é um instrumento fundamental para a compreensão da diversidade humana." },
+      // 2 discursiva
+      { type: "discursiva", statement: "Analise como a observação participante transformou a produção do conhecimento antropológico. Em sua resposta, explique por que Malinowski rompeu com a tradição do \"antropólogo de gabinete\".", answer: "A observação participante promoveu uma profunda transformação metodológica na Antropologia ao substituir a pesquisa baseada em relatos indiretos pelo contato direto com os grupos estudados. Antes dessa mudança, muitos antropólogos produziam suas análises a partir de informações fornecidas por missionários, exploradores e administradores coloniais, sem conviver efetivamente com os povos pesquisados.\n\nBronislaw Malinowski rompeu com essa tradição ao defender que o antropólogo deveria viver entre os membros da comunidade estudada, aprender sua língua, participar de suas atividades cotidianas e compreender seus significados a partir da perspectiva nativa. Essa metodologia permitiu captar aspectos da vida social que seriam invisíveis para um observador distante.\n\nA observação participante tornou possível compreender não apenas o que as pessoas fazem, mas também os sentidos que atribuem às suas ações. Dessa forma, a produção do conhecimento antropológico passou a basear-se na experiência direta do campo, permitindo descrições mais precisas, contextualizadas e sensíveis à lógica interna das culturas estudadas." },
+      // 3 discursiva
+      { type: "discursiva", statement: "O material afirma que \"a diversidade é um espelho\". Desenvolva criticamente essa afirmação relacionando-a ao processo de autoconhecimento cultural.", answer: "A afirmação de que a diversidade é um espelho expressa uma das ideias centrais da Antropologia: o conhecimento do outro possibilita o conhecimento de nós mesmos. Quando entramos em contato com culturas diferentes, percebemos que muitas práticas que considerávamos naturais ou universais são, na realidade, construções históricas e culturais específicas.\n\nAo observar diferentes formas de organização familiar, religiosa, política ou moral, compreendemos que existem múltiplas maneiras legítimas de viver em sociedade. Essa percepção nos permite questionar certezas aparentemente evidentes e reconhecer o caráter cultural de nossos próprios comportamentos.\n\nPortanto, a diversidade funciona como um espelho porque revela os limites de nossa visão de mundo. Ao compreender o outro, o indivíduo também passa a compreender melhor sua própria sociedade, seus valores e seus preconceitos. O estudo da alteridade torna-se, assim, um instrumento de reflexão crítica sobre a própria cultura." },
+      // 4 discursiva
+      { type: "discursiva", statement: "Compare criticamente as figuras do \"Mau Selvagem\" e do \"Bom Selvagem\". Explique como ambas podem produzir distorções sobre os povos estudados.", answer: "As figuras do \"Mau Selvagem\" e do \"Bom Selvagem\" representam duas formas opostas, porém igualmente problemáticas, de interpretar os povos considerados diferentes da civilização ocidental.\n\nA concepção do Mau Selvagem descreve o outro como bárbaro, irracional, violento e incapaz de desenvolver instituições complexas. Historicamente, essa visão foi utilizada para justificar processos de colonização, escravidão e dominação política, sob a alegação de que esses povos precisariam ser civilizados.\n\nPor outro lado, a ideia do Bom Selvagem idealiza os povos não ocidentais como exemplos de pureza moral, harmonia social e autenticidade perdida pela civilização moderna. Embora pareça mais positiva, essa perspectiva também simplifica a realidade, transformando sociedades complexas em símbolos românticos.\n\nAmbas as visões produzem distorções porque projetam expectativas e valores ocidentais sobre o outro. Em vez de compreender os povos em sua complexidade histórica e cultural, reduzem-nos a estereótipos. A Antropologia busca superar essas duas perspectivas por meio da compreensão contextual e da valorização da alteridade." },
+      // 5 discursiva
+      { type: "discursiva", statement: "Explique como o conceito de Relativismo Cultural surge da experiência etnográfica. Por que ele não significa que \"tudo é permitido\"?", answer: "O relativismo cultural surge da experiência etnográfica porque o trabalho de campo permite ao pesquisador compreender que práticas consideradas estranhas ou irracionais frequentemente possuem significados coerentes dentro de seu contexto cultural específico. A convivência prolongada com diferentes grupos sociais evidencia que valores, crenças e comportamentos variam historicamente entre as sociedades.\n\nDiante dessa constatação, a Antropologia propõe que os fenômenos culturais sejam compreendidos a partir dos referenciais da própria cultura em que ocorrem, evitando julgamentos precipitados baseados em valores externos.\n\nEntretanto, relativismo cultural não significa aceitar indiscriminadamente qualquer prática social nem afirmar que todas as ações são moralmente equivalentes. Seu objetivo principal é metodológico: compreender antes de julgar. O relativismo busca explicar os significados culturais de determinado comportamento, sem necessariamente concordar com ele. Portanto, compreender uma prática não implica legitimar ou defender sua continuidade." },
+      // 6 discursiva
+      { type: "discursiva", statement: "Compare os modelos teóricos de Malinowski e Lévi-Strauss. Quais perguntas fundamentais cada um procurava responder?", answer: "Malinowski e Lévi-Strauss representam duas importantes tradições teóricas da Antropologia, mas partem de perguntas diferentes sobre a vida social.\n\nMalinowski, principal representante do funcionalismo, procurava compreender qual função cada instituição desempenhava na sociedade. Para ele, elementos como religião, parentesco, economia e política existiam porque contribuíam para satisfazer necessidades humanas biológicas e sociais. Sua preocupação principal era entender para que servem as práticas culturais.\n\nLévi-Strauss, por sua vez, desenvolveu o estruturalismo. Seu objetivo não era explicar a função social das instituições, mas identificar as estruturas inconscientes universais que organizam o pensamento humano. Ele acreditava que diferentes culturas expressavam padrões mentais comuns, manifestados em mitos, sistemas de parentesco e classificações simbólicas.\n\nAssim, enquanto Malinowski enfatizava as funções desempenhadas pelas instituições sociais, Lévi-Strauss concentrava-se nas estruturas cognitivas profundas que tornam possível a produção dessas instituições." },
+      // 7 discursiva
+      { type: "discursiva", statement: "O que Marcel Mauss quis demonstrar com a noção de \"Fenômeno Social Total\"? Utilize exemplos para ilustrar sua resposta.", answer: "Marcel Mauss desenvolveu o conceito de Fenômeno Social Total para demonstrar que certos acontecimentos sociais não podem ser compreendidos por apenas uma dimensão da vida coletiva. Alguns fenômenos mobilizam simultaneamente aspectos econômicos, jurídicos, políticos, religiosos, morais e simbólicos.\n\nSeu exemplo mais conhecido é o sistema de trocas estudado na obra Ensaio sobre a Dádiva. Nessas sociedades, a troca de presentes não possui apenas valor econômico. Ela cria obrigações jurídicas, fortalece alianças políticas, expressa crenças religiosas e produz reconhecimento social.\n\nAo analisar essas trocas, Mauss demonstrou que a vida social funciona de forma integrada. As diversas esferas da sociedade não atuam isoladamente, mas se articulam constantemente. O conceito de Fenômeno Social Total evidencia justamente essa interdependência entre diferentes dimensões da experiência humana." },
+      // 8 discursiva
+      { type: "discursiva", statement: "Analise a importância da subjetividade na pesquisa antropológica segundo Devereux. Em que sentido a presença do pesquisador é considerada uma fonte de conhecimento?", answer: "Segundo Georges Devereux, a subjetividade não deve ser encarada apenas como um problema metodológico, mas também como uma fonte relevante de conhecimento antropológico. Diferentemente das ciências naturais, na Antropologia pesquisador e pesquisado pertencem à mesma condição humana e interagem continuamente durante a pesquisa.\n\nA presença do observador influencia o campo e modifica, em alguma medida, as relações observadas. Para Devereux, essa influência não deve ser ocultada nem ignorada, mas analisada como parte do próprio processo de investigação.\n\nEssa perspectiva ficou conhecida como \"subjetividade controlada\". O antropólogo deve refletir criticamente sobre suas emoções, expectativas e reações, utilizando essas informações para compreender melhor a dinâmica da pesquisa. O conhecimento antropológico surge, portanto, do encontro entre dois universos culturais e da interação entre pesquisador e pesquisado." },
+      // 9 discursiva
+      { type: "discursiva", statement: "Explique o significado da expressão \"aculturação ao inverso\" presente na experiência etnográfica. Qual sua relevância para a compreensão da alteridade?", answer: "A expressão \"aculturação ao inverso\" refere-se ao processo pelo qual o antropólogo se deixa transformar pela convivência com a cultura estudada. Em vez de apenas observar o outro à distância, ele procura participar da vida cotidiana do grupo, aprender sua língua e compreender seus modos de pensar.\n\nDurante esse processo, o pesquisador passa a questionar suas próprias referências culturais e desenvolve maior sensibilidade para compreender perspectivas diferentes das suas. Trata-se de uma experiência de deslocamento intelectual e emocional que amplia a capacidade de compreensão da alteridade.\n\nA relevância desse processo está justamente na possibilidade de reduzir interpretações etnocêntricas. Ao experimentar a lógica interna da cultura observada, o antropólogo produz análises mais profundas e contextualizadas, aproximando-se dos significados atribuídos pelos próprios membros daquela sociedade." },
+      // 10 discursiva
+      { type: "discursiva", statement: "A partir dos diferentes paradigmas apresentados no material, discuta se é possível construir uma explicação única e definitiva sobre o ser humano. Justifique sua resposta.", answer: "A pluralidade de paradigmas antropológicos demonstra que não é possível construir uma explicação única e definitiva sobre o ser humano. Cada corrente teórica destaca aspectos distintos da experiência humana e oferece contribuições específicas para sua compreensão.\n\nO funcionalismo enfatiza as funções desempenhadas pelas instituições sociais; o estruturalismo investiga estruturas mentais universais; a teoria do Fenômeno Social Total analisa a integração das diferentes esferas da vida social; a Configuração Cultural estuda os padrões valorizados por cada sociedade; e a Antropologia Dinâmica concentra-se nos processos de mudança, conflito e transformação histórica.\n\nEssa diversidade de abordagens revela a complexidade do fenômeno humano. Nenhuma teoria é capaz de esgotar sozinha todas as dimensões da cultura e da sociedade. Por essa razão, a Antropologia caracteriza-se pela coexistência de múltiplas perspectivas analíticas, que se complementam e enriquecem a compreensão da condição humana. A impossibilidade de uma explicação única não representa uma fraqueza da disciplina, mas sim o reconhecimento da riqueza e da diversidade da experiência humana." },
+      // 11 objetiva
+      { type: "objetiva", statement: "O conceito antropológico de estranhamento produz uma consequência epistemológica que pode ser corretamente descrita como:", alternatives: [{letter:"A",text:"A substituição da cultura do pesquisador pela cultura observada durante o trabalho de campo."},{letter:"B",text:"A suspensão provisória das categorias culturais do observador para compreender a lógica interna de outra cultura."},{letter:"C",text:"A rejeição de qualquer juízo crítico sobre práticas culturais distintas."},{letter:"D",text:"A neutralização completa da subjetividade do pesquisador."},{letter:"E",text:"A demonstração de que todas as culturas evoluem pelos mesmos estágios históricos."}], correctIndex:1, explanation:"O estranhamento consiste em suspender provisoriamente as categorias culturais próprias para compreender a lógica interna de outra cultura. É uma ferramenta metodológica que combate interpretações automáticas e etnocêntricas.\n\nPor que as outras estão erradas?\nA) Incorreta. O antropólogo não substitui sua cultura pela do grupo estudado. Ele busca compreendê-la, não abandoná-la.\nC) Incorreta. Estranhamento não elimina a possibilidade de crítica; apenas exige compreensão prévia antes do julgamento.\nD) Incorreta. A Antropologia contemporânea reconhece que a subjetividade nunca é totalmente eliminada.\nE) Incorreta. Essa alternativa expressa justamente uma visão evolucionista que a Antropologia moderna critica." },
+      // 12 objetiva
+      { type: "objetiva", statement: "A crítica antropológica ao evolucionismo do século XIX não consiste apenas em rejeitar uma teoria histórica, mas principalmente em:", alternatives: [{letter:"A",text:"Negar que existam diferenças entre sociedades."},{letter:"B",text:"Defender que povos não ocidentais permanecem isolados da história."},{letter:"C",text:"Questionar a existência de um padrão universal de hierarquização cultural."},{letter:"D",text:"Substituir a análise científica pela empatia moral."},{letter:"E",text:"Sustentar que toda mudança social ocorre por influência colonial."}], correctIndex:2, explanation:"O evolucionismo organizava culturas em uma escala hierárquica de desenvolvimento. A crítica antropológica questiona a própria existência desse padrão universal de superioridade cultural.\n\nPor que as outras estão erradas?\nA) Incorreta. A Antropologia reconhece diferenças culturais; ela apenas não as transforma automaticamente em desigualdades.\nB) Incorreta. A crítica ao evolucionismo não exclui povos da história; faz justamente o contrário.\nD) Incorreta. A Antropologia continua sendo ciência; não substitui análise por empatia.\nE) Incorreta. Mudanças sociais possuem múltiplas causas, não apenas a colonização." },
+      // 13 objetiva
+      { type: "objetiva", statement: "Ao afirmar que a diversidade cultural funciona como um \"espelho\", o texto sugere que:", alternatives: [{letter:"A",text:"A cultura do observador é necessariamente semelhante à cultura observada."},{letter:"B",text:"A observação de outras sociedades permite reconhecer a dimensão cultural daquilo que parecia natural."},{letter:"C",text:"Todas as culturas compartilham os mesmos sistemas de valores."},{letter:"D",text:"O conhecimento antropológico depende exclusivamente da comparação entre civilizações."},{letter:"E",text:"O pesquisador deve abandonar sua identidade cultural para compreender o outro."}], correctIndex:1, explanation:"Ao conhecer outras culturas, percebemos que muitos comportamentos considerados naturais são, na verdade, construções culturais.\n\nPor que as outras estão erradas?\nA) Incorreta. O espelho não significa semelhança, mas contraste.\nC) Incorreta. As culturas possuem valores distintos.\nD) Incorreta. A comparação é importante, mas não é a única base da Antropologia.\nE) Incorreta. O pesquisador não abandona sua identidade cultural." },
+      // 14 objetiva
+      { type: "objetiva", statement: "Considere a seguinte situação:\n\nUm pesquisador aprende a língua local, participa dos rituais, estabelece relações cotidianas com o grupo e busca compreender os significados atribuídos pelos próprios membros da comunidade.\n\nEssa postura aproxima-se mais da ideia de:", alternatives: [{letter:"A",text:"Estruturalismo."},{letter:"B",text:"Etnocentrismo metodológico."},{letter:"C",text:"Evolucionismo cultural."},{letter:"D",text:"Observação participante."},{letter:"E",text:"Fenômeno social total."}], correctIndex:3, explanation:"Aprender a língua, compartilhar experiências e compreender significados internos caracteriza a observação participante proposta por Malinowski.\n\nPor que as outras estão erradas?\nA) Incorreta. O estruturalismo procura estruturas universais do pensamento, não descreve especificamente esse método.\nB) Incorreta. O etnocentrismo faz o oposto: julga a cultura do outro pelos padrões da própria.\nC) Incorreta. O evolucionismo não exige imersão em campo.\nE) Incorreta. Fenômeno social total é um conceito de Mauss para analisar determinados fatos sociais." },
+      // 15 objetiva
+      { type: "objetiva", statement: "A oposição entre \"Bom Selvagem\" e \"Mau Selvagem\" revela que:", alternatives: [{letter:"A",text:"Apenas a primeira concepção apresenta distorções antropológicas."},{letter:"B",text:"Ambas representam formas distintas de projeção cultural sobre o outro."},{letter:"C",text:"O pensamento antropológico moderno deriva diretamente da ideia do Bom Selvagem."},{letter:"D",text:"O Mau Selvagem constitui uma teoria antropológica científica."},{letter:"E",text:"As duas concepções foram formuladas por antropólogos funcionalistas."}], correctIndex:1, explanation:"Embora pareçam opostas, ambas as visões são projeções culturais sobre o outro. Uma demoniza e a outra idealiza.\n\nPor que as outras estão erradas?\nA) Incorreta. As duas geram distorções.\nC) Incorreta. A Antropologia moderna critica tanto a idealização quanto a demonização.\nD) Incorreta. Não são teorias científicas, mas construções ideológicas.\nE) Incorreta. Essas concepções são anteriores ao funcionalismo." },
+      // 16 objetiva
+      { type: "objetiva", statement: "Um antropólogo observa que um ritual de troca de presentes mobiliza simultaneamente obrigações jurídicas, prestígio político, crenças religiosas e relações econômicas.\n\nA interpretação mais compatível com Marcel Mauss seria:", alternatives: [{letter:"A",text:"Trata-se de um exemplo de estrutura inconsciente universal."},{letter:"B",text:"O ritual satisfaz exclusivamente necessidades biológicas."},{letter:"C",text:"O fenômeno constitui um fato social total."},{letter:"D",text:"A prática evidencia uma etapa intermediária da evolução cultural."},{letter:"E",text:"O caso demonstra a impossibilidade de análise antropológica."}], correctIndex:2, explanation:"Marcel Mauss chama esse tipo de acontecimento de Fenômeno Social Total porque envolve simultaneamente diversas dimensões da vida social.\n\nPor que as outras estão erradas?\nA) Incorreta. Estruturas inconscientes remetem ao estruturalismo de Lévi-Strauss.\nB) Incorreta. Reduzir o fenômeno à biologia seria uma interpretação funcionalista simplificada.\nD) Incorreta. A ideia de estágio evolutivo pertence ao evolucionismo.\nE) Incorreta. O caso é perfeitamente analisável pela Antropologia." },
+      // 17 objetiva
+      { type: "objetiva", statement: "Qual alternativa expressa mais adequadamente a diferença entre Funcionalismo e Estruturalismo?", alternatives: [{letter:"A",text:"O funcionalismo busca padrões universais inconscientes; o estruturalismo investiga necessidades sociais concretas."},{letter:"B",text:"O funcionalismo enfatiza a função social das instituições; o estruturalismo procura estruturas mentais universais."},{letter:"C",text:"O funcionalismo rejeita o trabalho de campo; o estruturalismo o considera indispensável."},{letter:"D",text:"O funcionalismo estuda sociedades modernas; o estruturalismo, sociedades tradicionais."},{letter:"E",text:"Ambos possuem exatamente o mesmo objeto e método."}], correctIndex:1, explanation:"Malinowski investiga a função das instituições culturais; Lévi-Strauss procura estruturas universais inconscientes.\n\nPor que as outras estão erradas?\nA) Incorreta. As definições foram invertidas.\nC) Incorreta. O funcionalismo foi um dos maiores defensores do trabalho de campo.\nD) Incorreta. Nenhuma das teorias possui essa limitação.\nE) Incorreta. Possuem objetos e perguntas bastante diferentes." },
+      // 18 objetiva
+      { type: "objetiva", statement: "A noção de \"subjetividade controlada\", inspirada em Devereux, implica que:", alternatives: [{letter:"A",text:"A influência do pesquisador invalida os resultados da pesquisa."},{letter:"B",text:"A objetividade depende da eliminação completa das emoções do observador."},{letter:"C",text:"O pesquisador deve ocultar sua presença para evitar interferências."},{letter:"D",text:"A interação entre pesquisador e pesquisado pode tornar-se fonte legítima de conhecimento."},{letter:"E",text:"O trabalho de campo deve ser substituído pela análise documental."}], correctIndex:3, explanation:"A interação entre observador e observado produz informações relevantes e não deve ser tratada apenas como erro metodológico.\n\nPor que as outras estão erradas?\nA) Incorreta. A influência do pesquisador não invalida automaticamente a pesquisa.\nB) Incorreta. A objetividade antropológica não depende da eliminação das emoções.\nC) Incorreta. Ocultar a presença é impossível em grande parte das pesquisas de campo.\nE) Incorreta. Devereux não propõe abandonar o trabalho de campo." },
+      // 19 objetiva
+      { type: "objetiva", statement: "Um estudante afirma:\n\n\"Se a Antropologia adota o relativismo cultural, então ela não pode criticar nenhuma prática social.\"\n\nEssa afirmação está incorreta porque o relativismo cultural:", alternatives: [{letter:"A",text:"Substitui critérios morais por critérios biológicos."},{letter:"B",text:"Exige concordância com todas as práticas observadas."},{letter:"C",text:"Refere-se à compreensão contextual dos fenômenos culturais, e não à suspensão absoluta da reflexão crítica."},{letter:"D",text:"Defende a superioridade das culturas tradicionais."},{letter:"E",text:"Rejeita qualquer forma de comparação entre sociedades."}], correctIndex:2, explanation:"O relativismo cultural exige compreender uma prática em seu contexto antes de avaliá-la.\n\nPor que as outras estão erradas?\nA) Incorreta. O relativismo não substitui moral por biologia.\nB) Incorreta. Compreender não significa concordar.\nD) Incorreta. Não existe defesa automática de culturas tradicionais.\nE) Incorreta. A comparação continua sendo importante para a Antropologia." },
+      // 20 objetiva
+      { type: "objetiva", statement: "Qual das situações abaixo expressa melhor o princípio antropológico segundo o qual sujeito e objeto pertencem à mesma natureza?", alternatives: [{letter:"A",text:"Um químico reproduz uma reação em laboratório sob condições controladas."},{letter:"B",text:"Um matemático demonstra um teorema independentemente de sua experiência pessoal."},{letter:"C",text:"Um antropólogo percebe que suas próprias categorias culturais influenciam a interpretação dos dados coletados em campo."},{letter:"D",text:"Um historiador utiliza apenas documentos escritos para reconstruir o passado."},{letter:"E",text:"Um linguista analisa estruturas gramaticais sem interagir com falantes."}], correctIndex:2, explanation:"Na Antropologia, pesquisador e pesquisado são seres humanos. Por isso, as categorias culturais do observador influenciam a produção do conhecimento.\n\nPor que as outras estão erradas?\nA) Incorreta. Representa um modelo típico das ciências naturais.\nB) Incorreta. A demonstração matemática independe do encontro entre sujeitos.\nD) Incorreta. A questão não aborda a relação sujeito-objeto.\nE) Incorreta. A análise linguística apresentada não envolve necessariamente reflexividade antropológica." }
+    ]
+  },
+  {
+    id: "semana-02",
+    emoji: "🧠",
+    title: "SEMANA 02",
+    questions: [
+      // 1 discursiva
+      { type: "discursiva", statement: "Explique por que o Evolucionismo Cultural foi considerado uma das primeiras tentativas sistemáticas de compreender o fenômeno jurídico de forma antropológica. Em seguida, apresente suas principais limitações.", answer: "O Evolucionismo Cultural foi uma das primeiras correntes a tentar explicar o Direito de forma comparativa e histórica, inserindo-o em uma teoria geral do desenvolvimento humano. Seus autores partiam da ideia de que todas as sociedades pertenciam à mesma espécie humana e percorriam um caminho evolutivo universal, unilinear e inevitável, que conduzia das formas sociais consideradas simples às formas consideradas complexas e civilizadas.\n\nNessa perspectiva, o Direito era interpretado como uma instituição sujeita ao progresso histórico. As formas jurídicas observadas em diferentes sociedades seriam reflexos de diferentes estágios evolutivos. O método comparativo permitia aos evolucionistas analisar sistemas familiares, religiosos e jurídicos para reconstruir a trajetória da humanidade.\n\nEntretanto, essa corrente apresenta importantes limitações. Sua principal falha reside no etnocentrismo, pois utiliza a sociedade europeia como parâmetro universal de desenvolvimento. Dessa forma, culturas não europeias eram frequentemente classificadas como atrasadas ou primitivas. Além disso, o evolucionismo ignorava as especificidades históricas de cada sociedade, reduzindo a diversidade cultural a uma única trajetória evolutiva. Essa visão acabou servindo de justificativa intelectual para projetos coloniais, ao sustentar que a colonização promoveria o avanço dos povos considerados menos evoluídos." },
+      // 2 discursiva
+      { type: "discursiva", statement: "Analise a contribuição de Henry Maine para a Antropologia Jurídica e explique o significado da passagem do Status para o Contrato.", answer: "Henry Maine é considerado um dos principais fundadores da Antropologia Jurídica por ter buscado compreender historicamente a evolução das formas de organização jurídica. Em sua obra Ancient Law, propôs que o desenvolvimento do Direito poderia ser compreendido por meio da transição do Status para o Contrato.\n\nO Status caracteriza sociedades nas quais direitos e deveres são determinados pela posição ocupada pelo indivíduo dentro de estruturas familiares ou patriarcais. Nesses contextos, a identidade jurídica da pessoa deriva do grupo ao qual pertence, especialmente da família e das relações de parentesco.\n\nJá o Contrato representa uma etapa posterior, marcada pelo reconhecimento da autonomia individual. Os vínculos jurídicos deixam de ser impostos pela posição social e passam a ser estabelecidos pela vontade dos indivíduos. O Estado assume um papel regulador dessas relações.\n\nA importância dessa teoria está em demonstrar que o Direito não é uma realidade estática, mas uma instituição histórica sujeita a transformações sociais. Contudo, a interpretação de Maine também reflete pressupostos evolucionistas, ao pressupor que todas as sociedades caminhariam inevitavelmente para modelos jurídicos semelhantes aos europeus modernos." },
+      // 3 discursiva
+      { type: "discursiva", statement: "Compare as concepções de cultura presentes no Evolucionismo e no Difusionismo. Explique como Franz Boas rompeu com os pressupostos evolucionistas.", answer: "O Evolucionismo compreendia a cultura como uma realidade única submetida a um processo universal de desenvolvimento. As diferenças observadas entre os povos eram interpretadas como indicadores de diferentes estágios evolutivos. Assim, sociedades consideradas primitivas representariam fases anteriores da trajetória já alcançada pelas sociedades industrializadas.\n\nO Difusionismo surge como uma crítica a essa perspectiva. Para seus representantes, as semelhanças entre culturas não decorrem necessariamente de estágios evolutivos comuns, mas dos processos de contato, migração e difusão de traços culturais entre diferentes grupos humanos.\n\nFranz Boas desempenhou papel decisivo nessa ruptura ao formular o Particularismo Histórico. Segundo ele, cada sociedade possui uma trajetória própria, construída a partir de circunstâncias históricas específicas. Não existe um caminho universal de evolução cultural.\n\nAlém disso, Boas rejeitou explicações baseadas em raça ou determinismo biológico. Demonstrou que as diferenças humanas são produzidas principalmente pela cultura. Dessa forma, substituiu as grandes narrativas evolucionistas pela investigação detalhada de contextos históricos particulares, inaugurando uma nova forma de fazer Antropologia." },
+      // 4 discursiva
+      { type: "discursiva", statement: "Explique por que o Particularismo Histórico de Franz Boas representou uma transformação metodológica na Antropologia.", answer: "O Particularismo Histórico representou uma profunda transformação metodológica porque rompeu com as explicações generalizantes do Evolucionismo e deslocou o foco da análise para o estudo detalhado de sociedades específicas.\n\nPara Boas, nenhum costume pode ser compreendido isoladamente ou comparado automaticamente a costumes semelhantes encontrados em outros lugares. Seu significado depende do contexto histórico e cultural no qual está inserido.\n\nEssa perspectiva levou à valorização do trabalho de campo prolongado, da observação direta e da coleta sistemática de informações sobre cada grupo estudado. Em vez de reconstruir hipotéticas etapas universais da evolução humana, o antropólogo passou a investigar os processos concretos que moldaram cada cultura.\n\nA consequência dessa mudança foi a valorização da diversidade cultural e a rejeição de interpretações hierarquizantes. O conhecimento antropológico tornou-se mais empírico, contextualizado e sensível às particularidades históricas das sociedades." },
+      // 5 discursiva
+      { type: "discursiva", statement: "Explique como Malinowski compreendia a relação entre cultura, instituições sociais e necessidades humanas.", answer: "Para Malinowski, a cultura constitui um sistema integrado de instituições criado para satisfazer necessidades humanas. Essas necessidades podem ser tanto biológicas quanto sociais, e cada instituição desempenha uma função específica na manutenção da vida coletiva.\n\nA família, a religião, a economia e o Direito não existem por acaso. Elas surgem porque respondem a problemas concretos enfrentados pelos indivíduos em sociedade. A função de uma instituição deve ser compreendida a partir da contribuição que oferece para o funcionamento do sistema social.\n\nSegundo essa perspectiva, a análise antropológica não deve concentrar-se na origem histórica das práticas culturais, mas em sua função no presente. O importante é compreender como determinados costumes, normas e organizações contribuem para atender necessidades humanas e garantir a estabilidade da sociedade.\n\nAssim, a cultura é entendida como um instrumento adaptativo que organiza a vida social e permite a satisfação de necessidades individuais e coletivas." },
+      // 6 discursiva
+      { type: "discursiva", statement: "Analise a concepção de Direito desenvolvida por Malinowski e explique por que ela representou uma inovação para a Antropologia Jurídica.", answer: "Malinowski inovou ao demonstrar que o Direito não depende necessariamente da existência do Estado ou de tribunais formais. Estudando as Ilhas Trobriand, observou que sociedades sem instituições jurídicas semelhantes às ocidentais possuíam mecanismos eficazes de regulação social.\n\nPara ele, o Direito consiste em um sistema de obrigações recíprocas sustentado pela publicidade das relações sociais e pela expectativa de cumprimento das normas. As pessoas obedecem às regras não apenas por medo de punições, mas porque dependem das relações de reciprocidade que estruturam a vida coletiva.\n\nEssa interpretação rompe com a ideia de que povos considerados simples viveriam apenas sob tabus irracionais. Malinowski demonstrou que suas normas possuem lógica própria e desempenham funções fundamentais na organização social.\n\nSua contribuição foi decisiva porque ampliou o conceito de Direito, permitindo sua análise em contextos culturais diversos e combatendo visões etnocêntricas que restringiam a experiência jurídica aos modelos ocidentais." },
+      // 7 discursiva
+      { type: "discursiva", statement: "Explique o conceito de Fato Social Total elaborado por Marcel Mauss e demonstre sua importância para a compreensão do fenômeno jurídico.", answer: "O conceito de Fato Social Total foi desenvolvido por Marcel Mauss para designar fenômenos que mobilizam simultaneamente diferentes dimensões da vida social. Esses fenômenos são, ao mesmo tempo, jurídicos, econômicos, políticos, religiosos, morais e simbólicos.\n\nO exemplo clássico utilizado por Mauss é o sistema de dádivas. Nessas sociedades, as trocas não possuem apenas finalidade econômica. Elas criam obrigações jurídicas, reforçam alianças políticas, expressam valores religiosos e estabelecem relações morais entre os participantes.\n\nA importância desse conceito para a Antropologia Jurídica está em demonstrar que o Direito não pode ser compreendido isoladamente. As normas jurídicas estão profundamente conectadas a outras dimensões da vida social.\n\nDessa forma, Mauss evidencia que o fenômeno jurídico é parte de uma totalidade social mais ampla, exigindo análises integradas que considerem a complexidade das relações humanas." },
+      // 8 discursiva
+      { type: "discursiva", statement: "Compare as concepções de função presentes em Malinowski e Radcliffe-Brown.", answer: "Embora ambos sejam funcionalistas, Malinowski e Radcliffe-Brown atribuem significados distintos ao conceito de função.\n\nMalinowski entende que as instituições sociais existem para satisfazer necessidades humanas. Sua análise concentra-se nos indivíduos e nos problemas concretos que precisam ser resolvidos para garantir a sobrevivência biológica e social. A função de uma instituição é atender essas necessidades.\n\nRadcliffe-Brown, por outro lado, desloca o foco para a estrutura social. Para ele, a função não consiste em satisfazer necessidades individuais, mas em contribuir para a manutenção da continuidade estrutural da sociedade. Assim como os órgãos de um organismo biológico cooperam para preservar a vida, as instituições sociais desempenham atividades que asseguram a estabilidade das relações sociais.\n\nPortanto, enquanto Malinowski enfatiza as necessidades humanas, Radcliffe-Brown enfatiza a preservação da estrutura social." },
+      // 9 discursiva
+      { type: "discursiva", statement: "Explique como Lévi-Strauss compreende a noção de estrutura social e por que ela difere da concepção funcionalista.", answer: "Para Lévi-Strauss, a estrutura social não corresponde à realidade empírica diretamente observável. Ela consiste em um modelo teórico construído pelo pesquisador para identificar as relações invisíveis que organizam a vida social.\n\nInspirado pela linguística estrutural, Lévi-Strauss argumenta que os indivíduos seguem regras culturais inconscientes da mesma forma que utilizam regras gramaticais sem conhecê-las explicitamente. Essas estruturas mentais universais organizam sistemas de parentesco, mitos, classificações e normas sociais.\n\nEssa concepção difere do funcionalismo porque não busca explicar a função desempenhada pelas instituições na manutenção da sociedade. O objetivo do estruturalismo é identificar os princípios lógicos e inconscientes que tornam possíveis essas instituições.\n\nEnquanto o funcionalismo pergunta \"para que serve?\", o estruturalismo pergunta \"quais estruturas mentais tornam isso possível?\"." },
+      // 10 discursiva
+      { type: "discursiva", statement: "Analise criticamente a classificação de Lévi-Strauss entre sociedades frias e sociedades quentes. Quais são as potencialidades e limitações dessa distinção?", answer: "A distinção entre sociedades frias e sociedades quentes foi proposta por Lévi-Strauss para compreender diferentes formas de relação com a mudança histórica.\n\nAs sociedades frias são aquelas que procuram neutralizar ou minimizar as transformações históricas, reproduzindo padrões tradicionais e valorizando a continuidade estrutural. Já as sociedades quentes incorporam as mudanças históricas como parte de sua dinâmica social, encontrando-se em permanente processo de transformação.\n\nEssa classificação possui valor analítico porque permite compreender diferentes maneiras pelas quais as sociedades lidam com o tempo, a tradição e a inovação. Ela destaca que nem todos os grupos humanos atribuem o mesmo significado à mudança social.\n\nEntretanto, essa distinção também apresenta limitações. Ao dividir as sociedades em apenas duas categorias, corre o risco de simplificar excessivamente realidades complexas. Além disso, muitas sociedades apresentam simultaneamente elementos de conservação e transformação, tornando difícil enquadrá-las rigidamente em um único modelo. Por fim, críticos argumentam que essa classificação pode negligenciar a diversidade das experiências históricas concretas e reduzir a complexidade da vida social a um esquema excessivamente abstrato." },
+      // 11 objetiva
+      { type: "objetiva", statement: "Ao analisar o desenvolvimento histórico do Direito, Henry Maine sustentava que as sociedades evoluiriam de relações fundadas no Status para relações fundadas no Contrato. Qual alternativa melhor expressa o significado dessa transformação?", alternatives: [{letter:"A",text:"A substituição do poder religioso pelo poder militar como fundamento da autoridade jurídica."},{letter:"B",text:"A passagem de vínculos jurídicos determinados pela posição familiar ou social para vínculos construídos pela autonomia individual."},{letter:"C",text:"A transição do direito costumeiro para o direito escrito como requisito da civilização."},{letter:"D",text:"A substituição do patriarcado pelo matriarcado nas sociedades modernas."},{letter:"E",text:"A eliminação das obrigações coletivas em favor de deveres exclusivamente estatais."}], correctIndex:1, explanation:"Maine argumentava que, nas sociedades mais antigas, os direitos e deveres eram definidos pela posição do indivíduo dentro da família ou do grupo (Status). Com a evolução social, os indivíduos passariam a estabelecer relações jurídicas por sua própria vontade (Contrato).\n\nA) Confunde mudança política com a tese central de Maine.\nC) O autor não reduz a evolução jurídica à escrita.\nD) Não corresponde à sua teoria.\nE) O contrato não elimina obrigações coletivas." },
+      // 12 objetiva
+      { type: "objetiva", statement: "A principal ruptura promovida por Franz Boas em relação ao evolucionismo consistiu em:", alternatives: [{letter:"A",text:"Defender que a cultura europeia era apenas uma entre várias culturas em diferentes estágios evolutivos."},{letter:"B",text:"Substituir o estudo da cultura pelo estudo da biologia humana."},{letter:"C",text:"Negar que existam influências entre culturas diferentes."},{letter:"D",text:"Rejeitar a ideia de uma trajetória universal de desenvolvimento cultural."},{letter:"E",text:"Sustentar que todas as culturas possuem exatamente o mesmo nível de desenvolvimento."}], correctIndex:3, explanation:"Boas rompe com a noção de evolução universal ao defender que cada sociedade possui uma trajetória histórica singular.\n\nA) Ainda mantém a lógica evolucionista.\nB) Boas combateu o determinismo biológico.\nC) A difusão cultural continua existindo para Boas.\nE) Boas não negava diferenças culturais." },
+      // 13 objetiva
+      { type: "objetiva", statement: "Do ponto de vista metodológico, a diferença mais profunda entre Evolucionismo e Funcionalismo está no fato de que:", alternatives: [{letter:"A",text:"O evolucionismo analisa a função das instituições e o funcionalismo sua origem histórica."},{letter:"B",text:"Ambos buscam reconstruir o passado das sociedades por meio do método comparativo."},{letter:"C",text:"O evolucionismo privilegia explicações históricas, enquanto o funcionalismo concentra-se na lógica de funcionamento presente."},{letter:"D",text:"O funcionalismo rejeita a observação participante."},{letter:"E",text:"O evolucionismo abandona qualquer comparação entre culturas."}], correctIndex:2, explanation:"O evolucionismo busca explicar como as sociedades chegaram ao estágio atual. O funcionalismo procura compreender como elas funcionam no presente.\n\nA) Inverte as características das correntes.\nB) O funcionalismo não tem foco histórico.\nD) Malinowski é justamente o principal defensor da observação participante.\nE) O método comparativo é central no evolucionismo." },
+      // 14 objetiva
+      { type: "objetiva", statement: "Quando Malinowski afirma que o Direito nas sociedades simples é composto por obrigações recíprocas sustentadas pela publicidade das relações sociais, ele está combatendo diretamente a ideia de que:", alternatives: [{letter:"A",text:"O Direito depende necessariamente da economia."},{letter:"B",text:"As normas jurídicas derivam exclusivamente da religião."},{letter:"C",text:"Povos não ocidentais vivem apenas sob tabus irracionais e sem ordem jurídica."},{letter:"D",text:"A reciprocidade é incompatível com sociedades simples."},{letter:"E",text:"A cultura possui funções adaptativas."}], correctIndex:2, explanation:"Uma das maiores contribuições de Malinowski foi demonstrar que sociedades sem Estado também possuem mecanismos jurídicos eficazes.\n\nA) Não é o foco da crítica.\nB) A religião pode influenciar, mas não resume o Direito.\nD) A reciprocidade é justamente central em sua teoria.\nE) Essa ideia é defendida por ele." },
+      // 15 objetiva
+      { type: "objetiva", statement: "Considere a seguinte afirmação:\n\n\"Um fenômeno social pode ser simultaneamente econômico, jurídico, religioso e moral sem perder sua especificidade.\"\n\nEssa proposição corresponde principalmente à teoria:", alternatives: [{letter:"A",text:"Do Particularismo Histórico."},{letter:"B",text:"Da Estrutura Social."},{letter:"C",text:"Do Fato Social Total."},{letter:"D",text:"Do Animismo."},{letter:"E",text:"Da Difusão Cultural."}], correctIndex:2, explanation:"Mauss formulou o conceito de Fato Social Total exatamente para demonstrar a integração das diversas dimensões da vida social.\n\nA) Refere-se a Boas.\nB) Refere-se a Radcliffe-Brown.\nD) Refere-se a Tylor.\nE) Refere-se ao Difusionismo." },
+      // 16 objetiva
+      { type: "objetiva", statement: "Uma diferença importante entre Mauss e Malinowski é que:", alternatives: [{letter:"A",text:"Mauss nega a existência de reciprocidade social."},{letter:"B",text:"Malinowski estuda funções institucionais, enquanto Mauss enfatiza fenômenos que articulam simultaneamente diversas dimensões da vida social."},{letter:"C",text:"Mauss rejeita completamente a análise do Direito."},{letter:"D",text:"Malinowski explica a sociedade por estruturas inconscientes."},{letter:"E",text:"Ambos defendem que o Direito depende necessariamente do Estado."}], correctIndex:1, explanation:"Malinowski procura identificar a função das instituições. Mauss investiga fenômenos que articulam economia, moral, religião, política e Direito simultaneamente.\n\nA) A reciprocidade é central em Mauss.\nC) O Direito está presente no Fato Social Total.\nD) Isso é estruturalismo.\nE) Ambos mostram formas jurídicas além do Estado." },
+      // 17 objetiva
+      { type: "objetiva", statement: "Para Radcliffe-Brown, a função de uma instituição social deve ser entendida como:", alternatives: [{letter:"A",text:"O conjunto de necessidades biológicas que ela satisfaz."},{letter:"B",text:"A contribuição que oferece para a manutenção da continuidade da estrutura social."},{letter:"C",text:"O resultado de sua origem histórica."},{letter:"D",text:"O grau de racionalidade presente em suas normas."},{letter:"E",text:"A capacidade de produzir mudança social."}], correctIndex:1, explanation:"Radcliffe-Brown define função como contribuição para a preservação da estrutura social.\n\nA) Essa definição é mais próxima de Malinowski.\nC) Não é uma análise histórica.\nD) Não faz parte da definição funcionalista.\nE) Seu foco está na estabilidade, não na mudança." },
+      // 18 objetiva
+      { type: "objetiva", statement: "Ao afirmar que a estrutura social é um modelo teórico construído pelo pesquisador e não uma realidade diretamente observável, Lévi-Strauss pretende dizer que:", alternatives: [{letter:"A",text:"As estruturas sociais não existem."},{letter:"B",text:"A sociedade é uma ficção produzida pelos antropólogos."},{letter:"C",text:"O objetivo científico é identificar relações profundas que organizam os fenômenos observáveis."},{letter:"D",text:"Apenas os mitos possuem estrutura."},{letter:"E",text:"A observação empírica é desnecessária."}], correctIndex:2, explanation:"Para Lévi-Strauss, a estrutura é uma construção analítica que permite explicar relações invisíveis presentes nos fenômenos sociais.\n\nA) Não nega a existência da realidade social.\nB) Não reduz a sociedade a uma invenção.\nD) A estrutura aparece em vários domínios.\nE) A observação continua sendo indispensável." },
+      // 19 objetiva
+      { type: "objetiva", statement: "A comparação feita por Lévi-Strauss entre parentesco e sistema fonológico busca demonstrar que:", alternatives: [{letter:"A",text:"O casamento é determinado pela biologia."},{letter:"B",text:"As relações familiares obedecem a regras inconscientes que organizam a vida social."},{letter:"C",text:"A linguagem é mais importante que a cultura."},{letter:"D",text:"Os sistemas de parentesco são universais e idênticos."},{letter:"E",text:"O parentesco surgiu antes da linguagem."}], correctIndex:1, explanation:"Assim como falamos seguindo regras gramaticais que não percebemos conscientemente, as regras de parentesco também operam por estruturas inconscientes.\n\nA) Contraria o estruturalismo.\nC) Não existe essa hierarquia.\nD) As estruturas podem ser universais, mas os sistemas não são idênticos.\nE) Não há essa discussão na teoria." },
+      // 20 objetiva
+      { type: "objetiva", statement: "Uma das críticas mais consistentes ao Estruturalismo apresentada no material é que ele:", alternatives: [{letter:"A",text:"Supervaloriza a história em detrimento da estrutura."},{letter:"B",text:"Considera a cultura produto exclusivo da biologia."},{letter:"C",text:"Reduz excessivamente a complexidade social ao privilegiar estruturas universais e oposições binárias."},{letter:"D",text:"Rejeita completamente qualquer forma de comparação entre culturas."},{letter:"E",text:"Defende a superioridade da civilização ocidental."}], correctIndex:2, explanation:"As críticas ao estruturalismo apontam que o foco em estruturas universais, modelos abstratos e oposições binárias pode simplificar excessivamente a diversidade das experiências humanas.\n\nA) O problema apontado é justamente o contrário: pouca atenção à história.\nB) Não há determinismo biológico em Lévi-Strauss.\nD) O estruturalismo é profundamente comparativo.\nE) Não existe defesa da superioridade ocidental em sua teoria." }
+    ]
+  },
+  {
+    id: "cultura",
+    emoji: "🌍",
+    title: "Cultura",
+    questions: [
+      { type: "discursiva", statement: "Explique por que Laraia rejeita os determinismos biológico e geográfico. Em sua resposta, demonstre como essa crítica contribui para a construção do conceito antropológico de cultura.", answer: "Laraia rejeita tanto o determinismo biológico quanto o determinismo geográfico porque considera que ambos oferecem explicações insuficientes para a diversidade dos comportamentos humanos. O determinismo biológico sustenta que diferenças culturais seriam consequência de diferenças genéticas ou raciais. Contra essa perspectiva, Laraia argumenta que não existe relação necessária entre patrimônio genético e capacidades culturais. Povos biologicamente distintos podem desenvolver comportamentos semelhantes, assim como indivíduos biologicamente semelhantes podem apresentar culturas profundamente diferentes.\n\nDa mesma forma, ele critica o determinismo geográfico, que atribui as diferenças culturais às condições ambientais. Embora o meio ambiente imponha limites e ofereça possibilidades, ele não determina automaticamente a forma como uma sociedade irá organizar sua vida social. Diferentes grupos podem ocupar ambientes semelhantes e desenvolver culturas radicalmente distintas.\n\nAo rejeitar esses determinismos, Laraia fortalece uma compreensão antropológica da cultura como resultado do aprendizado social acumulado historicamente. A diversidade humana não decorre da biologia ou da geografia, mas dos processos culturais pelos quais os indivíduos aprendem, reproduzem e transformam conhecimentos, valores e práticas sociais." },
+      { type: "discursiva", statement: "Analise a importância da noção de \"tábula rasa\" de John Locke para a construção moderna do conceito antropológico de cultura.", answer: "A noção de tábula rasa formulada por John Locke desempenha papel fundamental na construção moderna do conceito antropológico de cultura porque estabelece a ideia de que os seres humanos não nascem com conhecimentos, crenças ou comportamentos sociais inatos. Segundo Locke, a mente humana é inicialmente uma folha em branco que será preenchida pela experiência.\n\nEssa concepção rompe com explicações que atribuíam diferenças humanas a características naturais ou hereditárias. Ao enfatizar o aprendizado e a experiência, Locke abre espaço para compreender o comportamento humano como resultado da socialização e da participação em sistemas culturais específicos.\n\nLaraia utiliza essa perspectiva para demonstrar que os indivíduos aprendem sua cultura por meio da convivência social. Um bebê não nasce sabendo falar determinada língua, praticar determinada religião ou obedecer determinadas normas jurídicas. Tudo isso é adquirido através do processo de aprendizagem cultural.\n\nA importância dessa concepção reside em fornecer uma base teórica para explicar como a cultura é transmitida socialmente e como diferentes sociedades produzem indivíduos com visões de mundo distintas." },
+      { type: "discursiva", statement: "Compare criticamente as concepções de cultura formuladas por Edward Tylor, Franz Boas e Alfred Kroeber.", answer: "Edward Tylor foi responsável pela primeira definição antropológica sistemática de cultura, entendendo-a como um complexo conjunto de conhecimentos, crenças, costumes, leis e capacidades adquiridas pelos indivíduos enquanto membros de uma sociedade. Apesar de sua importância, sua concepção estava vinculada ao evolucionismo, pressupondo que todas as culturas percorriam os mesmos estágios de desenvolvimento.\n\nFranz Boas rompeu com essa visão ao defender o Particularismo Histórico. Para ele, cada cultura possui uma trajetória singular e não pode ser compreendida a partir de esquemas universais de progresso. As diferenças culturais refletem histórias específicas e não diferentes posições em uma escala evolutiva.\n\nAlfred Kroeber amplia essa discussão ao formular a ideia de cultura como realidade superorgânica. Segundo ele, a cultura transcende as limitações biológicas do indivíduo e constitui uma dimensão própria da existência humana. Por meio da cultura, o ser humano supera condicionamentos orgânicos e produz conhecimento acumulativo ao longo das gerações.\n\nEnquanto Tylor enfatiza a definição geral da cultura, Boas destaca sua singularidade histórica e Kroeber enfatiza sua autonomia em relação à biologia." },
+      { type: "discursiva", statement: "Explique o conceito de cultura como realidade \"superorgânica\" em Alfred Kroeber. Quais são as implicações dessa teoria para a compreensão do comportamento humano?", answer: "A teoria da cultura superorgânica formulada por Alfred Kroeber sustenta que a cultura constitui uma dimensão da existência humana que transcende os limites biológicos dos indivíduos. Embora os seres humanos possuam uma base orgânica comum, sua vida social não pode ser explicada apenas por fatores biológicos.\n\nSegundo Kroeber, o desenvolvimento humano depende fundamentalmente da capacidade de acumular e transmitir conhecimento cultural. Enquanto a evolução biológica ocorre lentamente por meio de transformações genéticas, a cultura permite mudanças rápidas através da aprendizagem e da inovação.\n\nEssa perspectiva implica que o comportamento humano não é determinado pelos instintos, mas por sistemas culturais aprendidos socialmente. Um indivíduo pode nascer em qualquer grupo biológico e adquirir completamente a cultura da sociedade em que for criado.\n\nA teoria superorgânica reforça a ideia de que a principal característica distintiva da espécie humana não é sua biologia, mas sua capacidade de produzir, acumular e transmitir cultura." },
+      { type: "discursiva", statement: "Analise as diferentes abordagens contemporâneas da cultura apresentadas por Roger Keesing. Em que aspectos elas divergem na interpretação dos fenômenos culturais?", answer: "Roger Keesing organiza as principais correntes contemporâneas da Antropologia em diferentes abordagens que enfatizam aspectos distintos da cultura.\n\nOs Sistemas Adaptativos compreendem a cultura como um mecanismo de adaptação ao ambiente. Nessa perspectiva, os comportamentos culturais contribuem para a sobrevivência dos grupos humanos.\n\nOs Sistemas Cognitivos entendem a cultura como um conjunto de conhecimentos e padrões mentais compartilhados que permitem aos indivíduos interpretar e atuar adequadamente em sua sociedade.\n\nOs Sistemas Estruturais, influenciados por Lévi-Strauss, concentram-se nas estruturas inconscientes da mente humana responsáveis pela organização dos sistemas simbólicos.\n\nJá os Sistemas Simbólicos enfatizam os significados produzidos pelos seres humanos. Para Geertz, a cultura consiste em mecanismos simbólicos que orientam o comportamento, enquanto Schneider destaca sua autonomia em relação à realidade empírica.\n\nEssas abordagens divergem porque oferecem respostas distintas para a pergunta sobre o que é cultura: adaptação ecológica, conhecimento compartilhado, estrutura mental ou sistema simbólico." },
+      { type: "discursiva", statement: "Explique a concepção simbólica de cultura desenvolvida por Clifford Geertz. Qual é o papel da Antropologia nessa perspectiva?", answer: "Clifford Geertz concebe a cultura como um sistema de símbolos e significados que orienta o comportamento humano. Para ele, os indivíduos não agem apenas em resposta a estímulos biológicos ou ambientais, mas interpretam constantemente o mundo por meio de símbolos compartilhados.\n\nGeertz compara a cultura a um programa de computador ou mecanismo de controle que fornece orientações para a ação social. As práticas humanas só podem ser compreendidas quando seus significados culturais são interpretados.\n\nNessa perspectiva, o papel da Antropologia não consiste em descobrir leis universais do comportamento humano, mas em interpretar os significados presentes nas ações sociais. O antropólogo atua como um intérprete que busca compreender como os membros de determinada sociedade atribuem sentido às suas práticas.\n\nA cultura deixa de ser vista apenas como comportamento observável e passa a ser entendida como uma teia de significados construída coletivamente." },
+      { type: "discursiva", statement: "Explique o conceito de endoculturação e demonstre sua importância para a reprodução dos sistemas culturais.", answer: "A endoculturação é o processo pelo qual os indivíduos aprendem e interiorizam os padrões culturais de sua sociedade. Trata-se do mecanismo fundamental de transmissão da cultura entre gerações.\n\nDesde o nascimento, os indivíduos são expostos a valores, crenças, normas, costumes e formas de comportamento que passam a orientar sua vida social. Esse aprendizado ocorre por meio da família, da educação, da religião, das instituições jurídicas e das interações cotidianas.\n\nLaraia utiliza a ideia da tábula rasa para reforçar que o comportamento humano não é determinado por instintos, mas construído socialmente. Um indivíduo aprende a língua que fala, as normas que obedece e os valores que considera corretos através da endoculturação.\n\nSem esse processo, não haveria continuidade cultural. A reprodução dos sistemas culturais depende da capacidade de transmitir conhecimentos e práticas às novas gerações." },
+      { type: "discursiva", statement: "Diferencie os conceitos de difusão cultural e aculturação. Explique por que a distinção é relevante para a Antropologia Jurídica.", answer: "A difusão cultural refere-se à transferência de traços culturais entre sociedades distintas por meio do contato histórico. Esse processo envolve a circulação de ideias, tecnologias, instituições e práticas culturais que podem ser incorporadas por diferentes grupos.\n\nJá a aculturação caracteriza processos mais profundos e frequentemente assimétricos de transformação cultural decorrentes do contato contínuo entre sociedades. Em muitos casos, envolve relações de poder que levam à substituição ou enfraquecimento de elementos culturais de um dos grupos envolvidos.\n\nA distinção é relevante para a Antropologia Jurídica porque permite compreender diferentes formas de transformação dos sistemas normativos. Enquanto a difusão pode resultar na incorporação gradual de práticas jurídicas externas, a aculturação pode provocar mudanças drásticas e até a perda de sistemas jurídicos tradicionais.\n\nO caso dos povos indígenas brasileiros ilustra essa questão, pois muitos processos de aculturação ocorreram de forma coercitiva, afetando profundamente suas instituições sociais e jurídicas." },
+      { type: "discursiva", statement: "Analise a relação entre relativismo cultural e etnocentrismo. Por que essa discussão possui importância fundamental para o Direito?", answer: "O etnocentrismo consiste na tendência de utilizar a própria cultura como referência para julgar as demais. Essa postura leva à percepção de que os valores, normas e instituições do próprio grupo são naturais, corretos ou superiores.\n\nO relativismo cultural surge como uma resposta a essa tendência. Ele propõe que cada cultura seja compreendida a partir de seus próprios valores, crenças e contextos históricos. O objetivo não é afirmar que todas as práticas são moralmente equivalentes, mas evitar julgamentos simplistas e preconceituosos.\n\nEssa discussão é fundamental para o Direito porque sistemas jurídicos são construções culturais. Conceitos como justiça, crime, família, propriedade ou honra podem assumir significados distintos em diferentes sociedades.\n\nA aplicação do relativismo cultural permite compreender a lógica interna de sistemas normativos diversos, evitando que o Direito reproduza preconceitos etnocêntricos ao analisar grupos culturalmente diferentes." },
+      { type: "discursiva", statement: "Explique como a cultura condiciona a visão de mundo dos indivíduos. Utilize exemplos da Antropologia Jurídica para fundamentar sua resposta.", answer: "A cultura atua como uma lente através da qual os indivíduos percebem e interpretam a realidade. Ela fornece categorias de pensamento, valores e critérios que orientam a compreensão do mundo social.\n\nEsse condicionamento influencia a forma como as pessoas definem conceitos aparentemente universais, como família, parentesco, justiça, autoridade e responsabilidade. O que parece natural para um grupo pode ser interpretado de maneira completamente diferente por outro.\n\nNa Antropologia Jurídica, um exemplo significativo encontra-se nas Ilhas Trobriand. Nessa sociedade, não existe uma relação direta entre cópula e nascimento na compreensão cultural do parentesco. O pai é definido como o companheiro da mãe e não necessariamente por vínculos biológicos.\n\nEsse exemplo demonstra que instituições jurídicas, como o Direito de Família, não derivam automaticamente da natureza biológica, mas de interpretações culturais da realidade. Assim, a cultura condiciona profundamente a forma como os indivíduos compreendem o mundo e organizam suas relações sociais e jurídicas." },
+      { type: "objetiva", statement: "Ao rejeitar simultaneamente o determinismo biológico e o determinismo geográfico, Laraia procura defender que:", alternatives: [{letter:"A",text:"As diferenças culturais decorrem exclusivamente das condições econômicas de cada sociedade."},{letter:"B",text:"O patrimônio genético influencia parcialmente a cultura, enquanto o ambiente determina seus limites fundamentais."},{letter:"C",text:"O comportamento humano é resultado de processos de aprendizagem social historicamente construídos."},{letter:"D",text:"As diferenças culturais são ilusórias, uma vez que todos os seres humanos pertencem à mesma espécie."},{letter:"E",text:"A cultura é um reflexo direto das adaptações biológicas produzidas pela seleção natural."}], correctIndex:2, explanation:"Laraia demonstra que as diferenças culturais não podem ser explicadas nem pela genética nem pelo ambiente físico. O comportamento humano é aprendido socialmente através da participação em uma cultura específica.\n\nA) Incorreta. Laraia não reduz a cultura a fatores econômicos.\nB) Incorreta. A crítica do autor rejeita justamente a ideia de que biologia e ambiente sejam os fatores determinantes da cultura.\nD) Incorreta. Pertencer à mesma espécie não elimina a diversidade cultural.\nE) Incorreta. Essa alternativa retoma uma explicação biologizante que Laraia critica." },
+      { type: "objetiva", statement: "A utilização da teoria da tábula rasa por Laraia possui como principal consequência teórica:", alternatives: [{letter:"A",text:"Demonstrar que o comportamento humano é definido por instintos herdados."},{letter:"B",text:"Sustentar que o conhecimento humano deriva fundamentalmente da experiência e do aprendizado social."},{letter:"C",text:"Comprovar que todas as culturas compartilham estruturas mentais universais."},{letter:"D",text:"Defender a superioridade da educação formal sobre a tradição cultural."},{letter:"E",text:"Explicar as diferenças culturais por meio da diversidade genética dos povos."}], correctIndex:1, explanation:"A ideia de tábula rasa reforça que os seres humanos não nascem com conteúdos culturais prontos. O aprendizado ocorre por meio da experiência e da socialização.\n\nA) Incorreta. A teoria de Locke se opõe à explicação baseada em instintos.\nC) Incorreta. Essa discussão está mais relacionada ao estruturalismo de Lévi-Strauss.\nD) Incorreta. A teoria não trata da superioridade da educação formal.\nE) Incorreta. A proposta combate explicações genéticas para a cultura." },
+      { type: "objetiva", statement: "Um pesquisador afirma que dois povos podem apresentar instituições semelhantes sem que isso signifique estarem no mesmo estágio evolutivo.\n\nEssa afirmação aproxima-se mais da perspectiva de:", alternatives: [{letter:"A",text:"Edward Tylor."},{letter:"B",text:"Lewis Morgan."},{letter:"C",text:"Franz Boas."},{letter:"D",text:"Alfred Kroeber."},{letter:"E",text:"Leslie White."}], correctIndex:2, explanation:"Boas rompe com o evolucionismo ao defender que cada cultura possui uma trajetória histórica própria. Semelhanças culturais não significam necessariamente uma mesma etapa evolutiva.\n\nA) Incorreta. Tylor era um importante representante do evolucionismo.\nB) Incorreta. Morgan defendia explicitamente estágios evolutivos universais.\nD) Incorreta. Kroeber desenvolve a ideia de cultura superorgânica, mas não essa crítica específica.\nE) Incorreta. White retomou elementos evolucionistas em sua teoria cultural." },
+      { type: "objetiva", statement: "A noção de cultura como realidade \"superorgânica\" pretende demonstrar que:", alternatives: [{letter:"A",text:"A cultura constitui uma dimensão da existência humana que não pode ser reduzida à biologia."},{letter:"B",text:"A evolução cultural substitui completamente a influência do meio ambiente."},{letter:"C",text:"Os sistemas culturais funcionam como organismos vivos independentes dos indivíduos."},{letter:"D",text:"A cultura é determinada por leis naturais superiores às leis sociais."},{letter:"E",text:"Os instintos humanos permanecem predominantes sobre os processos de aprendizagem."}], correctIndex:0, explanation:"Kroeber utiliza o conceito de superorgânico para demonstrar que a cultura transcende as limitações biológicas individuais e possui dinâmica própria.\n\nB) Incorreta. Kroeber não afirma que o ambiente deixa de influenciar completamente.\nC) Incorreta. A cultura depende dos indivíduos para existir e ser transmitida.\nD) Incorreta. A teoria enfatiza processos culturais, não leis naturais superiores.\nE) Incorreta. A proposta vai exatamente na direção oposta." },
+      { type: "objetiva", statement: "Um antropólogo interpreta a cultura principalmente como um conjunto de conhecimentos compartilhados que permite aos indivíduos agir adequadamente dentro de sua sociedade.\n\nEssa perspectiva corresponde à abordagem dos:", alternatives: [{letter:"A",text:"Sistemas Adaptativos."},{letter:"B",text:"Sistemas Simbólicos."},{letter:"C",text:"Sistemas Estruturais."},{letter:"D",text:"Sistemas Cognitivos."},{letter:"E",text:"Sistemas Evolucionistas."}], correctIndex:3, explanation:"Os Sistemas Cognitivos compreendem a cultura como um conjunto de conhecimentos, classificações e informações compartilhadas que orientam o comportamento social.\n\nA) Incorreta. Os Sistemas Adaptativos enfatizam a adaptação ao ambiente.\nB) Incorreta. Os Sistemas Simbólicos focam nos significados e símbolos.\nC) Incorreta. Os Sistemas Estruturais procuram estruturas inconscientes.\nE) Incorreta. O evolucionismo não corresponde a essa definição." },
+      { type: "objetiva", statement: "Qual alternativa expressa de forma mais adequada a diferença entre a perspectiva de Geertz e a de Lévi-Strauss?", alternatives: [{letter:"A",text:"Geertz busca leis universais inconscientes; Lévi-Strauss investiga significados públicos."},{letter:"B",text:"Geertz interpreta símbolos culturalmente compartilhados; Lévi-Strauss procura estruturas mentais inconscientes."},{letter:"C",text:"Geertz explica a cultura pela adaptação ecológica; Lévi-Strauss pela difusão cultural."},{letter:"D",text:"Geertz rejeita o simbolismo; Lévi-Strauss o considera central."},{letter:"E",text:"Ambos defendem que a cultura é exclusivamente resultado da experiência individual."}], correctIndex:1, explanation:"Geertz preocupa-se em interpretar significados simbólicos presentes na vida social. Lévi-Strauss busca identificar estruturas inconscientes universais do pensamento humano.\n\nA) Incorreta. As definições foram invertidas.\nC) Incorreta. Nenhum dos dois autores é definido por essas explicações.\nD) Incorreta. Geertz é justamente um dos maiores representantes da antropologia simbólica.\nE) Incorreta. Ambos trabalham com fenômenos coletivos e culturais." },
+      { type: "objetiva", statement: "Um bebê nascido no Japão é adotado ainda recém-nascido por uma família brasileira e cresce inteiramente no Brasil.\n\nSegundo Laraia e Kroeber, esse exemplo demonstra principalmente que:", alternatives: [{letter:"A",text:"O patrimônio genético influencia a cultura apenas durante a infância."},{letter:"B",text:"A cultura é transmitida biologicamente pelas gerações."},{letter:"C",text:"A aprendizagem cultural possui maior relevância que a herança genética para o comportamento social."},{letter:"D",text:"O ambiente físico determina automaticamente a identidade cultural."},{letter:"E",text:"O desenvolvimento cultural ocorre de forma espontânea, independentemente da socialização."}], correctIndex:2, explanation:"O exemplo demonstra que o indivíduo adquire a cultura do grupo no qual é socializado, independentemente de sua origem biológica.\n\nA) Incorreta. A cultura não é transmitida geneticamente.\nB) Incorreta. Essa alternativa contradiz diretamente Laraia.\nD) Incorreta. O fator decisivo é a socialização, não o ambiente físico.\nE) Incorreta. A cultura depende da aprendizagem social." },
+      { type: "objetiva", statement: "Qual situação representa mais adequadamente um processo de aculturação?", alternatives: [{letter:"A",text:"Uma sociedade incorpora um novo instrumento agrícola estrangeiro."},{letter:"B",text:"Um grupo adapta uma técnica culinária aprendida de outro povo."},{letter:"C",text:"Duas culturas trocam elementos religiosos sem alterações significativas em suas identidades."},{letter:"D",text:"Um povo submetido à dominação prolongada perde parte de suas instituições tradicionais e adota padrões externos."},{letter:"E",text:"A difusão gradual de uma tecnologia entre diferentes regiões."}], correctIndex:3, explanation:"A aculturação envolve transformações profundas decorrentes do contato contínuo entre culturas, frequentemente associadas a relações de poder e perda de elementos culturais próprios.\n\nA) Incorreta. Representa difusão cultural.\nB) Incorreta. Também caracteriza difusão cultural.\nC) Incorreta. Há intercâmbio cultural, mas não transformação estrutural significativa.\nE) Incorreta. Difusão tecnológica não é necessariamente aculturação." },
+      { type: "objetiva", statement: "Ao afirmar que nenhum indivíduo domina completamente seu sistema cultural, Laraia pretende destacar que:", alternatives: [{letter:"A",text:"Os sistemas culturais são incompreensíveis para seus próprios membros."},{letter:"B",text:"A cultura é distribuída de forma desigual entre indivíduos conforme experiências, funções sociais e especializações."},{letter:"C",text:"A transmissão cultural ocorre apenas por instituições formais de ensino."},{letter:"D",text:"A participação cultural depende exclusivamente da idade dos indivíduos."},{letter:"E",text:"O conhecimento cultural encontra-se concentrado apenas nas elites sociais."}], correctIndex:1, explanation:"O conhecimento cultural é fragmentado. Diferentes indivíduos dominam diferentes aspectos da cultura conforme idade, gênero, profissão, posição social e experiência.\n\nA) Incorreta. Os indivíduos compreendem sua cultura, embora não a dominem integralmente.\nC) Incorreta. Grande parte da cultura é aprendida informalmente.\nD) Incorreta. A idade é apenas um dos fatores.\nE) Incorreta. O conhecimento cultural não está restrito às elites." },
+      { type: "objetiva", statement: "Considere a seguinte afirmação:\n\n\"O conceito de pai não possui fundamento universalmente biológico, mas é definido pelas categorias culturais de cada sociedade.\"\n\nA conclusão antropológica mais compatível com essa afirmação é:", alternatives: [{letter:"A",text:"As relações familiares são determinadas geneticamente."},{letter:"B",text:"A biologia é irrelevante para qualquer forma de parentesco."},{letter:"C",text:"Os sistemas jurídicos de família refletem construções culturais específicas sobre parentesco e filiação."},{letter:"D",text:"Todas as sociedades compartilham o mesmo conceito de paternidade."},{letter:"E",text:"O parentesco é exclusivamente uma invenção jurídica moderna."}], correctIndex:2, explanation:"O exemplo das Ilhas Trobriand demonstra que conceitos jurídicos ligados à família e ao parentesco são construções culturais e variam entre sociedades.\n\nA) Incorreta. A Antropologia demonstra justamente a diversidade dos modelos familiares.\nB) Incorreta. A questão não afirma que a biologia seja irrelevante, mas que não determina sozinha o parentesco.\nD) Incorreta. O texto utiliza exatamente um exemplo que demonstra o contrário.\nE) Incorreta. O parentesco existe em diversas sociedades muito anteriores ao Direito moderno." }
+    ]
+  },
+  {
+    id: "rituais",
+    emoji: "🔥",
+    title: "RITUAIS",
+    questions: [
+      { type: "discursiva", statement: "Explique a crítica de Mariza Peirano ao senso comum sobre os rituais. Em sua resposta, demonstre como essa crítica se relaciona com a ruptura antropológica em relação ao evolucionismo.", answer: "Mariza Peirano critica a visão difundida pelo senso comum segundo a qual os rituais seriam práticas vazias, meramente formais, irracionais ou características de sociedades antigas e pouco desenvolvidas. Essa percepção costuma associar os rituais à repetição mecânica de comportamentos sem significado real, como se fossem resquícios de um passado superado pela racionalidade moderna.\n\nA autora demonstra que essa interpretação é equivocada porque os rituais continuam presentes em todas as sociedades contemporâneas e exercem funções fundamentais na organização da vida social. Eles não são definidos por seu conteúdo religioso ou místico, mas pela forma como organizam ações simbólicas capazes de comunicar valores, reforçar identidades coletivas e produzir efeitos concretos sobre os participantes.\n\nEssa crítica está diretamente relacionada à ruptura da Antropologia com o evolucionismo. Autores evolucionistas como Tylor e Frazer interpretavam os rituais como manifestações de um estágio inferior do pensamento humano, uma espécie de tentativa fracassada de explicar racionalmente o mundo. Em contraste, Peirano, inspirada em Durkheim e Mauss, entende o ritual como um ato de sociedade. Os rituais não representam atraso intelectual, mas mecanismos pelos quais a sociedade se recria, reafirma seus valores e toma consciência de si mesma. Dessa forma, o ritual deixa de ser visto como sinal de irracionalidade e passa a ser compreendido como fenômeno central da vida social." },
+      { type: "discursiva", statement: "Explique por que Peirano afirma que o ritual deve ser compreendido por sua forma e eficácia, e não por seu conteúdo.", answer: "Peirano argumenta que a definição antropológica de ritual não pode depender do conteúdo específico das práticas observadas, pois isso levaria a classificações arbitrárias entre atividades consideradas religiosas, políticas, jurídicas ou profanas. O elemento central do ritual não é aquilo que ele aborda, mas a maneira como organiza e comunica significados.\n\nPor essa razão, o ritual deve ser compreendido por sua forma e eficácia. Sua forma refere-se à existência de ações organizadas, padronizadas e simbolicamente estruturadas, marcadas por regras, sequências e expectativas compartilhadas pelos participantes. Já sua eficácia está relacionada à capacidade de produzir efeitos reais na vida social.\n\nUm casamento, por exemplo, não é um ritual porque fala sobre amor ou família, mas porque segue uma sequência formal de atos e palavras capazes de transformar o status social dos participantes. Da mesma forma, uma cerimônia de formatura produz a passagem simbólica e social de estudante para profissional.\n\nAssim, a importância antropológica do ritual reside em sua capacidade de produzir transformações sociais concretas através de formas simbólicas organizadas, independentemente do conteúdo específico que veicula." },
+      { type: "discursiva", statement: "Analise o conceito de ritual como \"bricolagem\". De que forma essa ideia permite compreender a produção de significados na vida social?", answer: "Ao utilizar o conceito de bricolagem desenvolvido por Lévi-Strauss, Peirano afirma que os rituais não criam elementos completamente novos, mas reorganizam elementos já existentes na cultura. O ritual opera selecionando símbolos, objetos, categorias e valores presentes no cotidiano e atribuindo-lhes uma nova moldura de significado.\n\nEssa reorganização permite destacar aspectos da vida social que normalmente permanecem implícitos ou pouco percebidos. Durante o ritual, elementos comuns passam a adquirir uma intensidade simbólica especial, tornando visíveis valores que já existiam, mas que não eram plenamente conscientes para os participantes.\n\nPor exemplo, uma bandeira nacional pode fazer parte do cotidiano de uma sociedade sem despertar grandes emoções. Entretanto, durante uma cerimônia oficial ou durante uma Copa do Mundo, ela passa a integrar uma performance ritual capaz de mobilizar sentimentos de pertencimento, identidade nacional e solidariedade coletiva.\n\nA noção de bricolagem demonstra que os rituais não inventam valores sociais do nada; eles reorganizam e amplificam significados já existentes, tornando-os particularmente evidentes e eficazes." },
+      { type: "discursiva", statement: "Explique por que Stanley Tambiah define o ritual como um sistema cultural de comunicação simbólica. Quais características permitem identificar um ritual?", answer: "Stanley Tambiah define o ritual como um sistema cultural de comunicação simbólica porque considera que sua principal função é transmitir significados socialmente compartilhados por meio de símbolos organizados. Os rituais comunicam valores, crenças, identidades e relações sociais através de ações que ultrapassam a simples linguagem verbal.\n\nSegundo essa perspectiva, os rituais possuem algumas características fundamentais. A primeira é a padronização, isto é, a existência de sequências relativamente ordenadas de palavras, gestos e comportamentos. A segunda é a utilização de múltiplos meios de expressão, combinando sons, imagens, objetos, movimentos corporais e discursos. A terceira característica é a formalidade, marcada por regras específicas de comportamento. Por fim, destaca-se a redundância, que consiste na repetição de símbolos e mensagens para reforçar significados importantes.\n\nEsses elementos fazem com que os rituais sejam formas particularmente eficazes de comunicação social, pois envolvem simultaneamente diversas dimensões da experiência humana e tornam os valores coletivos mais visíveis e memoráveis." },
+      { type: "discursiva", statement: "Explique o conceito de performatividade dos rituais. Em que sentido o ritual faz mais do que representar a realidade social?", answer: "A performatividade dos rituais refere-se à capacidade que eles possuem de produzir efeitos concretos na realidade social. Diferentemente de uma simples representação simbólica, o ritual não apenas descreve ou expressa uma situação; ele efetivamente cria novas condições sociais.\n\nEssa ideia pode ser observada em situações nas quais determinadas palavras ou ações geram transformações reconhecidas coletivamente. Quando duas pessoas pronunciam o \"sim\" durante uma cerimônia de casamento, não estão apenas declarando sentimentos. O ato ritual altera seu status social, produzindo uma nova condição jurídica e socialmente reconhecida.\n\nA performatividade também se manifesta porque os rituais permitem que os participantes experimentem intensamente determinados valores coletivos. Por meio da repetição de símbolos, gestos e discursos, eles reforçam identidades, legitimam relações sociais e consolidam compromissos coletivos.\n\nPortanto, o ritual não apenas representa a sociedade. Ele participa ativamente de sua produção e reprodução, transformando pessoas, relações e significados." },
+      { type: "discursiva", statement: "Analise os três sentidos da performance ritual apresentados por Peirano. Como eles contribuem para a eficácia do ritual?", answer: "Peirano identifica três dimensões centrais da performance ritual. A primeira é a ideia de que dizer é fazer. Determinadas palavras pronunciadas em contextos ritualizados possuem força transformadora e produzem efeitos sociais imediatos. O exemplo clássico é o casamento, em que a declaração verbal altera o status dos participantes.\n\nA segunda dimensão é a experiência intensa. Os rituais mobilizam emoções, sentidos e percepções de forma muito mais profunda do que a comunicação cotidiana. Música, imagens, movimentos corporais e símbolos contribuem para criar uma vivência marcante para os participantes.\n\nA terceira dimensão consiste na criação de valores. Durante a participação em um ritual, os indivíduos não apenas reproduzem valores já existentes, mas também os reafirmam, reinterpretam e fortalecem. Sentimentos como patriotismo, pertencimento religioso ou solidariedade coletiva podem ser intensificados durante eventos ritualizados.\n\nEssas três dimensões explicam a eficácia dos rituais porque demonstram que eles operam simultaneamente sobre a organização social, a experiência subjetiva e a construção dos valores coletivos." },
+      { type: "discursiva", statement: "Explique por que Peirano considera os rituais uma ferramenta privilegiada para a compreensão da sociedade contemporânea.", answer: "Peirano argumenta que os rituais constituem uma ferramenta privilegiada para a análise antropológica porque revelam aspectos da vida social que dificilmente seriam identificados apenas por meio de entrevistas, estatísticas ou discursos formais. Nos momentos ritualizados, valores, tensões e hierarquias tornam-se particularmente visíveis.\n\nOs rituais funcionam como uma espécie de lupa que amplia elementos normalmente dispersos no cotidiano. Ao observar o que as pessoas fazem em situações especiais, o pesquisador consegue compreender melhor suas crenças, expectativas e formas de organização social.\n\nAlém disso, a autora enfatiza que os rituais não pertencem apenas a sociedades tradicionais. Eles continuam presentes nas instituições políticas, jurídicas, religiosas, esportivas e acadêmicas da contemporaneidade. Cerimônias de posse, julgamentos, formaturas, manifestações políticas e eventos esportivos são exemplos de práticas ritualizadas que expressam valores centrais da sociedade moderna.\n\nPor essa razão, o estudo dos rituais permite compreender tanto a permanência quanto as transformações das relações sociais contemporâneas." },
+      { type: "discursiva", statement: "Analise o carnaval brasileiro como ritual de inversão. O que esse exemplo revela sobre a sociedade brasileira?", answer: "Peirano utiliza o carnaval como exemplo de ritual de inversão porque, durante esse período, ocorre uma suspensão temporária de diversas hierarquias e convenções que organizam a vida cotidiana. Papéis sociais tornam-se mais flexíveis, normas comportamentais são relaxadas e diferentes grupos sociais compartilham espaços de maneira mais igualitária.\n\nEssa inversão não elimina permanentemente as desigualdades existentes na sociedade, mas cria um momento excepcional no qual as relações habituais são temporariamente reconfiguradas. A experiência produz uma sensação de communitas, conceito desenvolvido por Victor Turner para descrever formas intensas de pertencimento coletivo e igualdade simbólica.\n\nO carnaval revela características importantes da sociedade brasileira. Ele evidencia a coexistência entre hierarquia e igualdade, ordem e transgressão, formalidade e espontaneidade. Ao permitir que essas tensões sejam vividas de forma ritualizada, o carnaval funciona como um mecanismo de expressão e reflexão sobre a própria estrutura social brasileira." },
+      { type: "discursiva", statement: "Explique como a Marcha do MST analisada por Peirano exemplifica a capacidade dos rituais de produzir legitimidade social.", answer: "A análise da Marcha do Movimento dos Trabalhadores Rurais Sem Terra demonstra que os rituais podem ser utilizados para produzir legitimidade política e moral. Segundo Peirano, a marcha de 1997 apropriou-se de elementos tradicionalmente associados às peregrinações religiosas, especialmente às romarias.\n\nAo adotar símbolos, trajetos, práticas coletivas e formas de organização semelhantes às presentes em manifestações religiosas, o movimento conseguiu associar suas reivindicações a valores amplamente reconhecidos pela sociedade brasileira. A marcha deixou de ser percebida apenas como um ato político e passou a adquirir uma dimensão moral e simbólica mais ampla.\n\nEssa estratégia evidencia que os rituais não apenas reproduzem significados existentes, mas também podem redefinir a percepção pública de determinados grupos e causas. A performance ritual reorganiza símbolos culturais compartilhados e contribui para construir novas formas de reconhecimento social." },
+      { type: "discursiva", statement: "Explique o conceito de liminaridade e discuta por que Peirano afirma que os rituais não são inimigos da mudança social.", answer: "O conceito de liminaridade, desenvolvido por Van Gennep e aprofundado por Victor Turner, refere-se ao momento intermediário dos rituais em que os participantes encontram-se temporariamente afastados das posições e regras habituais da vida social. Trata-se de uma situação de suspensão, transição e indefinição.\n\nDurante a fase liminar, categorias normalmente rígidas tornam-se mais flexíveis. Os participantes deixam de ocupar plenamente sua posição anterior, mas ainda não assumiram completamente a nova condição. Essa situação cria oportunidades para experimentação, reflexão e transformação.\n\nPeirano utiliza esse conceito para demonstrar que os rituais não servem apenas para conservar a ordem social. Embora reforcem valores coletivos, eles também criam espaços nos quais mudanças podem ser elaboradas e legitimadas. A própria passagem de estudante para formado, de solteiro para casado ou de cidadão comum para autoridade política ocorre por meio de rituais de transição.\n\nAssim, os rituais não são obstáculos à mudança. Pelo contrário, eles constituem mecanismos fundamentais por meio dos quais as sociedades organizam, legitimam e tornam possíveis suas transformações." },
+      { type: "objetiva", statement: "Ao criticar a visão do senso comum sobre os rituais, Mariza Peirano procura demonstrar que:", alternatives: [{letter:"A",text:"Os rituais são práticas essencialmente religiosas que perderam importância nas sociedades modernas."},{letter:"B",text:"Os rituais permanecem relevantes apenas em sociedades tradicionais, mas não nas instituições contemporâneas."},{letter:"C",text:"Os rituais constituem formas de ação social dotadas de significado e eficácia, presentes em todas as sociedades."},{letter:"D",text:"Os rituais são manifestações irracionais que coexistem com formas modernas de pensamento científico."},{letter:"E",text:"A função principal dos rituais é preservar costumes antigos sem produzir efeitos concretos."}], correctIndex:2, explanation:"Peirano combate diretamente a ideia de que os rituais são comportamentos vazios, arcaicos ou irracionais. Para ela, os rituais continuam presentes na vida contemporânea e exercem funções fundamentais na comunicação de valores e na produção da vida social.\n\nA) Errada. O ritual não é definido por ser religioso.\nB) Errada. A autora enfatiza justamente a presença dos rituais na modernidade.\nD) Errada. Essa é uma visão evolucionista criticada pela autora.\nE) Errada. Os rituais produzem efeitos sociais concretos." },
+      { type: "objetiva", statement: "Quando Peirano afirma que o ritual deve ser compreendido por sua forma e eficácia, ela pretende destacar que:", alternatives: [{letter:"A",text:"O conteúdo religioso é menos importante que a antiguidade da prática."},{letter:"B",text:"O valor do ritual depende da crença individual dos participantes."},{letter:"C",text:"A relevância antropológica do ritual está na maneira como ele organiza ações simbólicas capazes de produzir efeitos sociais."},{letter:"D",text:"O ritual só existe quando há elementos sobrenaturais envolvidos."},{letter:"E",text:"O ritual é definido exclusivamente por sua função política."}], correctIndex:2, explanation:"A autora argumenta que não é o conteúdo do ritual que o define, mas sua capacidade de organizar simbolicamente ações que produzem transformações reconhecidas socialmente.\n\nA) Errada. A antiguidade da prática é irrelevante para sua definição.\nB) Errada. A eficácia ritual não depende apenas da crença individual.\nD) Errada. Existem inúmeros rituais não religiosos.\nE) Errada. O ritual não se restringe à política." },
+      { type: "objetiva", statement: "O conceito de \"bricolagem\" utilizado por Peirano sugere que os rituais:", alternatives: [{letter:"A",text:"Produzem significados completamente inéditos e independentes da cultura existente."},{letter:"B",text:"Reorganizam símbolos e valores já presentes na sociedade, atribuindo-lhes nova visibilidade."},{letter:"C",text:"Eliminam os significados cotidianos para substituí-los por interpretações universais."},{letter:"D",text:"Dependem exclusivamente de objetos materiais para gerar efeitos simbólicos."},{letter:"E",text:"Funcionam apenas em contextos religiosos tradicionais."}], correctIndex:1, explanation:"A bricolagem consiste em reorganizar elementos culturais já existentes para produzir novos enquadramentos simbólicos.\n\nA) Errada. O ritual não cria do nada.\nC) Errada. Os significados cotidianos são reutilizados.\nD) Errada. A bricolagem envolve categorias, valores, palavras e gestos.\nE) Errada. A ideia aplica-se a qualquer contexto ritual." },
+      { type: "objetiva", statement: "Segundo Stanley Tambiah, a principal característica que permite compreender o ritual como sistema cultural de comunicação simbólica é:", alternatives: [{letter:"A",text:"Sua dependência de crenças sobrenaturais."},{letter:"B",text:"Sua capacidade de comunicar significados através de símbolos organizados."},{letter:"C",text:"Sua função exclusiva de preservar tradições."},{letter:"D",text:"Sua oposição às formas racionais de comunicação."},{letter:"E",text:"Sua origem necessariamente religiosa."}], correctIndex:1, explanation:"Tambiah entende os rituais como formas de comunicação simbólica estruturada.\n\nA) Errada. O sobrenatural não é requisito.\nC) Errada. Os rituais podem produzir mudanças.\nD) Errada. Não existe oposição necessária à racionalidade.\nE) Errada. Existem rituais políticos, jurídicos, esportivos etc." },
+      { type: "objetiva", statement: "Qual das situações abaixo melhor exemplifica a dimensão performativa do ritual?", alternatives: [{letter:"A",text:"Um cidadão lê sozinho a Constituição Federal."},{letter:"B",text:"Um estudante estuda para uma prova."},{letter:"C",text:"Duas pessoas pronunciam os votos matrimoniais em uma cerimônia oficialmente reconhecida."},{letter:"D",text:"Um pesquisador observa um comportamento social."},{letter:"E",text:"Um indivíduo assiste a um documentário histórico."}], correctIndex:2, explanation:"A performatividade significa que determinadas palavras ou ações produzem efeitos sociais concretos.\n\nA, B, D e E) Embora possam gerar consequências indiretas, não transformam imediatamente o status social dos envolvidos.\nC) O casamento é o exemplo clássico do princípio \"dizer é fazer\"." },
+      { type: "objetiva", statement: "Quando Peirano afirma que os participantes experimentam valores de forma intensa durante os rituais, ela está se referindo principalmente à:", alternatives: [{letter:"A",text:"Dimensão econômica do ritual."},{letter:"B",text:"Dimensão jurídica do ritual."},{letter:"C",text:"Dimensão psicológica da performance ritual."},{letter:"D",text:"Dimensão burocrática do ritual."},{letter:"E",text:"Dimensão tecnológica do ritual."}], correctIndex:2, explanation:"A experiência ritual mobiliza emoções, sentidos e percepções de maneira intensa.\n\nA, B, D e E) Não correspondem ao conceito discutido pela autora.\nC) Refere-se exatamente ao envolvimento emocional e sensorial dos participantes." },
+      { type: "objetiva", statement: "A ideia de que um ritual pode criar valores coletivos significa que:", alternatives: [{letter:"A",text:"Os valores são inventados sem qualquer relação com a cultura existente."},{letter:"B",text:"Os rituais substituem completamente os processos de socialização."},{letter:"C",text:"Os participantes reafirmam e fortalecem valores compartilhados durante a experiência ritual."},{letter:"D",text:"Todo ritual produz necessariamente novos sistemas morais."},{letter:"E",text:"Os valores sociais surgem apenas em eventos ritualizados."}], correctIndex:2, explanation:"Os rituais ampliam e reforçam valores já existentes, tornando-os mais evidentes e significativos.\n\nA) Errada. Os valores não surgem do nada.\nB) Errada. A socialização continua fundamental.\nD) Errada. Nem todo ritual cria novos valores.\nE) Errada. Os valores existem também fora dos rituais." },
+      { type: "objetiva", statement: "O carnaval é apresentado por Peirano como ritual de inversão porque:", alternatives: [{letter:"A",text:"Elimina permanentemente as desigualdades sociais."},{letter:"B",text:"Substitui a ordem social por uma situação de anarquia."},{letter:"C",text:"Suspende temporariamente certas hierarquias e permite experiências de communitas."},{letter:"D",text:"Destrói os mecanismos de organização da sociedade."},{letter:"E",text:"Produz uma sociedade completamente igualitária após seu término."}], correctIndex:2, explanation:"O carnaval cria uma inversão temporária das hierarquias sem abolir definitivamente a estrutura social.\n\nA, D e E) Erradas porque pressupõem transformações permanentes.\nB) Errada porque não há ausência total de organização." },
+      { type: "objetiva", statement: "A análise da Marcha do MST realizada por Peirano demonstra que:", alternatives: [{letter:"A",text:"Manifestações políticas não podem assumir formas ritualizadas."},{letter:"B",text:"Rituais religiosos e movimentos políticos são fenômenos incompatíveis."},{letter:"C",text:"A apropriação de formas simbólicas conhecidas pode ampliar a legitimidade social de uma causa política."},{letter:"D",text:"A eficácia dos protestos depende exclusivamente da força numérica dos participantes."},{letter:"E",text:"O ritual possui relevância apenas em contextos religiosos."}], correctIndex:2, explanation:"A marcha utilizou elementos semelhantes aos das romarias para construir reconhecimento moral e legitimidade social.\n\nA e B) Contradizem diretamente a análise de Peirano.\nD) Reduz a questão a fatores quantitativos.\nE) Ignora a dimensão política dos rituais." },
+      { type: "objetiva", statement: "A noção de liminaridade desenvolvida por Van Gennep e Victor Turner permite compreender que:", alternatives: [{letter:"A",text:"Os rituais existem exclusivamente para conservar a ordem social."},{letter:"B",text:"Os momentos de transição criam espaços nos quais mudanças podem ser elaboradas e legitimadas."},{letter:"C",text:"A suspensão das regras sociais produz necessariamente desorganização permanente."},{letter:"D",text:"Toda mudança social ocorre fora dos contextos ritualizados."},{letter:"E",text:"A liminaridade corresponde à fase final e definitiva de um ritual."}], correctIndex:1, explanation:"A liminaridade é um momento intermediário de transição no qual antigas posições são suspensas e novas condições podem emergir.\n\nA) Errada. Peirano destaca que os rituais também promovem mudança.\nC) Errada. A suspensão é temporária e socialmente organizada.\nD) Errada. Muitos processos de mudança são ritualizados.\nE) Errada. A liminaridade é a fase intermediária, não a final." }
+    ]
+  },
+  {
+    id: "etnografia",
+    emoji: "⚖️",
+    title: "ETNOGRAFIA",
+    questions: [
+      { type: "discursiva", statement: "Explique por que o laudo antropológico não pode ser reduzido a uma simples coleta de informações sobre grupos indígenas. Em sua resposta, analise sua função epistemológica e jurídica.", answer: "O laudo antropológico não pode ser compreendido como uma simples reunião de informações empíricas sobre um grupo social porque sua elaboração envolve um processo complexo de produção de conhecimento científico. O antropólogo não atua como mero registrador de fatos, mas como intérprete de sistemas culturais, relações sociais, formas de organização política e processos históricos que estruturam a vida coletiva do grupo estudado.\n\nDo ponto de vista epistemológico, o laudo resulta da aplicação do método etnográfico, da observação participante, da análise documental e da interpretação teórica. Seu objetivo é traduzir para o campo jurídico aspectos da realidade social que não seriam adequadamente compreendidos apenas por categorias jurídicas tradicionais.\n\nDo ponto de vista jurídico, o laudo constitui instrumento probatório especializado. Ele permite ao Poder Judiciário compreender direitos territorialmente fundamentados, formas próprias de organização social e significados culturais que influenciam conflitos judiciais. Dessa forma, o laudo funciona como uma ponte entre o conhecimento antropológico e a decisão judicial, contribuindo para a efetivação de direitos constitucionalmente reconhecidos." },
+      { type: "discursiva", statement: "Analise a relação entre etnografia e laudo antropológico. Em que medida o laudo depende da experiência etnográfica?", answer: "O laudo antropológico depende profundamente da experiência etnográfica porque sua legitimidade científica decorre justamente do trabalho de campo realizado pelo antropólogo. A etnografia fornece os dados, as observações, os relatos e as interpretações que fundamentam as conclusões apresentadas no documento pericial.\n\nA pesquisa etnográfica permite compreender a perspectiva dos próprios sujeitos envolvidos, identificar formas de organização social, reconstruir trajetórias históricas e interpretar significados culturais que não são imediatamente visíveis para observadores externos. Sem essa experiência de campo, o laudo correria o risco de reproduzir estereótipos ou análises superficiais.\n\nAlém disso, a etnografia possibilita compreender o contexto específico do conflito analisado. Questões relativas à territorialidade, parentesco, identidade étnica e uso dos recursos naturais só podem ser adequadamente interpretadas quando observadas dentro da dinâmica concreta da vida social do grupo estudado.\n\nAssim, o laudo não substitui a etnografia; ele representa uma aplicação jurídica do conhecimento produzido etnograficamente." },
+      { type: "discursiva", statement: "Explique por que a Constituição Federal de 1988 produziu uma transformação na relação entre Antropologia e Direito no Brasil.", answer: "A Constituição Federal de 1988 promoveu uma mudança profunda na relação entre Antropologia e Direito ao reconhecer explicitamente os direitos dos povos indígenas às suas formas próprias de organização social, cultura, tradições e territórios tradicionalmente ocupados.\n\nAntes desse marco constitucional, predominava uma visão assimilacionista segundo a qual os povos indígenas deveriam ser progressivamente integrados à sociedade nacional. Com a nova Constituição, a diversidade cultural passou a ser reconhecida como um valor jurídico protegido pelo Estado.\n\nEssa transformação criou uma demanda crescente por conhecimentos especializados capazes de interpretar realidades socioculturais distintas daquelas pressupostas pelo Direito tradicional. Nesse contexto, a Antropologia passou a desempenhar papel central na produção de laudos, perícias e pareceres destinados a subsidiar decisões judiciais e administrativas.\n\nA Constituição, portanto, ampliou o diálogo entre as duas áreas ao reconhecer que a efetivação dos direitos indígenas exige a compreensão científica de suas formas específicas de organização social e territorial." },
+      { type: "discursiva", statement: "Analise o papel do antropólogo como perito judicial. Quais desafios surgem da necessidade de traduzir conceitos antropológicos para a linguagem jurídica?", answer: "O antropólogo que atua como perito judicial ocupa uma posição singular, pois precisa produzir conhecimento cientificamente rigoroso e, ao mesmo tempo, comunicá-lo de forma compreensível para operadores do Direito. Seu trabalho consiste em interpretar fenômenos culturais e apresentá-los em linguagem adequada ao contexto jurídico.\n\nEsse processo envolve importantes desafios. Conceitos antropológicos frequentemente possuem significados complexos e contextualizados que nem sempre encontram equivalentes diretos nas categorias jurídicas. Termos como território, parentesco, identidade étnica e tradição podem possuir sentidos muito diferentes daqueles normalmente utilizados pelo Direito.\n\nO antropólogo precisa evitar duas distorções igualmente problemáticas. De um lado, não pode simplificar excessivamente os fenômenos culturais a ponto de perder o rigor científico. De outro, não pode utilizar linguagem excessivamente técnica que impeça sua compreensão pelos magistrados e demais operadores jurídicos.\n\nAssim, a produção do laudo exige uma constante mediação entre universos conceituais distintos, preservando simultaneamente a precisão antropológica e a utilidade jurídica." },
+      { type: "discursiva", statement: "Explique a importância do conceito de grupo étnico formulado por Fredrik Barth para a elaboração de laudos antropológicos.", answer: "A contribuição de Fredrik Barth é fundamental para os laudos antropológicos porque oferece uma compreensão dinâmica da identidade étnica. Em vez de definir grupos étnicos por características culturais fixas ou imutáveis, Barth enfatiza os processos sociais pelos quais as fronteiras étnicas são produzidas e mantidas.\n\nSegundo essa perspectiva, a existência de um grupo étnico não depende da preservação integral de costumes ancestrais. O elemento central é a manutenção de formas de identificação coletiva e de reconhecimento social compartilhado pelos próprios membros do grupo.\n\nEssa abordagem possui grande relevância jurídica porque impede que direitos coletivos sejam condicionados à demonstração de uma suposta pureza cultural. Povos indígenas podem incorporar elementos da sociedade envolvente sem perder sua identidade étnica.\n\nNos laudos antropológicos, essa concepção permite demonstrar que a continuidade de um grupo não depende da ausência de mudanças culturais, mas da persistência de processos sociais de identificação e pertencimento." },
+      { type: "discursiva", statement: "Analise a diferença entre a concepção jurídica tradicional de terra e a concepção indígena apresentada no material.", answer: "A concepção jurídica tradicional tende a compreender a terra principalmente como um bem patrimonial, um objeto de propriedade sujeito a direitos econômicos, circulação mercantil e exploração produtiva. Nessa perspectiva, o valor da terra é frequentemente associado à sua utilidade econômica.\n\nA concepção indígena apresentada no material é significativamente mais ampla. A terra não é percebida apenas como recurso econômico, mas como fundamento da vida social, da memória coletiva, das relações de parentesco e da cosmologia do grupo.\n\nO território concentra significados históricos, espirituais, políticos e culturais. Ele constitui o espaço onde se realizam práticas produtivas, rituais religiosos, relações sociais e formas de transmissão cultural.\n\nEssa diferença evidencia a importância da Antropologia Jurídica, pois demonstra que conflitos territoriais não envolvem apenas disputas patrimoniais, mas diferentes formas culturais de compreender a relação entre seres humanos, sociedade e espaço." },
+      { type: "discursiva", statement: "Explique como o caso da Terra Indígena Mangueirinha evidencia a importância da dimensão histórica na produção do laudo antropológico.", answer: "O caso da Terra Indígena Mangueirinha demonstra que os conflitos territoriais indígenas não podem ser compreendidos apenas a partir da situação presente. A análise antropológica exige a reconstrução histórica dos processos que produziram as condições atuais.\n\nO litígio envolvendo a área remonta a intervenções estatais e interesses econômicos que reduziram o território indígena em benefício de empresas madeireiras. A compreensão desse processo histórico permite identificar mecanismos de expropriação e transformação territorial que influenciam diretamente a situação contemporânea.\n\nO laudo antropológico incorpora essa dimensão histórica por meio da análise documental, da memória coletiva e da reconstrução das trajetórias de ocupação territorial. Dessa forma, demonstra que a relação dos grupos indígenas com a terra possui continuidade histórica, mesmo diante de deslocamentos, conflitos ou intervenções externas.\n\nA dimensão histórica é essencial porque os direitos territoriais indígenas não se fundamentam apenas na ocupação atual, mas na ocupação tradicional e na continuidade das relações sociais estabelecidas com o território." },
+      { type: "discursiva", statement: "Explique por que genealogias, censos e reconstruções históricas possuem relevância para a produção de provas antropológicas.", answer: "Genealogias, censos e reconstruções históricas constituem instrumentos fundamentais da pesquisa antropológica porque permitem documentar empiricamente aspectos centrais da organização social dos grupos estudados.\n\nAs genealogias possibilitam identificar relações de parentesco, padrões de descendência, alianças familiares e mecanismos de pertencimento coletivo. Os censos oferecem informações sobre composição populacional, distribuição familiar e ocupação territorial. Já as reconstruções históricas permitem compreender processos de continuidade, transformação e deslocamento social.\n\nQuando incorporados ao laudo antropológico, esses elementos adquirem relevância probatória. Eles fornecem evidências concretas capazes de demonstrar vínculos históricos com determinado território, formas específicas de organização social e continuidade da identidade coletiva.\n\nDessa forma, a produção da prova antropológica combina interpretação qualitativa e documentação empírica, fortalecendo a fundamentação científica das conclusões apresentadas ao Judiciário." },
+      { type: "discursiva", statement: "Analise a tensão entre neutralidade científica e compromisso com os direitos humanos na atuação do antropólogo perito.", answer: "A atuação do antropólogo perito frequentemente envolve uma tensão entre a exigência de neutralidade científica e a preocupação com a proteção de direitos humanos. Como pesquisador, o antropólogo deve produzir análises fundamentadas em evidências empíricas e critérios metodológicos rigorosos, evitando conclusões baseadas em preferências pessoais.\n\nEntretanto, o próprio reconhecimento da diversidade cultural e dos direitos coletivos frequentemente coloca a pesquisa em contextos marcados por desigualdades históricas, conflitos territoriais e situações de vulnerabilidade social.\n\nEssa tensão não significa que o antropólogo deva abandonar a objetividade científica. Pelo contrário, sua principal responsabilidade consiste em produzir conhecimento rigoroso capaz de tornar visíveis realidades frequentemente ignoradas ou mal compreendidas pelo sistema jurídico.\n\nO compromisso ético da Antropologia manifesta-se justamente na produção de análises precisas e fundamentadas, permitindo que decisões jurídicas sejam tomadas com base em uma compreensão adequada das realidades socioculturais envolvidas." },
+      { type: "discursiva", statement: "Explique por que o laudo antropológico pode ser considerado um instrumento de mediação intercultural.", answer: "O laudo antropológico pode ser considerado um instrumento de mediação intercultural porque estabelece comunicação entre universos culturais distintos. De um lado, encontra-se o sistema jurídico estatal, baseado em categorias normativas específicas. De outro, estão grupos sociais que frequentemente organizam suas experiências por meio de valores, instituições e formas de conhecimento diferentes.\n\nA função do antropólogo consiste em interpretar essas realidades culturais e traduzi-las de maneira inteligível para o campo jurídico. Esse processo não implica eliminar diferenças, mas torná-las compreensíveis dentro de um espaço institucional que normalmente opera com categorias próprias.\n\nPor meio dessa mediação, o laudo contribui para reduzir incompreensões, evitar interpretações etnocêntricas e ampliar a capacidade do sistema jurídico de lidar com a diversidade cultural.\n\nAssim, o laudo antropológico não é apenas uma prova técnica. Ele constitui um mecanismo de diálogo intercultural que possibilita o reconhecimento jurídico de formas distintas de organização social, identidade coletiva e relação com o território." },
+      { type: "objetiva", statement: "A principal contribuição do laudo antropológico para os processos judiciais envolvendo povos indígenas consiste em:", alternatives: [{letter:"A",text:"Substituir a interpretação jurídica pela interpretação antropológica."},{letter:"B",text:"Produzir uma narrativa histórica favorável às comunidades indígenas."},{letter:"C",text:"Traduzir cientificamente aspectos socioculturais relevantes para a compreensão jurídica do conflito."},{letter:"D",text:"Determinar a decisão judicial por meio da autoridade técnica do antropólogo."},{letter:"E",text:"Comprovar exclusivamente a ocupação física atual do território disputado."}], correctIndex:2, explanation:"O laudo não substitui o Direito nem determina a sentença. Sua função é fornecer ao Judiciário elementos técnicos para compreender realidades socioculturais complexas.\n\nA) Errada. O Direito continua responsável pela decisão.\nB) Errada. O laudo não é instrumento de defesa automática.\nD) Errada. O juiz não está vinculado ao laudo.\nE) Errada. O foco inclui ocupação tradicional, história, organização social e identidade coletiva." },
+      { type: "objetiva", statement: "A relação entre etnografia e laudo antropológico pode ser corretamente compreendida pela afirmação de que:", alternatives: [{letter:"A",text:"O laudo substitui a pesquisa etnográfica quando o conflito possui natureza jurídica."},{letter:"B",text:"A etnografia constitui a principal base metodológica que fundamenta as conclusões do laudo."},{letter:"C",text:"A etnografia possui caráter subjetivo e, por isso, não influencia diretamente o laudo."},{letter:"D",text:"O laudo limita-se à análise documental, enquanto a etnografia se restringe ao trabalho de campo."},{letter:"E",text:"São procedimentos independentes que possuem finalidades distintas e incompatíveis."}], correctIndex:1, explanation:"A legitimidade científica do laudo deriva justamente da pesquisa etnográfica.\n\nA) Errada. O laudo depende da etnografia.\nC) Errada. A etnografia é o fundamento da análise.\nD) Errada. Ambos utilizam múltiplas fontes de informação.\nE) Errada. São complementares." },
+      { type: "objetiva", statement: "A Constituição Federal de 1988 ampliou a importância da Antropologia Jurídica porque:", alternatives: [{letter:"A",text:"Eliminou os conflitos territoriais indígenas."},{letter:"B",text:"Determinou que apenas antropólogos poderiam atuar em processos envolvendo povos indígenas."},{letter:"C",text:"Reconheceu juridicamente a diversidade cultural e os direitos coletivos dos povos indígenas."},{letter:"D",text:"Transformou os laudos antropológicos em decisões judiciais obrigatórias."},{letter:"E",text:"Substituiu a legislação civil pelos costumes indígenas."}], correctIndex:2, explanation:"O reconhecimento constitucional da diversidade cultural gerou demanda por conhecimento antropológico especializado.\n\nA) Errada. Os conflitos permaneceram.\nB) Errada. Não existe exclusividade profissional nesse sentido.\nD) Errada. O laudo continua sendo meio de prova.\nE) Errada. Não houve substituição normativa." },
+      { type: "objetiva", statement: "O principal desafio enfrentado pelo antropólogo na elaboração de um laudo judicial consiste em:", alternatives: [{letter:"A",text:"Produzir uma defesa jurídica da comunidade estudada."},{letter:"B",text:"Traduzir conceitos antropológicos complexos para uma linguagem compreensível ao Direito sem perder rigor científico."},{letter:"C",text:"Convencer o magistrado da superioridade do conhecimento antropológico."},{letter:"D",text:"Eliminar completamente interpretações subjetivas do trabalho de campo."},{letter:"E",text:"Adaptar os fatos observados às categorias jurídicas já existentes."}], correctIndex:1, explanation:"O laudo é um exercício permanente de mediação entre dois universos conceituais distintos.\n\nA) Errada. O antropólogo não atua como advogado.\nC) Errada. O objetivo é esclarecer, não convencer pela autoridade.\nD) Errada. A subjetividade é controlada, não eliminada.\nE) Errada. Muitas vezes o papel do laudo é justamente mostrar limites dessas categorias." },
+      { type: "objetiva", statement: "A teoria de Fredrik Barth torna-se particularmente relevante para os laudos antropológicos porque:", alternatives: [{letter:"A",text:"Define os grupos étnicos exclusivamente por características raciais."},{letter:"B",text:"Compreende a identidade étnica como resultado de fronteiras sociais e processos de identificação coletiva."},{letter:"C",text:"Sustenta que grupos étnicos permanecem inalterados ao longo da história."},{letter:"D",text:"Vincula a etnicidade à preservação integral dos costumes ancestrais."},{letter:"E",text:"Explica a identidade étnica a partir do isolamento cultural."}], correctIndex:1, explanation:"Barth desloca o foco para os processos sociais de pertencimento e reconhecimento coletivo.\n\nA) Errada. Barth rejeita explicações raciais.\nC) Errada. Mudanças culturais não eliminam a identidade.\nD) Errada. Não existe exigência de \"pureza cultural\".\nE) Errada. A interação social é central em sua teoria." },
+      { type: "objetiva", statement: "Segundo a perspectiva apresentada no material, a diferença fundamental entre a concepção indígena de terra e a concepção jurídica tradicional está em que:", alternatives: [{letter:"A",text:"Apenas a concepção indígena reconhece o valor econômico da terra."},{letter:"B",text:"A concepção jurídica ignora completamente a dimensão cultural do território."},{letter:"C",text:"A terra indígena envolve dimensões sociais, históricas e cosmológicas que ultrapassam a noção patrimonial."},{letter:"D",text:"A concepção indígena rejeita qualquer utilização produtiva do território."},{letter:"E",text:"Ambas compreendem a terra exclusivamente como recurso econômico."}], correctIndex:2, explanation:"O material enfatiza que o território indígena é suporte da vida social, espiritual e histórica.\n\nA) Errada. Ambas reconhecem usos econômicos.\nB) Errada. O Direito pode reconhecer aspectos culturais.\nD) Errada. Povos indígenas utilizam produtivamente seus territórios.\nE) Errada. Contraria diretamente o texto." },
+      { type: "objetiva", statement: "No caso da Terra Indígena Mangueirinha, a reconstrução histórica possui relevância porque:", alternatives: [{letter:"A",text:"Direitos territoriais dependem apenas da ocupação física atual."},{letter:"B",text:"Permite compreender processos de expropriação e continuidade da ocupação tradicional."},{letter:"C",text:"Substitui a necessidade de pesquisa etnográfica contemporânea."},{letter:"D",text:"Possui apenas valor acadêmico, sem relevância jurídica."},{letter:"E",text:"Demonstra que os conflitos fundiários são exclusivamente econômicos."}], correctIndex:1, explanation:"A história é fundamental para compreender a ocupação tradicional e os processos de perda territorial.\n\nA) Errada. O foco é a ocupação tradicional.\nC) Errada. História e etnografia se complementam.\nD) Errada. Possui enorme relevância jurídica.\nE) Errada. Há dimensões políticas, culturais e sociais." },
+      { type: "objetiva", statement: "O uso de genealogias e censos em laudos antropológicos busca principalmente:", alternatives: [{letter:"A",text:"Quantificar exclusivamente a produção econômica da comunidade."},{letter:"B",text:"Produzir estatísticas demográficas sem relevância interpretativa."},{letter:"C",text:"Documentar empiricamente formas de parentesco, pertencimento e organização social."},{letter:"D",text:"Demonstrar a superioridade metodológica da Antropologia sobre o Direito."},{letter:"E",text:"Substituir observações realizadas em campo."}], correctIndex:2, explanation:"Genealogias e censos fornecem evidências concretas sobre relações sociais e vínculos coletivos.\n\nA) Errada. O objetivo não é econômico.\nB) Errada. Os dados possuem interpretação antropológica.\nD) Errada. Não existe essa finalidade.\nE) Errada. São complementares ao trabalho de campo." },
+      { type: "objetiva", statement: "A tensão entre neutralidade científica e direitos humanos na atuação do antropólogo pode ser melhor compreendida pela ideia de que:", alternatives: [{letter:"A",text:"O antropólogo deve abandonar a objetividade em favor do ativismo."},{letter:"B",text:"A neutralidade exige ignorar situações de desigualdade social."},{letter:"C",text:"O rigor científico constitui precisamente o instrumento que permite tornar visíveis realidades frequentemente negligenciadas."},{letter:"D",text:"Direitos humanos e ciência são objetivos incompatíveis."},{letter:"E",text:"O laudo deve sempre favorecer grupos historicamente vulneráveis."}], correctIndex:2, explanation:"O compromisso ético da Antropologia manifesta-se através da produção de conhecimento rigoroso.\n\nA) Errada. O laudo não é militância.\nB) Errada. Ignorar desigualdades comprometeria a análise.\nD) Errada. Não existe incompatibilidade necessária.\nE) Errada. O compromisso é com a evidência científica." },
+      { type: "objetiva", statement: "Considerar o laudo antropológico como instrumento de mediação intercultural significa reconhecer que ele:", alternatives: [{letter:"A",text:"Elimina as diferenças culturais para adequá-las ao sistema jurídico."},{letter:"B",text:"Substitui categorias jurídicas por categorias antropológicas."},{letter:"C",text:"Cria um espaço de tradução e compreensão entre universos culturais distintos."},{letter:"D",text:"Tem como objetivo principal uniformizar concepções de justiça."},{letter:"E",text:"Atua exclusivamente em processos envolvendo povos indígenas."}], correctIndex:2, explanation:"O laudo funciona como uma ponte entre sistemas de significados diferentes.\n\nA) Errada. O objetivo não é eliminar diferenças.\nB) Errada. O papel é dialogar com o Direito.\nD) Errada. Não busca uniformização cultural.\nE) Errada. Pode ser utilizado em diversos contextos interculturais." }
+    ]
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+const COOKIE_KEY = "exercicios_v1";
+let state = loadState();
+let currentListId = null;
+let currentQIndex = 0;
+let discFlipped = {};
+let objAnswered = {};
+let objSelected = {};
+
+function loadState() {
+  try {
+    const raw = document.cookie.split(";").map(c => c.trim()).find(c => c.startsWith(COOKIE_KEY + "="));
+    if (raw) return JSON.parse(decodeURIComponent(raw.split("=").slice(1).join("=")));
+  } catch(e) {}
+  return { done: {}, correct: {}, wrong: {} };
+}
+
+function saveState() {
+  const val = encodeURIComponent(JSON.stringify(state));
+  const exp = new Date(Date.now() + 365*24*60*60*1000).toUTCString();
+  document.cookie = COOKIE_KEY + "=" + val + "; expires=" + exp + "; path=/; SameSite=Lax";
+}
+
+function listKey(listId, qIdx) { return listId + "__" + qIdx; }
+
+// ============================================================
+// HOME
+// ============================================================
+function renderHome() {
+  const grid = document.getElementById("lists-grid");
+  grid.innerHTML = "";
+  LISTS_DATA.forEach(list => {
+    const total = list.questions.length;
+    let correct = 0, wrong = 0, done = 0;
+    list.questions.forEach((_, i) => {
+      const k = listKey(list.id, i);
+      if (state.done[k]) done++;
+      if (state.correct[k]) correct++;
+      if (state.wrong[k]) wrong++;
+    });
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    const card = document.createElement("div");
+    card.className = "list-card";
+    card.innerHTML = `
+      <div class="card-cover">
+        <div class="card-emoji">${list.emoji}</div>
+        <div class="card-title">${list.title}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-stats">
+          <div class="stat-item">
+            <span class="stat-num">${total}</span>
+            <span class="stat-label">Questões</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num green">${correct}</span>
+            <span class="stat-label">Acertos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num red">${wrong}</span>
+            <span class="stat-label">Erros</span>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <button class="btn-start" onclick="openList('${list.id}')">▶ Iniciar Lista</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ============================================================
+// OPEN / CLOSE LIST
+// ============================================================
+function openList(listId) {
+  currentListId = listId;
+  currentQIndex = 0;
+  discFlipped = {};
+  objAnswered = {};
+  objSelected = {};
+
+  const list = LISTS_DATA.find(l => l.id === listId);
+  document.getElementById("list-title-center").textContent = list.title;
+
+  // Restore per-session answered state from cookie (visual only)
+  list.questions.forEach((q, i) => {
+    const k = listKey(listId, i);
+    if (state.wrong[k] || state.correct[k]) {
+      objAnswered[i] = true;
+    }
+  });
+
+  document.getElementById("home-page").style.display = "none";
+  document.getElementById("list-page").style.display = "block";
+
+  renderDots();
+  renderQuestion();
+}
+
+function goHome() {
+  document.getElementById("list-page").style.display = "none";
+  document.getElementById("home-page").style.display = "block";
+  renderHome();
+}
+
+// ============================================================
+// DOTS
+// ============================================================
+function renderDots() {
+  const list = LISTS_DATA.find(l => l.id === currentListId);
+  const container = document.getElementById("q-dots");
+  container.innerHTML = "";
+
+  list.questions.forEach((q, i) => {
+    const k = listKey(currentListId, i);
+    const dot = document.createElement("button");
+    dot.className = "q-dot" + (i === currentQIndex ? " active" : "");
+    if (state.correct[k]) dot.classList.add("correct");
+    else if (state.wrong[k]) dot.classList.add("wrong");
+    else if (state.done[k]) dot.classList.add("done");
+    dot.textContent = i + 1;
+    dot.onclick = () => jumpTo(i);
+    container.appendChild(dot);
+  });
+
+  const total = list.questions.length;
+  document.getElementById("mobile-counter").textContent = (currentQIndex + 1) + "/" + total;
+}
+
+function jumpTo(idx) {
+  currentQIndex = idx;
+  renderDots();
+  renderQuestion();
+}
+
+// ============================================================
+// RENDER QUESTION
+// ============================================================
+function renderQuestion() {
+  const list = LISTS_DATA.find(l => l.id === currentListId);
+  const area = document.getElementById("question-area");
+
+  if (list.questions.length === 0) {
+    area.innerHTML = `<div style="padding:40px 0;text-align:center;color:var(--gov-gray-50)">
+      <div style="font-size:40px;margin-bottom:12px">📭</div>
+      <p style="font-weight:600">Esta lista ainda não possui questões.</p>
+    </div>`;
+    updateBottomNav();
+    return;
+  }
+
+  const q = list.questions[currentQIndex];
+  const k = listKey(currentListId, currentQIndex);
+  const isFlipped = !!discFlipped[currentQIndex];
+  const isAnswered = !!objAnswered[currentQIndex];
+  const sel = objSelected[currentQIndex];
+
+  area.innerHTML = "";
+
+  // Header
+  const hdr = document.createElement("div");
+  hdr.className = "q-header";
+  hdr.innerHTML = `
+    <span class="q-number-badge">Questão ${currentQIndex + 1}</span>
+    <span class="q-type-badge ${q.type === 'discursiva' ? 'disc' : 'obj'}">${q.type === 'discursiva' ? 'Discursiva' : 'Objetiva'}</span>
+  `;
+  area.appendChild(hdr);
+
+  if (q.type === "discursiva") {
+    renderDiscursiva(area, q, k, isFlipped);
+  } else {
+    renderObjetiva(area, q, k, isAnswered, sel);
+  }
+
+  updateBottomNav();
+}
+
+function renderDiscursiva(area, q, k, isFlipped) {
+  const stmt = document.createElement("div");
+  stmt.className = "q-statement";
+  stmt.textContent = q.statement;
+  area.appendChild(stmt);
+
+  const flipWrap = document.createElement("div");
+  flipWrap.className = "disc-flip-container";
+  flipWrap.id = "disc-flip";
+  flipWrap.innerHTML = `
+    <div class="disc-flip-inner ${isFlipped ? 'flipped' : ''}" id="disc-inner">
+      <div class="disc-face front">
+        <button class="btn-verify" onclick="flipDisc()">🔍 Verificar Resposta</button>
+      </div>
+      <div class="disc-face back">
+        <div style="margin-bottom:12px">
+          <button class="btn-verify back-mode" onclick="flipDisc()">← Voltar ao Enunciado</button>
+        </div>
+        <div class="answer-box">
+          <span class="answer-label">✅ Resposta</span>
+          ${q.answer}
+        </div>
+      </div>
+    </div>
+  `;
+  area.appendChild(flipWrap);
+
+  setTimeout(() => adjustFlipHeight(), 10);
+}
+
+function flipDisc() {
+  const inner = document.getElementById("disc-inner");
+  if (!inner) return;
+  const flipped = inner.classList.toggle("flipped");
+  discFlipped[currentQIndex] = flipped;
+  setTimeout(() => adjustFlipHeight(), 50);
+}
+
+function adjustFlipHeight() {
+  const wrap = document.getElementById("disc-flip");
+  const inner = document.getElementById("disc-inner");
+  if (!wrap || !inner) return;
+  const flipped = inner.classList.contains("flipped");
+  const front = inner.querySelector(".disc-face.front");
+  const back = inner.querySelector(".disc-face.back");
+  if (flipped && back) {
+    wrap.style.height = back.offsetHeight + "px";
+    inner.style.height = back.offsetHeight + "px";
+  } else if (!flipped && front) {
+    wrap.style.height = front.offsetHeight + "px";
+    inner.style.height = front.offsetHeight + "px";
+  }
+}
+
+function renderObjetiva(area, q, k, isAnswered, sel) {
+  const stmt = document.createElement("div");
+  stmt.className = "q-statement";
+  stmt.textContent = q.statement;
+  area.appendChild(stmt);
+
+  const altsList = document.createElement("div");
+  altsList.className = "alternatives";
+  q.alternatives.forEach((alt, i) => {
+    const div = document.createElement("div");
+    div.className = "alternative" + (isAnswered ? " locked" : "");
+    div.id = "alt-" + i;
+    if (isAnswered) {
+      if (i === q.correctIndex) div.classList.add("correct-alt");
+      else if (i === sel) div.classList.add("wrong-alt");
+    } else if (i === sel) {
+      div.classList.add("selected");
+    }
+    div.innerHTML = `<div class="alt-letter">${alt.letter}</div><div>${alt.text}</div>`;
+    if (!isAnswered) div.onclick = () => selectAlt(i);
+    altsList.appendChild(div);
+  });
+  area.appendChild(altsList);
+
+  const btnRow = document.createElement("div");
+  if (!isAnswered) {
+    const btnConfirm = document.createElement("button");
+    btnConfirm.className = "btn-confirm";
+    btnConfirm.id = "btn-confirm";
+    btnConfirm.disabled = sel === undefined || sel === null;
+    btnConfirm.innerHTML = "✓ Confirmar Resposta";
+    btnConfirm.onclick = confirmAnswer;
+    btnRow.appendChild(btnConfirm);
+  } else {
+    const btnExp = document.createElement("button");
+    btnExp.className = "btn-confirm explain-mode";
+    btnExp.innerHTML = "💡 Ver Explicação";
+    btnExp.onclick = openExplanation;
+    btnRow.appendChild(btnExp);
+  }
+  area.appendChild(btnRow);
+}
+
+function selectAlt(idx) {
+  objSelected[currentQIndex] = idx;
+  const alts = document.querySelectorAll(".alternative");
+  alts.forEach((el, i) => {
+    el.classList.toggle("selected", i === idx);
+  });
+  const btn = document.getElementById("btn-confirm");
+  if (btn) btn.disabled = false;
+}
+
+function confirmAnswer() {
+  const list = LISTS_DATA.find(l => l.id === currentListId);
+  const q = list.questions[currentQIndex];
+  const k = listKey(currentListId, currentQIndex);
+  const sel = objSelected[currentQIndex];
+  if (sel === undefined || sel === null) return;
+
+  objAnswered[currentQIndex] = true;
+  const correct = sel === q.correctIndex;
+
+  if (correct) {
+    state.correct[k] = true;
+    delete state.wrong[k];
+  } else {
+    state.wrong[k] = true;
+    delete state.correct[k];
+  }
+  state.done[k] = true;
+  saveState();
+
+  renderDots();
+  renderQuestion();
+}
+
+function openExplanation() {
+  const list = LISTS_DATA.find(l => l.id === currentListId);
+  const q = list.questions[currentQIndex];
+  document.getElementById("modal-content").innerHTML = q.explanation || "Sem explicação disponível.";
+  document.getElementById("explanation-modal").classList.add("open");
+}
+
+function closeExplanationModal() {
+  document.getElementById("explanation-modal").classList.remove("open");
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById("explanation-modal")) closeExplanationModal();
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function navigate(dir) {
+  const list = LISTS_DATA.find(l => l.id === currentListId);
+  const next = currentQIndex + dir;
+  if (next < 0 || next >= list.questions.length) return;
+  currentQIndex = next;
+  renderDots();
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function markDone() {
+  const k = listKey(currentListId, currentQIndex);
+  if (state.done[k]) {
+    delete state.done[k];
+    delete state.correct[k];
+    delete state.wrong[k];
+  } else {
+    state.done[k] = true;
+  }
+  saveState();
+  renderDots();
+  updateBottomNav();
+}
+
+function updateBottomNav() {
+  const list = LISTS_DATA.find(l => l.id === currentListId);
+  if (!list) return;
+  const k = listKey(currentListId, currentQIndex);
+  const isDone = !!state.done[k];
+  const btnMark = document.getElementById("btn-mark");
+  const btnPrev = document.getElementById("btn-prev");
+  const btnNext = document.getElementById("btn-next");
+  if (btnMark) {
+    btnMark.classList.toggle("marked", isDone);
+    btnMark.querySelector(".label").textContent = isDone ? "Desmarcar" : "Marcar como Feita";
+  }
+  if (btnPrev) btnPrev.disabled = currentQIndex === 0;
+  if (btnNext) btnNext.disabled = currentQIndex >= list.questions.length - 1;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderHome();
+</script>
+</body>
+</html>
