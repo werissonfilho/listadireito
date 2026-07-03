@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia Quiz - PT-BR</title>
+<style>
+  :root{
+    --bg1:#1e1b4b; --bg2:#312e81; --card:#ffffff; --accent:#7c3aed; --accent2:#a78bfa;
+    --correct:#16a34a; --wrong:#dc2626; --text:#1e1b2e; --muted:#6b7280;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; font-family:'Segoe UI',Roboto,Arial,sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .app{width:100%; max-width:640px;}
+  .card{
+    background:var(--card); border-radius:18px; padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+  h1{
+    text-align:center; color:var(--accent); margin:0 0 6px; font-size:1.8rem;
+  }
+  .subtitle{text-align:center; color:var(--muted); margin-bottom:24px; font-size:.95rem;}
+  .progress-wrap{background:#eee; border-radius:8px; height:10px; overflow:hidden; margin-bottom:20px;}
+  .progress-bar{height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%; transition:width .3s;}
+  .meta{display:flex; justify-content:space-between; font-size:.85rem; color:var(--muted); margin-bottom:14px;}
+  .question{font-size:1.2rem; font-weight:600; color:var(--text); margin-bottom:22px; line-height:1.4;}
+  .options{display:flex; flex-direction:column; gap:12px;}
+  .option{
+    padding:14px 16px; border:2px solid #e5e7eb; border-radius:12px; cursor:pointer;
+    font-size:1rem; color:var(--text); transition:.15s; background:#fafafa;
+  }
+  .option:hover{border-color:var(--accent2); background:#f3f0ff;}
+  .option.correct{background:#dcfce7; border-color:var(--correct); color:#14532d; font-weight:600;}
+  .option.wrong{background:#fee2e2; border-color:var(--wrong); color:#7f1d1d; font-weight:600;}
+  .option.disabled{pointer-events:none; opacity:.85;}
+  .btn{
+    margin-top:22px; width:100%; padding:14px; border:none; border-radius:12px;
+    background:var(--accent); color:#fff; font-size:1rem; font-weight:600; cursor:pointer;
+    transition:.15s;
+  }
+  .btn:hover{background:#6d28d9;}
+  .btn:disabled{background:#c4b5fd; cursor:not-allowed;}
+  .center{text-align:center;}
+  .loader{
+    display:flex; flex-direction:column; align-items:center; gap:16px; padding:40px 0;color:var(--muted);
+  }
+  .spinner{
+    width:46px; height:46px; border:5px solid #ede9fe; border-top-color:var(--accent);
+    border-radius:50%; animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .result-score{font-size:3rem; font-weight:800; color:var(--accent); margin:10px 0;}
+  .result-label{color:var(--muted); margin-bottom:24px;}
+  .error{color:var(--wrong); text-align:center; padding:20px;}
+  .badge{
+    display:inline-block; background:#ede9fe; color:var(--accent); padding:3px 10px;
+    border-radius:20px; font-size:.75rem; font-weight:700; margin-bottom:10px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="card" id="card">
+    <h1>🧠 Trivia Quiz</h1>
+    <div class="subtitle">Conhecimentos Gerais · Dificuldade Média · Traduzido para PT-BR</div>
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      <div id="loaderText">Buscando perguntas...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const card = document.getElementById('card');
+let questions = [];
+let current = 0;
+let score = 0;
+let answered = false;
+
+function decodeHTML(str){
+  const txt = document.createElement('textarea');
+  txt.innerHTML = str;
+  return txt.value;
+}
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+async function translateText(text){
+  try{
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|pt-BR`);
+    const data = await res.json();
+    if(data && data.responseData && data.responseData.translatedText){
+      return decodeHTML(data.responseData.translatedText);
+    }
+    return text;
+  }catch(e){
+    return text;
+  }
+}
+
+async function loadQuestions(){
+  const loaderText = document.getElementById('loaderText');
+  try{
+    const res = await fetch('https://opentdb.com/api.php?amount=20&category=9&difficulty=medium&type=multiple');
+    const data = await res.json();
+    if(data.response_code !== 0 || !data.results || data.results.length === 0){
+      throw new Error('A API não retornou perguntas.');
+    }
+    const raw = data.results;
+
+    for(let i=0;i<raw.length;i++){
+      loaderText.textContent = `Traduzindo pergunta ${i+1} de ${raw.length}...`;
+      const q = raw[i];
+      const question = decodeHTML(q.question);
+      const correct = decodeHTML(q.correct_answer);
+      const incorrects = q.incorrect_answers.map(decodeHTML);
+
+      const [qPt, correctPt, ...incorrectsPt] = await Promise.all([
+        translateText(question),
+        translateText(correct),
+        ...incorrects.map(t => translateText(t))
+      ]);
+
+      const options = shuffle([
+        {text: correctPt, correct:true},
+        ...incorrectsPt.map(t=>({text:t, correct:false}))
+      ]);
+
+      questions.push({
+        question: qPt,
+        originalQuestion: question,
+        options
+      });
+    }
+
+    renderQuestion();
+  }catch(err){
+    card.innerHTML = `
+      <h1>🧠 Trivia Quiz</h1>
+      <div class="error">
+        Ocorreu um erro ao carregar as perguntas: ${err.message}<br><br>
+        <button class="btn" onclick="location.reload()">Tentar novamente</button>
+      </div>
+    `;
+  }
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = questions[current];
+  const progress = Math.round(((current)/questions.length)*100);
+
+  card.innerHTML = `
+    <div class="badge">Pergunta ${current+1} de ${questions.length}</div>
+    <div class="progress-wrap"><div class="progress-bar" style="width:${progress}%"></div></div>
+    <div class="meta"><span>Pontuação: ${score}</span><span>Dificuldade: Média</span></div>
+    <div class="question">${q.question}</div>
+    <div class="options" id="options"></div>
+  `;
+
+  const optionsDiv = document.getElementById('options');
+  q.options.forEach((opt, idx) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.textContent = opt.text;
+    div.onclick = () => selectAnswer(idx);
+    optionsDiv.appendChild(div);
+  });
+}
+
+function selectAnswer(idx){
+  if(answered) return;
+  answered = true;
+  const q = questions[current];
+  const optionDivs = document.querySelectorAll('.option');
+
+  optionDivs.forEach((div, i) => {
+    div.classList.add('disabled');
+    if(q.options[i].correct){
+      div.classList.add('correct');
+    } else if(i === idx){
+      div.classList.add('wrong');
+    }
+  });
+
+  if(q.options[idx].correct) score++;
+
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.textContent = current === questions.length - 1 ? 'Ver resultado' : 'Próxima pergunta';
+  btn.onclick = () => {
+    current++;
+    if(current < questions.length){
+      renderQuestion();
+    } else {
+      renderResult();
+    }
+  };
+  card.appendChild(btn);
+}
+
+function renderResult(){
+  const pct = Math.round((score/questions.length)*100);
+  let msg = 'Continue estudando!';
+  if(pct >= 90) msg = 'Incrível! Você é um mestre em conhecimentos gerais! 🏆';
+  else if(pct >= 70) msg = 'Muito bom! Ótimo desempenho! 🎉';
+  else if(pct >= 50) msg = 'Nada mal! Dá pra melhorar. 👍';
+
+  card.innerHTML = `
+    <h1>🧠 Resultado Final</h1>
+    <div class="center">
+      <div class="result-score">${score} / ${questions.length}</div>
+      <div class="result-label">${pct}% de acertos — ${msg}</div>
+      <button class="btn" onclick="restart()">Jogar novamente</button>
+    </div>
+  `;
+}
+
+function restart(){
+  questions = [];
+  current = 0;
+  score = 0;
+  card.innerHTML = `
+    <h1>🧠 Trivia Quiz</h1>
+    <div class="subtitle">Conhecimentos Gerais · Dificuldade Média · Traduzido para PT-BR</div>
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      <div id="loaderText">Buscando perguntas...</div>
+    </div>
+  `;
+  loadQuestions();
+}
+
+loadQuestions();
+</script>
+</body>
+</html>
