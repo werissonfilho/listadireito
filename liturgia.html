@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liturgia Diária</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #f4f1ea;
+    color: #2b2b2b;
+    padding: 20px;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  header h1 {
+    font-size: 1.8rem;
+    margin: 0 0 4px;
+    color: #5c1a1a;
+  }
+  .data {
+    font-size: 0.95rem;
+    color: #555;
+  }
+  .cor-liturgica {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #fff;
+  }
+  section {
+    background: #fff;
+    border: 1px solid #e0dcd0;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  section h2 {
+    font-size: 1.1rem;
+    color: #5c1a1a;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-top: 0;
+  }
+  .referencia {
+    font-style: italic;
+    color: #777;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+  .refrao {
+    font-weight: bold;
+    color: #5c1a1a;
+    margin-bottom: 8px;
+  }
+  p {
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  #status {
+    text-align: center;
+    padding: 40px 0;
+    color: #777;
+  }
+  .erro {
+    color: #a33;
+    text-align: center;
+  }
+  .oracoes p { margin-bottom: 14px; }
+  .oracoes strong { display: block; color: #5c1a1a; margin-bottom: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>✝ Liturgia Diária</h1>
+    <div class="data" id="data-liturgia">Carregando...</div>
+    <div class="cor-liturgica" id="cor-liturgica" style="display:none;"></div>
+  </header>
+
+  <div id="status">Buscando a liturgia de hoje...</div>
+  <div id="conteudo" style="display:none;"></div>
+</div>
+
+<script>
+const cores = {
+  "Verde": "#3a7d44",
+  "Roxo": "#6b2f8c",
+  "Branco": "#999",
+  "Vermelho": "#a33",
+  "Rosa": "#d17a9e"
+};
+
+async function carregarLiturgia() {
+  const status = document.getElementById('status');
+  const conteudo = document.getElementById('conteudo');
+  try {
+    const resp = await fetch('https://liturgia.up.railway.app/v2/');
+    if (!resp.ok) throw new Error('Falha na requisição: ' + resp.status);
+    const dados = await resp.json();
+
+    document.getElementById('data-liturgia').textContent = dados.data + ' — ' + dados.liturgia;
+
+    const corEl = document.getElementById('cor-liturgica');
+    corEl.textContent = 'Cor: ' + dados.cor;
+    corEl.style.background = cores[dados.cor] || '#888';
+    corEl.style.display = 'inline-block';
+
+    let html = '';
+
+    // Primeira leitura
+    if (dados.leituras.primeiraLeitura && dados.leituras.primeiraLeitura.length) {
+      dados.leituras.primeiraLeitura.forEach(l => {
+        html += `<section><h2>Primeira Leitura</h2>
+          <div class="referencia">${l.titulo} (${l.referencia})</div>
+          <p>${l.texto}</p></section>`;
+      });
+    }
+
+    // Salmo
+    if (dados.leituras.salmo && dados.leituras.salmo.length) {
+      dados.leituras.salmo.forEach(s => {
+        html += `<section><h2>Salmo Responsorial</h2>
+          <div class="referencia">${s.referencia}</div>
+          <div class="refrao">${s.refrao}</div>
+          <p>${s.texto}</p></section>`;
+      });
+    }
+
+    // Segunda leitura (nem todo dia tem)
+    if (dados.leituras.segundaLeitura && dados.leituras.segundaLeitura.length) {
+      dados.leituras.segundaLeitura.forEach(l => {
+        html += `<section><h2>Segunda Leitura</h2>
+          <div class="referencia">${l.titulo} (${l.referencia})</div>
+          <p>${l.texto}</p></section>`;
+      });
+    }
+
+    // Evangelho
+    if (dados.leituras.evangelho && dados.leituras.evangelho.length) {
+      dados.leituras.evangelho.forEach(e => {
+        html += `<section><h2>Evangelho</h2>
+          <div class="referencia">${e.titulo} (${e.referencia})</div>
+          <p>${e.texto}</p></section>`;
+      });
+    }
+
+    // Orações
+    if (dados.oracoes) {
+      html += `<section class="oracoes"><h2>Orações da Missa</h2>
+        <p><strong>Coleta</strong>${dados.oracoes.coleta || ''}</p>
+        <p><strong>Sobre as Oferendas</strong>${dados.oracoes.oferendas || ''}</p>
+        <p><strong>Pós-Comunhão</strong>${dados.oracoes.comunhao || ''}</p>
+      </section>`;
+    }
+
+    conteudo.innerHTML = html;
+    status.style.display = 'none';
+    conteudo.style.display = 'block';
+
+  } catch (err) {
+    status.innerHTML = `<div class="erro">Erro ao carregar a liturgia: ${err.message}<br>Tente recarregar a página.</div>`;
+  }
+}
+
+carregarLiturgia();
+</script>
+</body>
+</html>
